@@ -1,7 +1,7 @@
 # Проект «Большое путешествие (простой)»
 
 * Студент: [Lena Korsakova](https://up.htmlacademy.ru/ecmascript/18/user/2063853).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Конотоп](https://htmlacademy.ru/profile/id2123489).
 
 ---
 
