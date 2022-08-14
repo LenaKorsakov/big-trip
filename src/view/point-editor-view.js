@@ -163,7 +163,7 @@ export default class TripPointEditorView {
 
   getElement() {
     if (!this.element) {
-      this.element = createElement(this.getTemplate());//откуда взялся element
+      this.element = createElement(this.getTemplate());
     }
 
     return this.element;
