@@ -1,10 +1,10 @@
 import BaseView from './base-view';
-import createAdjacentHtml from './event-template';
+import createAdjacentHtml from './point-template';
 
 /**
  * Trip event
  */
-export default class EventView extends BaseView {
+export default class PointView extends BaseView {
   /**
    * @override
    */
@@ -19,4 +19,4 @@ export default class EventView extends BaseView {
   }
 }
 
-customElements.define('trip-event', EventView);
+customElements.define('trip-event', PointView);

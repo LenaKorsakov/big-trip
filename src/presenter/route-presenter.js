@@ -1,14 +1,14 @@
 import RouteView from '../view/route-view';
-import EventView from '../view/event-view';
+import PointView from '../view/point-view';
 import OfferView from '../view/offer-view';
-import EventEditorView from '../view/event-editor-view';
+import PointEditorView from '../view/point-editor-view';
 
 export default class RoutePresenter {
   model = null;
   view = new RouteView();
 
-  createEventView() {
-    return new EventView().addOffer(this.createOfferView());
+  createPointView() {
+    return new PointView().addOffer(this.createOfferView());
   }
 
   createOfferView() {
@@ -18,8 +18,8 @@ export default class RoutePresenter {
   init() {
     // TODO get points from route model
     this.view.append(
-      new EventEditorView(),
-      ...new Array(3).fill().map(this.createEventView, this)
+      new PointEditorView(),
+      ...new Array(3).fill().map(this.createPointView, this)
     );
   }
 }
