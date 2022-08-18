@@ -35,6 +35,17 @@ export default class PointView extends BaseView {
   }
 
   /**
+   * Установит иконку события
+   * @param {string}
+   * @returns
+   */
+  setIcon(type){
+    this.querySelector('.event__type-icon').src = `img/icons/${type}.png`;
+
+    return this;
+  }
+
+  /**
    * Установит время начала события
    * @param {string}
    * @returns

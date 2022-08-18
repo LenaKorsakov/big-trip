@@ -11,7 +11,8 @@ export default class RouteView extends BaseView {
   }
 
   /**
-   * @override обертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
+   * Oбертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
+   * @override
    */
   append(...views) {
     views.forEach((view) => view.classList.add('trip-events__item'));

@@ -18,6 +18,27 @@ export default class OfferView extends BaseView {
     return createAdjacentHtml();
   }
 
+  /**
+     * Установит цену предложения
+     * @param {number}
+     * @returns
+     */
+  setOfferPrice(price) {
+    this.querySelector('.event__offer-price').textContent = price;
+
+    return this;
+  }
+
+  /**
+   * Установит название предложения
+   * @param {string}
+   * @returns
+   */
+  setOfferTitle(title) {
+    this.querySelector('.event__offer-title').textContent = title;
+
+    return this;
+  }
 }
 
 customElements.define('trip-offer', OfferView);
