@@ -2,7 +2,7 @@ import BaseView from './base-view';
 import createAdjacentHtml from './offer-template';
 
 /**
- * Trip offer
+ * View выбранных предложений для точки маршрута
  */
 export default class OfferView extends BaseView {
   constructor() {
@@ -21,7 +21,6 @@ export default class OfferView extends BaseView {
   /**
      * Установит цену предложения
      * @param {number}
-     * @returns
      */
   setOfferPrice(price) {
     this.querySelector('.event__offer-price').textContent = price;
@@ -32,7 +31,6 @@ export default class OfferView extends BaseView {
   /**
    * Установит название предложения
    * @param {string}
-   * @returns
    */
   setOfferTitle(title) {
     this.querySelector('.event__offer-title').textContent = title;

@@ -2,7 +2,7 @@ import BaseView from './base-view';
 import createAdjacentHtml from './filter-template';
 
 /**
- * Trip filter
+ * View фильтра
  */
 export default class FilterView extends BaseView {
   /**
