@@ -1,9 +1,10 @@
-const PRICE_MAX = 5000;
-const PRICE_MIN = 100;
+const PRICE_MAX = 5;
+const PRICE_MIN = 1;
 const PICTURE_MIN = 1;
-const PICTURE_MAX = 500;
+const PICTURE_MAX = 5;
 const MAX_OFFERS_IN_GROUP = 5;
 const MAX_OFFERS_NUM = 2;
+const MAX_PICTURES = 5;
 const MAX_HOURS_GAP = 200;
 const MAX_MINUTES_GAP = 120;
 const POINTS_NUMBER = 10;
@@ -33,4 +34,4 @@ const offersTitles = [
   'Add lunch'
 ];
 
-export { MAX_OFFERS_IN_GROUP, MAX_ID, MAX_HOURS_GAP, MAX_MINUTES_GAP, PRICE_MAX, PRICE_MIN, PICTURE_MAX, PICTURE_MIN, MAX_OFFERS_NUM, pointTypes, destinationsNames, destinationsDescriptions, offersTitles, POINTS_NUMBER};
+export { MAX_PICTURES, MAX_OFFERS_IN_GROUP, MAX_ID, MAX_HOURS_GAP, MAX_MINUTES_GAP, PRICE_MAX, PRICE_MIN, PICTURE_MAX, PICTURE_MIN, MAX_OFFERS_NUM, pointTypes, destinationsNames, destinationsDescriptions, offersTitles, POINTS_NUMBER};
