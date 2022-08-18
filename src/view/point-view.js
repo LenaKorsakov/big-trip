@@ -2,9 +2,17 @@ import BaseView from './base-view';
 import createAdjacentHtml from './point-template';
 
 /**
- * Trip event
+ * View точки маршрута
  */
 export default class PointView extends BaseView {
+  constructor() {
+    super();
+
+    this.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      this.dispatchEvent(new CustomEvent('expand'));
+    });
+  }
+
   /**
    * @override
    */
@@ -15,7 +23,6 @@ export default class PointView extends BaseView {
   /**
    * Установит дату события
    * @param {string}
-   * @returns
    */
   setDate(date) {
     this.querySelector('.event__date').textContent = date;
@@ -26,7 +33,6 @@ export default class PointView extends BaseView {
   /**
    * Установит название события
    * @param {string}
-   * @returns
    */
   setTitle(title) {
     this.querySelector('.event__title').textContent = title;
@@ -37,7 +43,6 @@ export default class PointView extends BaseView {
   /**
    * Установит иконку события
    * @param {string}
-   * @returns
    */
   setIcon(type){
     this.querySelector('.event__type-icon').src = `img/icons/${type}.png`;
@@ -48,7 +53,6 @@ export default class PointView extends BaseView {
   /**
    * Установит время начала события
    * @param {string}
-   * @returns
    */
   setTimeFrom(time) {
     this.querySelector('.event__start-time').textContent = time;
@@ -59,7 +63,6 @@ export default class PointView extends BaseView {
   /**
      * Установит время окончания события
      * @param {string}
-     * @returns
      */
   setTimeTo(time) {
     this.querySelector('.event__end-time').textContent = time;
@@ -70,7 +73,6 @@ export default class PointView extends BaseView {
   /**
      * Установит цену события
      * @param {number}
-     * @returns
      */
   setPrice(price) {
     this.querySelector('.event__price-value').textContent = price;
@@ -78,11 +80,15 @@ export default class PointView extends BaseView {
     return this;
   }
 
-  addOffer(...views) {
-    this.querySelector('.event__selected-offers').append(...views);
+  /**
+   Заменит предложения на выбранные
+   * @param  {...any} views
+   */
+  replaceOffers(...views) {
+    this.querySelector('.event__selected-offers').replaceChildren(...views);
 
     return this;
   }
 }
 
-customElements.define('trip-event', PointView);
+customElements.define('trip-point', PointView);
