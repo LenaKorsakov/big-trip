@@ -1,16 +1,10 @@
 import BaseView from './base-view';
-import createAdjacentHtml from './offer-template';
+import createAdjacentHtml from './offer-editor-template';
 
 /**
- * View выбранных предложений для точки маршрута
+ * View предложений для точки маршрута в форме редактирования/создания
  */
-export default class OfferView extends BaseView {
-  constructor() {
-    super();
-
-    this.classList.add('event__offer');
-  }
-
+export default class OfferEditorView extends BaseView {
   /**
    * @override
    */
@@ -29,6 +23,16 @@ export default class OfferView extends BaseView {
   }
 
   /**
+   * Установит атрибут checked
+   * @param {boolean} checked
+   */
+  setChecked(checked) {
+    this.querySelector('.event__offer-checkbox').checked = checked;
+
+    return this;
+  }
+
+  /**
    * Установит название предложения
    * @param {string}
    */
@@ -39,4 +43,4 @@ export default class OfferView extends BaseView {
   }
 }
 
-customElements.define('trip-offer', OfferView);
+customElements.define('trip-editor-offer', OfferEditorView);

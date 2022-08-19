@@ -2,7 +2,7 @@ import BaseView from './base-view';
 import createAdjacentHtml from './sort-template';
 
 /**
- * Trip sort
+ * View сортировки
  */
 export default class SortView extends BaseView {
   /**

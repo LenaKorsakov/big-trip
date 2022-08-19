@@ -5,6 +5,9 @@ export default class BaseView extends HTMLElement {
     this.insertAdjacentHTML('beforeend', this.createAdjacentHtml(...arguments));
   }
 
+  /**
+   * Создаст дополнительную HTML-разметку
+   */
   createAdjacentHtml() {
     return '';
   }

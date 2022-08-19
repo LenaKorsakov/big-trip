@@ -11,6 +11,7 @@ export default class RouteView extends BaseView {
   }
 
   /**
+   * Oбертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
    * @override
    */
   append(...views) {
