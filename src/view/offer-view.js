@@ -22,7 +22,7 @@ export default class OfferView extends BaseView {
      * Установит цену предложения
      * @param {number}
      */
-  setOfferPrice(price) {
+  setPrice(price) {
     this.querySelector('.event__offer-price').textContent = price;
 
     return this;
@@ -32,7 +32,7 @@ export default class OfferView extends BaseView {
    * Установит название предложения
    * @param {string}
    */
-  setOfferTitle(title) {
+  setTitle(title) {
     this.querySelector('.event__offer-title').textContent = title;
 
     return this;
