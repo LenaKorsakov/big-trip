@@ -2,8 +2,8 @@ import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
 import OfferView from '../view/offer-view';
 import PointEditorView from '../view/point-editor-view';
-import PointsModel from '../model.js/points-model';
-import OfferEditorView from '../view/offer-editor-view';
+import PointsModel from '../model/points-model';
+import OfferToggleView from '../view/offer-toggle-view';
 import { formatStringToDate,formatStringToHour, formatStringToFullFDate} from '../format';
 export default class RoutePresenter {
   constructor() {
@@ -37,8 +37,7 @@ export default class RoutePresenter {
       this.editorView.close()
 
         .setDestination(point.destination.name)
-        .setType(point.type)
-        .setIcon(point.type)
+        .setLable(point.type)
         .setStartTime(formatStringToFullFDate(point.date_from))
         .setEndTime(formatStringToFullFDate(point.date_to))
         .setPrice(point.base_price)
@@ -72,14 +71,14 @@ export default class RoutePresenter {
    */
   createOfferView(offer) {
     return new OfferView()
-      .setOfferPrice(offer.price)
-      .setOfferTitle(offer.title);
+      .setPrice(offer.price)
+      .setTitle(offer.title);
   }
 
   createOfferEditorView(offer) {
-    return new OfferEditorView()
-      .setOfferPrice(offer.price)
-      .setOfferTitle(offer.title);
+    return new OfferToggleView()
+      .setPrice(offer.price)
+      .setTitle(offer.title);
   }
 
   init() {

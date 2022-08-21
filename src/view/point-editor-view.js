@@ -10,11 +10,17 @@ export default class PointEditorView extends BaseView {
   constructor() {
     super();
 
+    //TODO каждый раз искать элемент - неэффективно, создать метод поиска элемента по передаваемому селектору?
     this.querySelector('.event__reset-btn').addEventListener('click', () => {
       this.close();
     });
 
     this.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      this.close();
+    });
+
+    this.querySelector('.event__save-btn').addEventListener('submit', (event) => {
+      event.preventDefault();
       this.close();
     });
   }
@@ -44,10 +50,12 @@ export default class PointEditorView extends BaseView {
   }
 
   /**
+   * Метод объекта (в данном случае this), реализующего EventListener, служит как колбэк-функция, использование позволяет запомнить нужный контекст
    * @param {KeyboardEvent} event
    */
   handleEvent(event) {
     if (event.key === 'Escape') {
+      event.preventDefault();
       this.close();
     }
   }
@@ -71,11 +79,12 @@ export default class PointEditorView extends BaseView {
   }
 
   /**
-   * Установит тип события
+   * Установит тип события и его иконку
    * @param {string}
    */
-  setType(type) {
+  setLable(type) {
     this.querySelector('.event__label').textContent = type;
+    this.querySelector('.event__type-icon').src = `img/icons/${type}.png`;
 
     return this;
   }
@@ -96,16 +105,6 @@ export default class PointEditorView extends BaseView {
    */
   setEndTime(date) {
     this.querySelector('#event-end-time-1').value = date;
-
-    return this;
-  }
-
-  /**
-   * Установит иконку события
-   * @param {string}
-   */
-  setIcon(type){
-    this.querySelector('.event__type-icon').src = `img/icons/${type}.png`;
 
     return this;
   }

@@ -1,10 +1,10 @@
 import BaseView from './base-view';
-import createAdjacentHtml from './offer-editor-template';
+import createAdjacentHtml from './offer-toggle-template';
 
 /**
  * View предложений для точки маршрута в форме редактирования/создания
  */
-export default class OfferEditorView extends BaseView {
+export default class OfferToggleView extends BaseView {
   /**
    * @override
    */
@@ -16,7 +16,7 @@ export default class OfferEditorView extends BaseView {
      * Установит цену предложения
      * @param {number}
      */
-  setOfferPrice(price) {
+  setPrice(price) {
     this.querySelector('.event__offer-price').textContent = price;
 
     return this;
@@ -36,11 +36,11 @@ export default class OfferEditorView extends BaseView {
    * Установит название предложения
    * @param {string}
    */
-  setOfferTitle(title) {
+  setTitle(title) {
     this.querySelector('.event__offer-title').textContent = title;
 
     return this;
   }
 }
 
-customElements.define('trip-editor-offer', OfferEditorView);
+customElements.define('trip-offer-toggle', OfferToggleView);
