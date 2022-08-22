@@ -4,7 +4,9 @@ import OfferView from '../view/offer-view';
 import PointEditorView from '../view/point-editor-view';
 import PointsModel from '../model/points-model';
 import OfferToggleView from '../view/offer-toggle-view';
+import NoPointsView from '../view/no-points-view';
 import { formatStringToDate,formatStringToHour, formatStringToFullFDate} from '../format';
+import { Message } from '../view/const';
 export default class RoutePresenter {
   constructor() {
     this.view = new RouteView();
@@ -29,7 +31,7 @@ export default class RoutePresenter {
     const addedOffersIds = point.offers.map((offer) => offer.id);
     const availableOfferViews = this.model.getAvailableOffers(point.type)
       .map((availableOffer) =>
-        this.createOfferEditorView(availableOffer)
+        this.createOfferToggleView(availableOffer)
           .setChecked(addedOffersIds.includes(availableOffer.id))
       , this);
 
@@ -40,7 +42,7 @@ export default class RoutePresenter {
         .setLable(point.type)
         .setStartTime(formatStringToFullFDate(point.date_from))
         .setEndTime(formatStringToFullFDate(point.date_to))
-        .setPrice(point.base_price)
+        .setPrice(point.base_price)//TODO проверять, есть ли к данному типу point destination.description, pictures,если нет - вместо методов ниже применить скрытие блоков предусмотренными методами
         .setDestinationDescription(point.destination.description)
         .replacePictures(...point.destination.pictures.map(this.createPictureView, this))
         .replaceOffers(...availableOfferViews)
@@ -75,16 +77,25 @@ export default class RoutePresenter {
       .setTitle(offer.title);
   }
 
-  createOfferEditorView(offer) {
+  createOfferToggleView(offer) {
     return new OfferToggleView()
       .setPrice(offer.price)
       .setTitle(offer.title);
   }
 
+  createNoPointsView(filter) {
+    return new NoPointsView()
+      .setMessage(Message[filter]);
+  }
+
   init() {
     const points = this.model.get();
+
+    if (points.length === 0) {//приходит ли пустой массив, если нет точек?
+      this.view.append(this.createNoPointsView('Everything'));
+    }
     this.view.append(
-      ...points.map(this.createPointView, this)
-    );
+      ...points.map(this.createPointView, this));
   }
+  //TODO в обработчике события для клика кнопки delete в редакторе предусмотреть проверку RoutView на hasChildNodes()), если их нет, createNoPointsView('Everything')
 }
