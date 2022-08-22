@@ -1,13 +1,12 @@
 /**
  * @typedef Point
  * @prop {number} base_price
- * @prop {string} date_from
+ * @prop {string} startDate
  * @prop {string} date_to
  * @prop {number} destination
  * @prop {string} id
- * @prop {boolean} is_favorite
  * @prop {number[]} offers
- * @prop {OfferType} type
+ * @prop {PointType} type
  */
 
 
@@ -17,7 +16,6 @@
  * @prop {string} date_from
  * @prop {string} date_to
  * @prop {number} destination
- * @prop {boolean} is_favorite
  * @prop {number[]} offers
- * @prop {OfferType} type
+ * @prop {PointType} type
  */

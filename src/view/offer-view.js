@@ -1,5 +1,4 @@
 import BaseView from './base-view';
-import createAdjacentHtml from './offer-template';
 
 /**
  * View выбранных предложений для точки маршрута
@@ -15,7 +14,12 @@ export default class OfferView extends BaseView {
    * @override
    */
   createAdjacentHtml() {
-    return createAdjacentHtml();
+    return `
+      <span class="event__offer-title">Order Uber</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">20</span>
+  `;
+
   }
 
   /**
