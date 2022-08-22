@@ -129,6 +129,18 @@ export default class PointEditorView extends BaseView {
     return this;
   }
 
+  hideOffersBlock() {
+    this.querySelector('.event__section--offers').style.display = 'none';
+
+    return this;
+  }
+
+  hideDestinationBlock() {
+    this.querySelector('.event__section--destination').style.display = 'none';
+
+    return this;
+  }
+
   /**
      * Заменит предложения на выбранные
      * @param  {...any} views
