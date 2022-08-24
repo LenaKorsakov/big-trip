@@ -1,9 +1,9 @@
-import BaseView from './base-view';
+import ComponentView, {html} from './component-view.js';
 
 /**
  * View точки маршрута
  */
-export default class PointView extends BaseView {
+export default class PointView extends ComponentView {
   constructor() {
     super();
 
@@ -16,7 +16,7 @@ export default class PointView extends BaseView {
    * @override
    */
   createAdjacentHtml() {
-    return `
+    return html`
       <div class="event">
         <time class="event__date" datetime="2019-03-18">MAR 18</time>
         <div class="event__type">

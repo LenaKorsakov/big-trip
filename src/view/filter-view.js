@@ -1,14 +1,14 @@
-import BaseView from './base-view';
+import ComponentView, {html} from './component-view.js';
 
 /**
  * View фильтра
  */
-export default class FilterView extends BaseView {
+export default class FilterView extends ComponentView {
   /**
    * @override
    */
   createAdjacentHtml() {
-    return `
+    return html`
       <div class="trip-controls__filters">
         <h2 class="visually-hidden">Filter events</h2>
         <form class="trip-filters" action="#" method="get">

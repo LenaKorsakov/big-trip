@@ -1,14 +1,14 @@
-import BaseView from './base-view';
+import ComponentView, {html} from './component-view.js';
 
 /**
  * View сортировки
  */
-export default class SortView extends BaseView {
+export default class SortView extends ComponentView {
   /**
    * @override
    */
   createAdjacentHtml() {
-    return `
+    return html`
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
         <div class="trip-sort__item  trip-sort__item--day">
           <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day">

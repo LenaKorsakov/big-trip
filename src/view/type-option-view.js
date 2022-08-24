@@ -1,5 +1,8 @@
 import ComponentView, {html} from './component-view.js';
 
+/**
+ * View для одного компонента меню
+ */
 export default class TypeOptionView extends ComponentView {
   constructor() {
     super(...arguments);
@@ -9,7 +12,7 @@ export default class TypeOptionView extends ComponentView {
 
   /**
    * @override
-   * @param {string} label
+   * @param {string} label ('Taxi')
    * @param {PointType} value
    */
   createAdjacentHtml(label, value) {

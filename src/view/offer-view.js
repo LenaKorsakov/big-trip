@@ -1,9 +1,9 @@
-import BaseView from './base-view';
+import ComponentView, {html} from './component-view.js';
 
 /**
  * View выбранных предложений для точки маршрута
  */
-export default class OfferView extends BaseView {
+export default class OfferView extends ComponentView {
   constructor() {
     super();
 
@@ -14,7 +14,7 @@ export default class OfferView extends BaseView {
    * @override
    */
   createAdjacentHtml() {
-    return `
+    return html`
       <span class="event__offer-title">Order Uber</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">20</span>

@@ -60,4 +60,10 @@ export default class RouteModel {
 
     return clone(destination);
   }
+
+  getDestinationByName(name) {
+    const destination = this.#destinationCache.find((item) => item.name === name);
+
+    return clone(destination);
+  }
 }

@@ -1,6 +1,9 @@
 import ComponentView, {html} from './component-view.js';
 import TypeOptionView from './type-option-view.js';
 
+/**
+ * View иконки с выбором типа пункта путешествия
+ */
 export default class TypeSelectView extends ComponentView {
   constructor() {
     super(...arguments);
@@ -29,6 +32,7 @@ export default class TypeSelectView extends ComponentView {
   }
 
   /**
+   * Параметр - список из подсписков комбинаций вида ['Bus', 'bus'], ...
    * @param {[string, PointType][]} states
    */
   setOptions(states) {
@@ -68,6 +72,7 @@ export default class TypeSelectView extends ComponentView {
 
     if (type === 'radio') {
       this.select(value);
+      this.dispatchEvent(new CustomEvent('labelChanged', {detail: {'value': value}}));
     }
   }
 }

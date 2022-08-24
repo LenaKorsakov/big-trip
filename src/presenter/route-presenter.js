@@ -1,11 +1,11 @@
 import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
 import OfferView from '../view/offer-view';
-import RouteModel from '../model/points-model';
+import RouteModel from '../model/route-model';
 import OfferToggleView from '../view/offer-toggle-view';
 import NoPointsView from '../view/no-points-view';
 import { formatStringToDate,formatStringToHour, formatStringToFullFDate} from '../format';
-import Message from '../enum/placeholder-message-enum';
+import PlaceholderMessageEnum from '../enum/placeholder-message-enum';
 import EditorPresenter from './editor-presenter';
 export default class RoutePresenter {
   constructor() {
@@ -13,6 +13,7 @@ export default class RoutePresenter {
     this.model = new RouteModel();
     this.editorPresenter = new EditorPresenter();
     this.editorView = this.editorPresenter.view;
+    this.message = new PlaceholderMessageEnum();
   }
 
   /**
@@ -41,7 +42,7 @@ export default class RoutePresenter {
       this.editorView.close()
 
         .setDestination(destination.name)
-        //.setLable(point.type)
+        .setLable(point.type)
         .setStartTime(formatStringToFullFDate(point.startDate))
         .setEndTime(formatStringToFullFDate(point.endDate))
         .setPrice(point.basePrice)//TODO проверять, есть ли к данному типу point destination.description, pictures,если нет - вместо методов ниже применить скрытие блоков предусмотренными методами
@@ -58,6 +59,7 @@ export default class RoutePresenter {
   }
 
   /**
+   * Создание фотографий для месторасположения
    * @param {Picture} picture
    */
   createPictureView(picture) {
@@ -85,16 +87,16 @@ export default class RoutePresenter {
       .setTitle(offer.title);
   }
 
-  createNoPointsView(filter) {
+  createNoPointsView() {
     return new NoPointsView()
-      .setMessage(Message[filter]);
+      .setMessage(this.message.EVERYTHING);
   }
 
   init() {
     const points = this.model.getPoins();
 
     if (points.length === 0) {//приходит ли пустой массив, если нет точек?
-      this.view.append(this.createNoPointsView('Everything'));
+      this.view.append(this.createNoPointsView());
     }
     this.view.append(
       ...points.map(this.createPointView, this));
