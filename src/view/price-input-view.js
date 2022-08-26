@@ -25,6 +25,16 @@ export default class PriceInputView extends ComponentView {
       value="">
     `;
   }
+
+  /**
+     * Установит цену события
+     * @param {number}
+     */
+  setPrice(price) {
+    this.querySelector('.event__input--price').value = price;
+
+    return this;
+  }
 }
 
 customElements.define(String(PriceInputView), PriceInputView);

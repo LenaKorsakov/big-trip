@@ -30,4 +30,4 @@ export default class NoPointsView extends ComponentView {
   }
 }
 
-customElements.define('trip-no-points', NoPointsView);
+customElements.define(String(NoPointsView), NoPointsView);

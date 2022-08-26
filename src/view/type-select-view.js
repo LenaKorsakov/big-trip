@@ -72,7 +72,9 @@ export default class TypeSelectView extends ComponentView {
 
     if (type === 'radio') {
       this.select(value);
-      this.dispatchEvent(new CustomEvent('labelChanged', {detail: {'value': value}}));
+      this.dispatchEvent(
+        new CustomEvent('select', {detail: value})
+      );
     }
   }
 }

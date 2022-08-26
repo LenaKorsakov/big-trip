@@ -39,4 +39,4 @@ export default class SortView extends ComponentView {
   }
 }
 
-customElements.define('trip-sort', SortView);
+customElements.define(String(SortView), SortView);

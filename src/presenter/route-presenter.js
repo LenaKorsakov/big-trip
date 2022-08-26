@@ -2,10 +2,9 @@ import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
 import OfferView from '../view/offer-view';
 import RouteModel from '../model/route-model';
-import OfferToggleView from '../view/offer-toggle-view';
 import NoPointsView from '../view/no-points-view';
 import { formatStringToDate,formatStringToHour, formatStringToFullFDate} from '../format';
-import PlaceholderMessageEnum from '../enum/placeholder-message-enum';
+import PlaceholderMessage from '../enum/placeholder-message';
 import EditorPresenter from './editor-presenter';
 export default class RoutePresenter {
   constructor() {
@@ -13,7 +12,7 @@ export default class RoutePresenter {
     this.model = new RouteModel();
     this.editorPresenter = new EditorPresenter();
     this.editorView = this.editorPresenter.view;
-    this.message = new PlaceholderMessageEnum();
+    this.message = new PlaceholderMessage();
   }
 
   /**
@@ -22,6 +21,7 @@ export default class RoutePresenter {
   createPointView(point) {
     const destination = this.model.getDestinationById(point.destinationId);
     const offers = this.model.getOffers(point.type, point.offerIds);
+    const availableOffers = this.model.getAvailableOffers(point.type);
 
     const pointView = new PointView()
       .setDate(formatStringToDate(point.startDate))
@@ -30,46 +30,54 @@ export default class RoutePresenter {
       .setTimeFrom(formatStringToHour(point.startDate))
       .setTimeTo(formatStringToHour(point.endDate))
       .setPrice(point.basePrice)
-      .replaceOffers(...offers.map(this.createOfferView, this));
-
-    const availableOfferViews = this.model.getAvailableOffers(point.type)
-      .map((availableOffer) =>
-        this.createOfferToggleView(availableOffer)
-          .setChecked(point.offerIds.includes(availableOffer.id))
-      , this);
+      .setOffers(offers.map(
+        (offer) => [offer.title, offer.price.toLocaleString()]
+      ));
 
     pointView.addEventListener('expand', () => {
-      this.editorView.close()
+      this.editorView.close();
 
-        .setDestination(destination.name)
-        .setLable(point.type)
+      this.editorView.destinationInputView
+        .select(destination.name)
+        .setLabel(point.type);
+
+      this.editorView.destinationDetailesView
+        .setVisibility(!destination.pictures.length)
+        .setDescription(destination.description)
+        .setPictures(destination.pictures.map(
+          (picture) => [picture.src, picture.description]
+        ));
+
+      this.editorView.typeSelectView
+        .select(point.type);
+
+      this.editorView.offerSelectView
+        .setVisibility(!offers.length)
+        .setOffers(offers.map(
+          (offer) => [offer.title, offer.price.toLocaleString(), true]
+        ).concat(availableOffers.filter(
+          (offer) => !point.offerIds.includes(offer.id)
+        ).map(
+          (offer) => [offer.title, offer.price.toLocaleString(), false]
+        )));
+
+      this.editorView.dataPickerView
         .setStartTime(formatStringToFullFDate(point.startDate))
-        .setEndTime(formatStringToFullFDate(point.endDate))
-        .setPrice(point.basePrice)//TODO проверять, есть ли к данному типу point destination.description, pictures,если нет - вместо методов ниже применить скрытие блоков предусмотренными методами
-        .setDestinationDescription(destination.description)
-        .replacePictures(...destination.pictures.map(this.createPictureView, this))
-        .replaceOffers(...availableOfferViews)
+        .setEndTime(formatStringToFullFDate(point.endDate));
 
-        .link(pointView)
+      this.editorView.priceInputView
+        .setPrice(point.basePrice);
+
+      this.editorView.link(pointView)
         .open();
 
+      this.editorView.addEventListener(
+        'delete', () => {pointView.remove();}
+      );
+      //TODO в обработчике события для клика кнопки delete в редакторе предусмотреть проверку RoutView на hasChildNodes()), если их нет, createNoPointsView('Everything')
     });
 
     return pointView;
-  }
-
-  /**
-   * Создание фотографий для месторасположения
-   * @param {Picture} picture
-   */
-  createPictureView(picture) {
-    const view = new Image();
-
-    view.src = picture.src;
-    view.className = 'event__photo';
-    view.alt = picture.description;
-
-    return view;
   }
 
   /**
@@ -77,12 +85,6 @@ export default class RoutePresenter {
    */
   createOfferView(offer) {
     return new OfferView()
-      .setPrice(offer.price)
-      .setTitle(offer.title);
-  }
-
-  createOfferToggleView(offer) {
-    return new OfferToggleView()
       .setPrice(offer.price)
       .setTitle(offer.title);
   }
@@ -101,6 +103,4 @@ export default class RoutePresenter {
     this.view.append(
       ...points.map(this.createPointView, this));
   }
-
-  //TODO в обработчике события для клика кнопки delete в редакторе предусмотреть проверку RoutView на hasChildNodes()), если их нет, createNoPointsView('Everything')
 }

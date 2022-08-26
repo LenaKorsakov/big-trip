@@ -2,7 +2,7 @@ import ComponentView, {html} from './component-view.js';
 /**
  * View для ввода даты с использованием библиотеки flatpickr.js
  */
-export default class DataPickerView extends ComponentView {
+export default class DatePickerView extends ComponentView {
   constructor() {
     super(...arguments);
 
@@ -22,9 +22,25 @@ export default class DataPickerView extends ComponentView {
     `;
   }
 
-  pickDate() {
-    //
+  /**
+   * Установит время начала события
+   * @param {string}
+   */
+  setStartTime(date) {
+    this.querySelector('#event-start-time-1').value = date;
+
+    return this;
+  }
+
+  /**
+   * Установит время окончания события
+   * @param {string}
+   */
+  setEndTime(date) {
+    this.querySelector('#event-end-time-1').value = date;
+
+    return this;
   }
 }
 
-customElements.define(String(DataPickerView), DataPickerView);
+customElements.define(String(DatePickerView), DatePickerView);

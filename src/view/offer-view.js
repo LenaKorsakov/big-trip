@@ -5,7 +5,7 @@ import ComponentView, {html} from './component-view.js';
  */
 export default class OfferView extends ComponentView {
   constructor() {
-    super();
+    super(...arguments);
 
     this.classList.add('event__offer');
   }
@@ -13,34 +13,13 @@ export default class OfferView extends ComponentView {
   /**
    * @override
    */
-  createAdjacentHtml() {
+  createAdjacentHtml(title, price) {
     return html`
-      <span class="event__offer-title">Order Uber</span>
+      <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">20</span>
+      <span class="event__offer-price">${price}</span>
   `;
-
-  }
-
-  /**
-     * Установит цену предложения
-     * @param {number}
-     */
-  setPrice(price) {
-    this.querySelector('.event__offer-price').textContent = price;
-
-    return this;
-  }
-
-  /**
-   * Установит название предложения
-   * @param {string}
-   */
-  setTitle(title) {
-    this.querySelector('.event__offer-title').textContent = title;
-
-    return this;
   }
 }
 
-customElements.define('trip-offer', OfferView);
+customElements.define(String(OfferView), OfferView);

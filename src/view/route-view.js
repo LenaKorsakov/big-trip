@@ -1,5 +1,7 @@
 import ComponentView from './component-view.js';
 
+/** @typedef {import('../enum/type-label').default} TypeLabel */
+
 /**
  * Trip route
  */
@@ -10,10 +12,27 @@ export default class RouteView extends ComponentView {
     this.classList.add('trip-events__list');
   }
 
+  // createAdjacentHtml() {
+  //   return html`
+  //     <!-- H2
+  //     Message (...Loading)
+  //     Div(контейнер списка) -->
+  //   `;
+  // }
+
+  // showPlaceholder(text) {
+
+  // }
+
+  // hidePlaceholder() {
+  //   //вернуть сортировку
+  // }
+
   /**
    * Oбертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
    * @override
    */
+  //setPoints
   append(...views) {
     views.forEach((view) => view.classList.add('trip-events__item'));
 
@@ -24,4 +43,4 @@ export default class RouteView extends ComponentView {
 
 }
 
-customElements.define('trip-route', RouteView);
+customElements.define(String(RouteView), RouteView);

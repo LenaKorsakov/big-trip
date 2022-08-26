@@ -1,5 +1,7 @@
 import EditorView from '../view/editor-view';
 import RouteModel from '../model/route-model';
+import Type from '../enum/type';
+import TypeLabel from '../enum/type-label';
 export default class EditorPresenter {
   constructor() {
     this.view = new EditorView();
@@ -7,42 +9,43 @@ export default class EditorPresenter {
 
     const destinations = this.model.getAvailableDestinations();
 
+    const typeOptions = Object.keys(Type).map((key) => [TypeLabel[key], Type[key]]);
     const {typeSelectView, destinationDetailesView, destinationInputView, offerSelectView} = this.view;
+
     typeSelectView
-      .setOptions([
-        ['Taxi', 'taxi'],
-        ['Bus', 'bus'],
-        ['Flight', 'flight'],
-        ['Sightseeing', 'sightseeing'],
-        ['Restaurant', 'restaurant'],
-        ['Ship', 'ship'],
-      ])
-      .select('taxi');
+      .setOptions(typeOptions)
+      .select(Type.BUS);
 
     destinationInputView
-      .setOptions(destinations.map((destination) => destination.name))
+      .setOptions(destinations.map((destination) => ['', destination.name]))
       .select('Paris');
 
-    typeSelectView.addEventListener('labelChanged', (event) => {
-      destinationInputView.setLabel(event.detail.value);
+    typeSelectView.addEventListener('select', (event) => {
+      const pointType = event.detail;
+      const labelKey = Type.resolveKey(pointType);
 
-      if (this.model.getAvailableOffers(event.detail.value).length !== 0) {
+      destinationInputView.setLabel(TypeLabel[labelKey]);
 
-        offerSelectView.replaceOffers(this.model.getAvailableOffers(event.detail.value));
-      } else {
-        offerSelectView.hide();
-      }
+      const offers = this.model.getAvailableOffers(pointType);
+      const offerStates = offers.map(
+        (offer) => [offer.title, offer.price.toLocaleString(), false]
+      );
+
+      offerSelectView
+        .setVisibility(!offers.length)
+        .setOffers(offerStates);
     });
 
-    destinationInputView.addEventListener('destinationChanged', (event) => {
+    destinationInputView.addEventListener('select', (event) => {
+      const destination = this.model.getDestinationByName(event.detail);
+      const pictureStates = destination.pictures.map(
+        (picture) => [picture.src, picture.description]
+      );
 
-      if(this.model.getDestinationByName(event.detail.value).pictures.length !== 0) {
-
-        destinationDetailesView.replacePictures(...this.model.getDestinationByName(event.detail.value).pictures);
-        destinationDetailesView.setDescription(this.model.getDestinationByName(event.detail.value).description);
-      } else {
-        destinationDetailesView.hide();
-      }
+      destinationDetailesView
+        .setVisibility(!destination.pictures.length)
+        .setPictures(pictureStates)
+        .setDescription(destination.description);
     });
   }
 }

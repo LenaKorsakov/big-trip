@@ -15,19 +15,19 @@ export default class DestinationInputView extends ComponentView {
     return html`
       <label class="event__label  event__type-output" for="event-destination-1">
 
-    </label>
-    <input class="event__input  event__input--destination"
-      id="event-destination-1"
-      type="text"
-      name="event-destination"
-      value=""
-      list="destination-list-1">
+      </label>
+      <input class="event__input  event__input--destination"
+        id="event-destination-1"
+        type="text"
+        name="event-destination"
+        value=""
+        list="destination-list-1">
 
-      <datalist id="destination-list-1">
-      <!--options-->
-      </datalist>
+        <datalist id="destination-list-1">
+        <!--options-->
+        </datalist>
 
-    </input>
+      </input>
     `;
   }
 
@@ -36,23 +36,13 @@ export default class DestinationInputView extends ComponentView {
   }
 
   /**
-   * @param {string[]} destinations
+   * @param {[string, string][]} states
    */
-  setOptions(destinations) {
-    const views = destinations.map((destination) => this.createOption(destination));
+  setOptions(states) {
+    const views = states.map((state) => new Option(...state));
     this.querySelector('datalist').replaceChildren(...views);
 
     return this;
-  }
-
-  /**
-   * @param {string} destination
-   */
-  createOption(destination) {
-    const option = new Option();
-    option.value = destination;
-
-    return option;
   }
 
   /**
@@ -70,7 +60,9 @@ export default class DestinationInputView extends ComponentView {
   onChange(event) {
     const {value} = event.target;
     this.select(value);
-    this.dispatchEvent(new CustomEvent('destinationChanged', {detail: {'value': value}}));
+    this.dispatchEvent(
+      new CustomEvent('select', {detail: value})
+    );
   }
 }
 

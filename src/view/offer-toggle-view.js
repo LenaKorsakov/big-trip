@@ -24,16 +24,6 @@ export default class OfferToggleView extends ComponentView {
   }
 
   /**
-     * Установит цену предложения
-     * @param {number}
-     */
-  setPrice(price) {
-    this.querySelector('.event__offer-price').textContent = price;
-
-    return this;
-  }
-
-  /**
    * Установит атрибут checked
    * @param {boolean} checked
    */
@@ -42,16 +32,6 @@ export default class OfferToggleView extends ComponentView {
 
     return this;
   }
-
-  /**
-   * Установит название предложения
-   * @param {string}
-   */
-  setTitle(title) {
-    this.querySelector('.event__offer-title').textContent = title;
-
-    return this;
-  }
 }
 
-customElements.define('trip-offer-toggle', OfferToggleView);
+customElements.define(String(OfferToggleView), OfferToggleView);

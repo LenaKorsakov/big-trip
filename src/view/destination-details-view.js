@@ -1,6 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 
-export default class DestinationDetailesView extends ComponentView {
+export default class DestinationDetailsView extends ComponentView {
   constructor() {
     super(...arguments);
 
@@ -13,7 +13,6 @@ export default class DestinationDetailesView extends ComponentView {
    */
   createAdjacentHtml(description) {
     return html`
-      <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
 
@@ -22,15 +21,17 @@ export default class DestinationDetailesView extends ComponentView {
           <!---фотографии--->
           </div>
         </div>
-      </section>
     `;
   }
 
   /**
-   * @param  {...any} views
+   * @param  {[URL, string][]} states
    */
-  replacePictures(...views) {
-    this.querySelector('.event__photos-tape').replaceChildren(...views.map(this.createPictureView,this));
+  setPictures(states) {
+    const views = states.map(([src,alt]) =>
+      Object.assign(new Image(), {src, alt, className: 'event__photo'})
+    );
+    this.querySelector('.event__photos-tape').replaceChildren(...views);
 
     return this;
   }
@@ -57,11 +58,11 @@ export default class DestinationDetailesView extends ComponentView {
     return this;
   }
 
-  hide() {
-    this.style.display = 'none';
+  setVisibility(flag = true) {
+    this.style.display = flag ? 'none' : 'block';
 
     return this;
   }
 }
 
-customElements.define(String(DestinationDetailesView), DestinationDetailesView);
+customElements.define(String(DestinationDetailsView), DestinationDetailsView);
