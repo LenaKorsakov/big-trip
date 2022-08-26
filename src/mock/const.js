@@ -1,4 +1,4 @@
-const PRICE_MAX = 5;
+const PRICE_MAX = 500;
 const PRICE_MIN = 1;
 const PICTURE_MIN = 1;
 const PICTURE_MAX = 5;

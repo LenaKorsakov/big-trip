@@ -1,9 +1,9 @@
-import BaseView from './base-view';
+import ComponentView from './component-view.js';
 
 /**
  * Trip route
  */
-export default class RouteView extends BaseView {
+export default class RouteView extends ComponentView {
   constructor() {
     super();
 

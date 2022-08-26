@@ -1,11 +1,11 @@
 /**
  * @typedef OfferGroup
- * @prop {OfferType} type
+ * @prop {PointType} type
  * @prop {Offer[]} offers
  */
 
 /**
- * @typedef {'taxi' | 'bus' | 'train' | 'ship' | 'drive' | 'flight' | 'check-in' | 'sightseeing' | 'restaurant'} OfferType
+ * @typedef {'taxi' | 'bus' | 'train' | 'ship' | 'drive' | 'flight' | 'check-in' | 'sightseeing' | 'restaurant'} PointType
  */
 
 /**

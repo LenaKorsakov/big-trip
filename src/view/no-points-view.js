@@ -1,15 +1,23 @@
-import BaseView from './base-view';
-import createAdjacentHtml from './no-points-template';
+import ComponentView, {html} from './component-view.js';
 
 /**
  * View сообщения с приглашением добавить первую точку маршрута
  */
-export default class NoPointsView extends BaseView {
+export default class NoPointsView extends ComponentView {
   /**
    * @override
    */
   createAdjacentHtml() {
-    return createAdjacentHtml();
+    return html`
+      <p class="trip-events__msg">Click New Event to create your first point</p>
+
+        <!--
+          Значение отображаемого текста зависит от выбранного фильтра:
+            * Everthing – 'Click New Event to create your first point'
+            * Past — 'There are no past events now';
+            * Future — 'There are no future events now'.
+        -->
+      `;
   }
 
   /**

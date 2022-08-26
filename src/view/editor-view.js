@@ -1,14 +1,32 @@
-import BaseView from './base-view';
-import createAdjacentHtml from './point-editor-template';
+import ComponentView, {html} from './component-view';
+import TypeSelectView from './type-select-view';
+import DataPickerView from './data-picker-view';
+import PriceInputView from './price-input-view';
+import OfferSelectView from './offer-select-view';
+import DestinationDetailesView from './destination-detailes-view';
+import DestinationInputView from './destination-input-view';
 
 /**
  * View редактора точки маршрута
  */
-export default class PointEditorView extends BaseView {
+export default class EditorView extends ComponentView {
   #linkedView = null;
 
   constructor() {
     super();
+
+    /** @type {TypeSelectView} */
+    this.typeSelectView = this.querySelector(String(TypeSelectView));
+    /** @type {DataPickerView} */
+    this.dataPickerView = this.querySelector(String(DataPickerView));
+    /** @type {PriceInputView} */
+    this.priceInputView = this.querySelector(String(PriceInputView));
+    /** @type {PriceInputView} */
+    this.offerSelectView = this.querySelector(String(OfferSelectView));
+    /** @type {DestinationDetailesView} */
+    this.destinationDetailesView = this.querySelector(String(DestinationDetailesView));
+    /** @type {DestinationInputView} */
+    this.destinationInputView = this.querySelector(String(DestinationInputView));
 
     //TODO каждый раз искать элемент - неэффективно, создать метод поиска элемента по передаваемому селектору?
     this.querySelector('.event__reset-btn').addEventListener('click', () => {
@@ -19,7 +37,7 @@ export default class PointEditorView extends BaseView {
       this.close();
     });
 
-    this.querySelector('.event__save-btn').addEventListener('submit', (event) => {
+    this.addEventListener('submit', (event) => {
       event.preventDefault();
       this.close();
     });
@@ -29,7 +47,26 @@ export default class PointEditorView extends BaseView {
    * @override
    */
   createAdjacentHtml() {
-    return createAdjacentHtml();
+    return html`
+      <form class="event event--edit" action="#" method="post">
+      <header class="event__header">
+        ${TypeSelectView}
+        ${DestinationInputView}
+        </div>
+        ${DataPickerView}
+        ${PriceInputView}
+        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+        <button class="event__reset-btn" type="reset">Cancel</button>
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
+      </header>
+      <section class="event__details">
+        ${OfferSelectView}
+        ${DestinationDetailesView}
+      </section>
+    </form>
+  `;
   }
 
   /**
@@ -129,18 +166,6 @@ export default class PointEditorView extends BaseView {
     return this;
   }
 
-  hideOffersBlock() {
-    this.querySelector('.event__section--offers').style.display = 'none';
-
-    return this;
-  }
-
-  hideDestinationBlock() {
-    this.querySelector('.event__section--destination').style.display = 'none';
-
-    return this;
-  }
-
   /**
      * Заменит предложения на выбранные
      * @param  {...any} views
@@ -162,4 +187,4 @@ export default class PointEditorView extends BaseView {
   }
 }
 
-customElements.define('trip-point-editor', PointEditorView);
+customElements.define(String(EditorView), EditorView);
