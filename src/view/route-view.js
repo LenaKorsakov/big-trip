@@ -1,6 +1,6 @@
-import ComponentView from './component-view.js';
-
-/** @typedef {import('../enum/type-label').default} TypeLabel */
+import ComponentView, { html } from './component-view.js';
+import SortSelectView from './sort-select-view.js';
+import NoPointsView from './no-points-view.js';
 
 /**
  * Trip route
@@ -10,33 +10,45 @@ export default class RouteView extends ComponentView {
     super();
 
     this.classList.add('trip-events__list');
+
+    this.sortView = this.querySelector(String(SortSelectView));
+    this.noPointsView = null;
   }
 
-  // createAdjacentHtml() {
-  //   return html`
-  //     <!-- H2
-  //     Message (...Loading)
-  //     Div(контейнер списка) -->
-  //   `;
-  // }
+  createAdjacentHtml() {
+    return html`
+      ${SortSelectView}
+    `;
+  }
 
-  // showPlaceholder(text) {
+  showPlaceholder(text) {
+    this.noPointsView = new NoPointsView(text);
+    this.sortView.replaceWith(this.noPointsView);
 
-  // }
+    return this;
+  }
 
-  // hidePlaceholder() {
-  //   //вернуть сортировку
-  // }
+  hidePlaceholder() {
+    if (this.noPointsView) {
+      this.noPointsView.replaceWith(this.sortView);
+      this.noPointsView = null;
+    }
+
+    return this;
+  }
+
+  hasPoints() {
+    return !!this.querySelector('.trip-events__item');
+  }
 
   /**
    * Oбертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
    * @override
    */
-  //setPoints
-  append(...views) {
+  setPoints(...views) {
     views.forEach((view) => view.classList.add('trip-events__item'));
 
-    super.append(...views);
+    super.replaceChildren(...views);
 
     return this;
   }

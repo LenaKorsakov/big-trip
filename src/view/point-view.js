@@ -5,12 +5,28 @@ import OfferView from './offer-view.js';
  * View точки маршрута
  */
 export default class PointView extends ComponentView {
-  constructor() {
+  #id;
+
+  /**
+   * @param {number} id
+   */
+  constructor(id) {
     super();
 
-    this.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('expand'));
-    });
+    this.#id = id;
+    this.addEventListener('click', this.onClick);
+  }
+
+  onClick(event) {
+    if (!event.target.closest('.event__rollup-btn')) {
+      return;
+    }
+    this.dispatchEvent(
+      new CustomEvent('point-edit', {
+        detail:this.#id,
+        bubbles: true
+      })
+    );
   }
 
   /**
