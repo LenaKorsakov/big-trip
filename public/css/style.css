@@ -354,8 +354,7 @@ main {
   cursor: default;
   -webkit-transition: color 0.2s;
   transition: color 0.2s; }
-  .trip-sort__item:last-child {
-    margin-right: 0; }
+ 
   .trip-sort__item--day {
     width: 55px;
     text-align: center;
