@@ -37,19 +37,6 @@ export default class DestinationDetailsView extends ComponentView {
   }
 
   /**
-   * @param {Picture} picture
-   */
-  createPictureView(picture) {
-    const view = new Image();
-
-    view.src = picture.src;
-    view.className = 'event__photo';
-    view.alt = picture.description;
-
-    return view;
-  }
-
-  /**
    * @param {string} description
    */
   setDescription(description) {
@@ -63,6 +50,7 @@ export default class DestinationDetailsView extends ComponentView {
 
     return this;
   }
+
 }
 
 customElements.define(String(DestinationDetailsView), DestinationDetailsView);

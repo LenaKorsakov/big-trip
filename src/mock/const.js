@@ -7,7 +7,7 @@ const MAX_OFFERS_NUM = 2;
 const MAX_PICTURES = 5;
 const MAX_HOURS_GAP = 200;
 const MAX_MINUTES_GAP = 120;
-const POINTS_NUMBER = 10;
+const POINTS_NUMBER = 15;
 const MAX_ID = 100000;
 
 const pointTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];

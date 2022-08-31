@@ -33,7 +33,7 @@ export default class UiBlocker {
 
     this.#element = document.createElement('div');
     this.#element.classList.add('ui-blocker');
-    document.body.append(this.#element);
+    document.body.setPoints(this.#element);
   }
 
   /** Метод для блокировки интерфейса */

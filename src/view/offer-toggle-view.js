@@ -4,6 +4,11 @@ import ComponentView, {html} from './component-view.js';
  * View предложений для точки маршрута в форме редактирования/создания
  */
 export default class OfferToggleView extends ComponentView {
+  constructor() {
+    super(...arguments);
+
+  }
+
   /**
    * @override
    */

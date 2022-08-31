@@ -4,7 +4,7 @@ import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationDetailsView from './destination-details-view';
-import DestinationInputView from './destination-input-view';
+import DestinationSelectView from './destination-select-view';
 
 /**
  * View редактора точки маршрута
@@ -21,25 +21,18 @@ export default class EditorView extends ComponentView {
     this.dataPickerView = this.querySelector(String(DatePickerView));
     /** @type {PriceInputView} */
     this.priceInputView = this.querySelector(String(PriceInputView));
-    /** @type {PriceInputView} */
+    /** @type {OfferSelectView} */
     this.offerSelectView = this.querySelector(String(OfferSelectView));
     /** @type {DestinationDetailsView} */
-    this.destinationDetailesView = this.querySelector(String(DestinationDetailsView));
-    /** @type {DestinationInputView} */
-    this.destinationInputView = this.querySelector(String(DestinationInputView));
+    this.destinationDetailsView = this.querySelector(String(DestinationDetailsView));
+    /** @type {DestinationSelectView} */
+    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
 
-    this.querySelector('.event__reset-btn').addEventListener(
-      'click', () => {this.onClick();}
-    );
+    this.querySelector('.event__reset-btn').addEventListener('click', this.onDeleteClick.bind(this));
 
-    this.querySelector('.event__rollup-btn').addEventListener(
-      'click', () => {this.close();}
-    );
+    this.querySelector('.event__rollup-btn').addEventListener('click', this.onRollupClick.bind(this));
 
-    this.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this.close();
-    });
+    this.addEventListener('submit', this.onFormSubmit);
   }
 
   /**
@@ -50,7 +43,7 @@ export default class EditorView extends ComponentView {
       <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         ${TypeSelectView}
-        ${DestinationInputView}
+        ${DestinationSelectView}
         </div>
         ${DatePickerView}
         ${PriceInputView}
@@ -85,6 +78,14 @@ export default class EditorView extends ComponentView {
     return this;
   }
 
+  close() {
+    this.replaceWith(this.#linkedView);
+
+    document.removeEventListener('keydown', this);
+
+    return this;
+  }
+
   /**
    * Метод объекта (в данном случае this), реализующего EventListener, служит как колбэк-функция, использование позволяет запомнить нужный контекст
    * @param {KeyboardEvent} event
@@ -96,17 +97,20 @@ export default class EditorView extends ComponentView {
     }
   }
 
-  close() {
-    this.replaceWith(this.#linkedView);
-
-    document.removeEventListener('keydown', this);
-
-    return this;
+  onDeleteClick() {
+    this.close();
+    this.dispatchEvent(
+      new CustomEvent('delete'), {
+      });
   }
 
-  onClick() {
+  onRollupClick() {
     this.close();
-    this.dispatchEvent(new CustomEvent('delete'));
+  }
+
+  onFormSubmit(event) {
+    event.preventDefault();
+    this.close();
   }
 }
 
