@@ -1,19 +1,13 @@
 import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
-import OfferView from '../view/offer-view';
-import RouteModel from '../model/route-model';
-import OfferToggleView from '../view/offer-toggle-view';
-import NoPointsView from '../view/no-points-view';
-import { formatStringToDate,formatStringToHour, formatStringToFullFDate} from '../format';
-import PlaceholderMessageEnum from '../enum/placeholder-message-enum';
-import EditorPresenter from './editor-presenter';
+import { formatStringToDate,formatStringToHour} from '../format';
+import PlaceholderMessage from '../enum/placeholder-message';
+import FilterPredicate from '../enum/filter-predicate';
 export default class RoutePresenter {
-  constructor() {
+  constructor(model) {
     this.view = new RouteView();
-    this.model = new RouteModel();
-    this.editorPresenter = new EditorPresenter();
-    this.editorView = this.editorPresenter.view;
-    this.message = new PlaceholderMessageEnum();
+    this.model = model;
+    this.message = new PlaceholderMessage();
   }
 
   /**
@@ -23,84 +17,41 @@ export default class RoutePresenter {
     const destination = this.model.getDestinationById(point.destinationId);
     const offers = this.model.getOffers(point.type, point.offerIds);
 
-    const pointView = new PointView()
+    return new PointView(point.id)
       .setDate(formatStringToDate(point.startDate))
       .setTitle(`${point.type} ${destination.name}`)
       .setIcon(point.type)
       .setTimeFrom(formatStringToHour(point.startDate))
       .setTimeTo(formatStringToHour(point.endDate))
       .setPrice(point.basePrice)
-      .replaceOffers(...offers.map(this.createOfferView, this));
-
-    const availableOfferViews = this.model.getAvailableOffers(point.type)
-      .map((availableOffer) =>
-        this.createOfferToggleView(availableOffer)
-          .setChecked(point.offerIds.includes(availableOffer.id))
-      , this);
-
-    pointView.addEventListener('expand', () => {
-      this.editorView.close()
-
-        .setDestination(destination.name)
-        .setLable(point.type)
-        .setStartTime(formatStringToFullFDate(point.startDate))
-        .setEndTime(formatStringToFullFDate(point.endDate))
-        .setPrice(point.basePrice)//TODO проверять, есть ли к данному типу point destination.description, pictures,если нет - вместо методов ниже применить скрытие блоков предусмотренными методами
-        .setDestinationDescription(destination.description)
-        .replacePictures(...destination.pictures.map(this.createPictureView, this))
-        .replaceOffers(...availableOfferViews)
-
-        .link(pointView)
-        .open();
-
-    });
-
-    return pointView;
-  }
-
-  /**
-   * Создание фотографий для месторасположения
-   * @param {Picture} picture
-   */
-  createPictureView(picture) {
-    const view = new Image();
-
-    view.src = picture.src;
-    view.className = 'event__photo';
-    view.alt = picture.description;
-
-    return view;
-  }
-
-  /**
-   * @param {Offer} offer
-   */
-  createOfferView(offer) {
-    return new OfferView()
-      .setPrice(offer.price)
-      .setTitle(offer.title);
-  }
-
-  createOfferToggleView(offer) {
-    return new OfferToggleView()
-      .setPrice(offer.price)
-      .setTitle(offer.title);
-  }
-
-  createNoPointsView() {
-    return new NoPointsView()
-      .setMessage(this.message.EVERYTHING);
+      .setOffers(offers.map(
+        (offer) => [offer.title, offer.price.toLocaleString()]
+      ));
   }
 
   init() {
-    const points = this.model.getPoins();
+    const points = this.model.getPoints();
 
-    if (points.length === 0) {//приходит ли пустой массив, если нет точек?
-      this.view.append(this.createNoPointsView());
-    }
-    this.view.append(
-      ...points.map(this.createPointView, this));
+    this.#addPoints(this.message.EVERYTHING, points);
+
+    document.addEventListener('filter-change', this.onFilterChange.bind(this));
   }
 
-  //TODO в обработчике события для клика кнопки delete в редакторе предусмотреть проверку RoutView на hasChildNodes()), если их нет, createNoPointsView('Everything')
+  #addPoints(placeholder, points) {
+    if (!points.length) {//приходит ли пустой массив, если нет точек?
+      this.view.showPlaceholder(placeholder);
+    }
+    this.view.setPoints(
+      ...points.map(this.createPointView, this));
+
+  }
+
+  //TODO Решение временное. Обработчик вешаю в init Сделала так, чтобы подключить к main. Перенести в презентер фильтра, добавить disabled
+  onFilterChange(event) {
+    const filter = event.detail;
+    const filteredPoints = this.model.getPoints().slice().filter(
+      (point) => FilterPredicate[String(filter).toUpperCase()](point)
+    );
+    this.#addPoints(this.message[filter.toUpperCase()], filteredPoints);
+  }
 }

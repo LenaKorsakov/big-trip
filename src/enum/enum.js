@@ -1,5 +1,5 @@
 export default class Enum {
-  static getKey() {
-
+  static resolveKey(value) {
+    return Object.keys(this).find((key) => this[key] === value);
   }
 }

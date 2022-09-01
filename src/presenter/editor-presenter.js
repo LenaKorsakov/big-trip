@@ -1,48 +1,105 @@
 import EditorView from '../view/editor-view';
-import RouteModel from '../model/route-model';
+import Type from '../enum/type';
+import TypeLabel from '../enum/type-label';
+import { formatStringToFullFDate} from '../format';
 export default class EditorPresenter {
-  constructor() {
+  constructor(model) {
     this.view = new EditorView();
-    this.model = new RouteModel();
+    this.model = model;
 
     const destinations = this.model.getAvailableDestinations();
+    const typeOptions = Object.keys(Type).map((key) => [TypeLabel[key], Type[key]]);
+    const {typeSelectView, destinationSelectView: destinationInputView} = this.view;
 
-    const {typeSelectView, destinationDetailesView, destinationInputView, offerSelectView} = this.view;
     typeSelectView
-      .setOptions([
-        ['Taxi', 'taxi'],
-        ['Bus', 'bus'],
-        ['Flight', 'flight'],
-        ['Sightseeing', 'sightseeing'],
-        ['Restaurant', 'restaurant'],
-        ['Ship', 'ship'],
-      ])
-      .select('taxi');
+      .setOptions(typeOptions)
+      .select(Type.TAXI);
 
     destinationInputView
-      .setOptions(destinations.map((destination) => destination.name))
-      .select('Paris');
+      .setOptions(destinations.map((destination) => ['', destination.name]));
 
-    typeSelectView.addEventListener('labelChanged', (event) => {
-      destinationInputView.setLabel(event.detail.value);
+    typeSelectView.addEventListener('select', this.onTypeSelect.bind(this));
 
-      if (this.model.getAvailableOffers(event.detail.value).length !== 0) {
+    destinationInputView.addEventListener('select', this.onDestinationSelect.bind(this));
 
-        offerSelectView.replaceOffers(this.model.getAvailableOffers(event.detail.value));
-      } else {
-        offerSelectView.hide();
-      }
-    });
+    document.addEventListener('point-edit', this.onPointEdit.bind(this));
+  }
 
-    destinationInputView.addEventListener('destinationChanged', (event) => {
+  #setDestinationBlock(destination) {
+    this.view.destinationDetailsView
+      .setVisibility(!destination.pictures.length)
+      .setDescription(destination.description)
+      .setPictures(destination.pictures.map(
+        (picture) => [picture.src, picture.description]
+      ));
+  }
 
-      if(this.model.getDestinationByName(event.detail.value).pictures.length !== 0) {
+  #setOffersBlock(offers, availableOffers, point) {
+    this.view.offerSelectView
+      .setVisibility(!availableOffers.length)
+      .setOffers(offers.map(
+        (offer) => [offer.title, offer.price.toLocaleString(), true]
+      ).concat(availableOffers.filter(
+        (offer) => !point.offerIds.includes(offer.id)
+      ).map(
+        (offer) => [offer.title, offer.price.toLocaleString(), false]
+      )));
+  }
 
-        destinationDetailesView.replacePictures(...this.model.getDestinationByName(event.detail.value).pictures);
-        destinationDetailesView.setDescription(this.model.getDestinationByName(event.detail.value).description);
-      } else {
-        destinationDetailesView.hide();
-      }
-    });
+  onPointEdit(event) {
+    const point = this.model.getPointById(event.detail);
+    const destination = this.model.getDestinationById(point.destinationId);
+    const availableOffers = this.model.getAvailableOffers(point.type);
+    const offers = this.model.getOffers(point.type, point.offerIds);
+
+    this.view.close();
+
+    this.view.destinationSelectView
+      .setValue(destination.name)
+      .setLabel(point.type);
+
+    this.#setDestinationBlock(destination);
+
+    this.view.typeSelectView
+      .select(point.type);
+
+    this.#setOffersBlock(offers, availableOffers, point);
+
+    this.view.dataPickerView
+      .setStartTime(formatStringToFullFDate(point.startDate))
+      .setEndTime(formatStringToFullFDate(point.endDate));
+
+    this.view.priceInputView
+      .setPrice(point.basePrice);
+
+    this.view.link(event.target)
+      .open();
+  }
+
+  onTypeSelect(event) {
+    const pointType = event.detail;
+    const labelKey = Type.resolveKey(pointType);
+    const offers = this.model.getAvailableOffers(pointType);
+    const offerStates = offers.map(
+      (offer) => [offer.title, offer.price.toLocaleString(), false]
+    );
+
+    this.view.destinationSelectView.setLabel(TypeLabel[labelKey]);
+
+    this.view.offerSelectView
+      .setVisibility(!offers.length)
+      .setOffers(offerStates);
+  }
+
+  onDestinationSelect(event) {
+    const destination = this.model.getDestinationByName(event.target.getValue());
+    const pictureStates = destination.pictures.map(
+      (picture) => [picture.src, picture.description]
+    );
+
+    this.view.destinationDetailsView
+      .setVisibility(!destination.pictures.length)
+      .setPictures(pictureStates)
+      .setDescription(destination.description);
   }
 }

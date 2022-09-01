@@ -4,7 +4,7 @@ export default class PointAdapter {
    */
   constructor(point) {
     this.basePrice = point.base_price;
-    this.startDate = point.startDate;
+    this.startDate = point.date_from;
     this.endDate = point.date_to;
     this.destinationId = point.destination;
     this.id = Number(point.id);
@@ -18,7 +18,7 @@ export default class PointAdapter {
   toJSON() {
     return {
       'base_price': this.basePrice,
-      'startDate': this.startDate,
+      'date_from': this.startDate,
       'date_to': this.endDate,
       'destination': this.destinationId,
       'id': String(this.id),

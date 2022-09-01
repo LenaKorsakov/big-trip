@@ -61,5 +61,4 @@ const generatePoint = () => {
 
 const generatePoints = () => Array.from({length: POINTS_NUMBER}, generatePoint);
 
-
 export {generatePoints, generateOfferGroups, generateDestinations};

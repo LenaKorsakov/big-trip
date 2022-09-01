@@ -1,15 +1,32 @@
 import ComponentView, {html} from './component-view.js';
+import OfferView from './offer-view.js';
 
 /**
  * View точки маршрута
  */
 export default class PointView extends ComponentView {
-  constructor() {
+  #id;
+
+  /**
+   * @param {number} id
+   */
+  constructor(id) {
     super();
 
-    this.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('expand'));
-    });
+    this.#id = id;
+    this.addEventListener('click', this.onClick);
+  }
+
+  onClick(event) {
+    if (!event.target.closest('.event__rollup-btn')) {
+      return;
+    }
+    this.dispatchEvent(
+      new CustomEvent('point-edit', {
+        detail:this.#id,
+        bubbles: true
+      })
+    );
   }
 
   /**
@@ -105,14 +122,14 @@ export default class PointView extends ComponentView {
   }
 
   /**
-   Заменит предложения на выбранные
-   * @param  {...any} views
-   */
-  replaceOffers(...views) {
+     * @param  {[string, string][]} states
+     */
+  setOffers(states) {
+    const views = states.map((state) => new OfferView(...state));
     this.querySelector('.event__selected-offers').replaceChildren(...views);
 
     return this;
   }
 }
 
-customElements.define('trip-point', PointView);
+customElements.define(String(PointView), PointView);

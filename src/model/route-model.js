@@ -9,24 +9,24 @@ import { generatePoints, generateDestinations, generateOfferGroups } from '../mo
 const clone = (target) => JSON.parse(JSON.stringify(target));
 export default class RouteModel {
   /** @type {Point[]} */
-  #pointCache = generatePoints();
+  #points = generatePoints();
 
   /** @type {Destination[]} */
-  #destinationCache = generateDestinations();
+  #destinations = generateDestinations();
 
   /** @type {OfferGroup[]} */
-  #offerCache = generateOfferGroups();
+  #offerGroups = generateOfferGroups();
 
 
-  getPoins() {
-    return clone(this.#pointCache).map((point) => new PointAdapter(point));
+  getPoints() {
+    return clone(this.#points).map((point) => new PointAdapter(point));
   }
 
   /**
    * @param {number} id
    */
   getPointById(id) {
-    const point = this.#pointCache.find((item) => item.id === id);
+    const point = this.#points.find((item) => Number(item.id) === id);
 
     return new PointAdapter(point);
   }
@@ -35,7 +35,7 @@ export default class RouteModel {
    * @param {PointType} type
    */
   getAvailableOffers(type) {
-    const group = this.#offerCache.find((item) => item.type === type);
+    const group = this.#offerGroups.find((item) => item.type === type);
 
     return clone(group.offers);
   }
@@ -52,17 +52,17 @@ export default class RouteModel {
   }
 
   getAvailableDestinations() {
-    return clone(this.#destinationCache);
+    return clone(this.#destinations);
   }
 
   getDestinationById(id) {
-    const destination = this.#destinationCache.find((item) => item.id === id);
+    const destination = this.#destinations.find((item) => item.id === id);
 
     return clone(destination);
   }
 
   getDestinationByName(name) {
-    const destination = this.#destinationCache.find((item) => item.name === name);
+    const destination = this.#destinations.find((item) => item.name === name);
 
     return clone(destination);
   }
