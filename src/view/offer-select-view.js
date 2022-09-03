@@ -1,9 +1,10 @@
 import ComponentView, {html} from './component-view.js';
 import OfferToggleView from './offer-toggle-view.js';
+/** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
 
 export default class OfferSelectView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  constructor(...state) {
+    super(...state);
 
     this.classList.add('event__section', 'event__section--offers');
     this.style.display = 'block';
@@ -25,7 +26,7 @@ export default class OfferSelectView extends ComponentView {
   }
 
   /**
-     * @param  {[string, string, boolean][]} states
+     * @param  {OfferSelectState} states
      */
   setOffers(states) {
     const views = states.map(([title, price, isChecked]) => new OfferToggleView(title, price).setChecked(isChecked));

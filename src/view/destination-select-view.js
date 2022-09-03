@@ -1,5 +1,6 @@
 import './destination-select-view.css';
 import ComponentView, {html} from './component-view.js';
+/** @typedef {[string, string][]} DestinationOptionState  */
 
 export default class DestinationSelectView extends ComponentView {
   constructor() {
@@ -47,7 +48,7 @@ export default class DestinationSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, string][]} states
+   * @param {DestinationOptionState} states
    */
   setOptions(states) {
     const views = states.map((state) => new Option(...state));
@@ -89,7 +90,6 @@ export default class DestinationSelectView extends ComponentView {
 
   onChange() {
     this.#moveValueToPlaceholder();
-    this.dispatchEvent(new CustomEvent('select'));
   }
 
   onKeyDown(event) {

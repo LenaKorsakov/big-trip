@@ -1,18 +1,24 @@
 import ComponentView, {html} from './component-view.js';
+/** @typedef {[title: string, price: string]} OfferToggleState  */
 
 /**
  * View предложений для точки маршрута в форме редактирования/создания
  */
 export default class OfferToggleView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  /**
+   * @param {OfferToggleState} state
+   */
+  constructor(...state) {
+    super(...state);
 
   }
 
   /**
    * @override
+   * @param {OfferToggleState} state
    */
-  createAdjacentHtml(title, price) {
+  createAdjacentHtml(...state) {
+    const [title, price] = state;
     return html`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden"

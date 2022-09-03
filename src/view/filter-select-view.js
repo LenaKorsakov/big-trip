@@ -34,8 +34,12 @@ export default class FilterSelectView extends ComponentView {
     return this;
   }
 
-  select(type) {
-    this.querySelector(`[value="${type}"]`).checked = true;
+  getValue() {
+    return this.querySelector('input:checked').value;
+  }
+
+  setValue(value) {
+    this.querySelector(`[value="${value}"]`).checked = true;
 
     return this;
   }

@@ -1,8 +1,9 @@
 import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
 import { formatStringToDate,formatStringToHour} from '../format';
-import PlaceholderMessage from '../enum/placeholder-message';
-import FilterPredicate from '../enum/filter-predicate';
+import PlaceholderMessage from '../enum/filter-placeholder';
+import FilterCallback from '../enum/filter-callback';
+import SortCallback from '../enum/sort-callback';
 export default class RoutePresenter {
   constructor(model) {
     this.view = new RouteView();
@@ -34,7 +35,8 @@ export default class RoutePresenter {
 
     this.#addPoints(this.message.EVERYTHING, points);
 
-    document.addEventListener('filter-change', this.onFilterChange.bind(this));
+    document.addEventListener('select', this.onFilterSelect.bind(this));
+    document.addEventListener('sort-select', this.onSortSelect.bind(this));
   }
 
   #addPoints(placeholder, points) {
@@ -46,12 +48,19 @@ export default class RoutePresenter {
 
   }
 
-  //TODO Решение временное. Обработчик вешаю в init Сделала так, чтобы подключить к main. Перенести в презентер фильтра, добавить disabled
-  onFilterChange(event) {
+  //TODO Решение временное. Обработчик вешаю в init Сделала так, чтобы подключить к main.
+  onFilterSelect(event) {
     const filter = event.detail;
     const filteredPoints = this.model.getPoints().slice().filter(
-      (point) => FilterPredicate[String(filter).toUpperCase()](point)
+      (point) => FilterCallback[String(filter).toUpperCase()](point)
     );
     this.#addPoints(this.message[filter.toUpperCase()], filteredPoints);
+  }
+
+  onSortSelect(event) {
+    const sortType = event.detail;
+    const sortedPoints = this.model.getPoints().slice().sort(SortCallback[String(sortType).toUpperCase()]);
+    this.view.setPoints(
+      ...sortedPoints.map(this.createPointView, this));
   }
 }
