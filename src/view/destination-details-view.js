@@ -1,8 +1,12 @@
 import ComponentView, {html} from './component-view.js';
+/** @typedef {[URL, string][]} DestinationPictureState  */
 
 export default class DestinationDetailsView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  /**
+ * @param  {State} state
+ */
+  constructor(...state) {
+    super(...state);
 
     this.classList.add('event__section', 'event__section--destination');
     this.picturesContainer = this.querySelector('.event__photos-tape');
@@ -25,7 +29,7 @@ export default class DestinationDetailsView extends ComponentView {
   }
 
   /**
-   * @param  {[URL, string][]} states
+   * @param  {DestinationPictureState } states
    */
   setPictures(states) {
     const views = states.map(([src,alt]) =>

@@ -1,21 +1,25 @@
 import ComponentView, {html} from './component-view.js';
+/** @typedef {[label: string, value: PointType]} TypeOptionState  */
 
 /**
  * View для одного компонента меню
  */
 export default class TypeOptionView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  /**
+   * @param {TypeOptionState} state
+   */
+  constructor(...state) {
+    super(...state);
 
     this.classList.add('event__type-item');
   }
 
   /**
    * @override
-   * @param {string} label ('Taxi')
-   * @param {PointType} value
+   * @param {TypeOptionState} state
    */
-  createAdjacentHtml(label, value) {
+  createAdjacentHtml(...state) {
+    const [label, value] = state;
     return html`
       <input
         id="event-type-${value}-1"

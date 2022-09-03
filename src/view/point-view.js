@@ -122,7 +122,7 @@ export default class PointView extends ComponentView {
   }
 
   /**
-     * @param  {[string, string][]} states
+     * @param  {OfferState[]} states
      */
   setOffers(states) {
     const views = states.map((state) => new OfferView(...state));

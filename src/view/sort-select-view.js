@@ -20,8 +20,12 @@ export default class SortSelectView extends ComponentView {
   `;
   }
 
-  select(value) {
-    this.querySelector(`[value="sort-${value}"]`).checked = true;
+  getValue() {
+    return this.querySelector('input:checked').value;
+  }
+
+  setValue(value) {
+    this.querySelector(`[value="${value}"]`).checked = true;
 
     return this;
   }

@@ -1,105 +1,122 @@
+/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
+/** @typedef {import('../view/point-view').default} PointView  */
+
 import EditorView from '../view/editor-view';
 import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
-import { formatStringToFullFDate} from '../format';
+import { formatStringToFullFDate } from '../format';
 export default class EditorPresenter {
+  /** @type {PointAdapter} */
+  #point;
   constructor(model) {
     this.view = new EditorView();
     this.model = model;
 
-    const destinations = this.model.getAvailableDestinations();
-    const typeOptions = Object.keys(Type).map((key) => [TypeLabel[key], Type[key]]);
-    const {typeSelectView, destinationSelectView: destinationInputView} = this.view;
+    this.#buildTypeSelectView().addEventListener(
+      'change',
+      this.onTypeSelectChange.bind(this)
+    );
 
-    typeSelectView
-      .setOptions(typeOptions)
-      .select(Type.TAXI);
-
-    destinationInputView
-      .setOptions(destinations.map((destination) => ['', destination.name]));
-
-    typeSelectView.addEventListener('select', this.onTypeSelect.bind(this));
-
-    destinationInputView.addEventListener('select', this.onDestinationSelect.bind(this));
+    this.#buildDestinationSelectView().addEventListener(
+      'change',
+      this.onDestinationSelectChange.bind(this)
+    );
 
     document.addEventListener('point-edit', this.onPointEdit.bind(this));
   }
 
-  #setDestinationBlock(destination) {
-    this.view.destinationDetailsView
-      .setVisibility(!destination.pictures.length)
-      .setDescription(destination.description)
-      .setPictures(destination.pictures.map(
-        (picture) => [picture.src, picture.description]
-      ));
+  #buildTypeSelectView() {
+    const optionStates = Object.keys(Type).map((key) => [
+      TypeLabel[key],
+      Type[key],
+    ]);
+
+    return this.view.typeSelectView
+      .setOptions(optionStates)
+      .setValue(Type.TAXI);
   }
 
-  #setOffersBlock(offers, availableOffers, point) {
-    this.view.offerSelectView
-      .setVisibility(!availableOffers.length)
-      .setOffers(offers.map(
-        (offer) => [offer.title, offer.price.toLocaleString(), true]
-      ).concat(availableOffers.filter(
-        (offer) => !point.offerIds.includes(offer.id)
-      ).map(
-        (offer) => [offer.title, offer.price.toLocaleString(), false]
-      )));
+  #buildDestinationSelectView() {
+    const destinations = this.model.getAvailableDestinations();
+
+    return this.view.destinationSelectView.setOptions(
+      destinations.map((destination) => ['', destination.name])
+    );
   }
 
-  onPointEdit(event) {
-    const point = this.model.getPointById(event.detail);
-    const destination = this.model.getDestinationById(point.destinationId);
-    const availableOffers = this.model.getAvailableOffers(point.type);
-    const offers = this.model.getOffers(point.type, point.offerIds);
+  #updateTypeSelectView() {
+    this.view.typeSelectView.setValue(this.#point.type);
+  }
 
-    this.view.close();
+  #updateDestinationSelectView() {
+    const destination = this.model.getDestinationById(this.#point.destinationId);
+    const key = Type.resolveKey(this.#point.type);
 
     this.view.destinationSelectView
       .setValue(destination.name)
-      .setLabel(point.type);
-
-    this.#setDestinationBlock(destination);
-
-    this.view.typeSelectView
-      .select(point.type);
-
-    this.#setOffersBlock(offers, availableOffers, point);
-
-    this.view.dataPickerView
-      .setStartTime(formatStringToFullFDate(point.startDate))
-      .setEndTime(formatStringToFullFDate(point.endDate));
-
-    this.view.priceInputView
-      .setPrice(point.basePrice);
-
-    this.view.link(event.target)
-      .open();
+      .setLabel(TypeLabel[key]);
   }
 
-  onTypeSelect(event) {
-    const pointType = event.detail;
-    const labelKey = Type.resolveKey(pointType);
-    const offers = this.model.getAvailableOffers(pointType);
-    const offerStates = offers.map(
-      (offer) => [offer.title, offer.price.toLocaleString(), false]
-    );
+  #updateDatePickerView() {
+    this.view.dataPickerView
+      .setStartTime(formatStringToFullFDate(this.#point.startDate))
+      .setEndTime(formatStringToFullFDate(this.#point.endDate));
+  }
 
-    this.view.destinationSelectView.setLabel(TypeLabel[labelKey]);
+  #updatePriceInputView() {
+    this.view.priceInputView.setPrice(this.#point.basePrice);
+  }
+
+  #updateOfferSelectView() {
+    const selectedType = this.view.typeSelectView.getValue();
+    const availableOffers = this.model.getAvailableOffers(selectedType);
+    const offers = availableOffers.map((offer) => [offer.title, offer.price, this.#point.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
-      .setVisibility(!offers.length)
-      .setOffers(offerStates);
+      .setVisibility(!availableOffers.length)
+      .setOffers(offers);
   }
 
-  onDestinationSelect(event) {
-    const destination = this.model.getDestinationByName(event.target.getValue());
-    const pictureStates = destination.pictures.map(
-      (picture) => [picture.src, picture.description]
+  #updateDestinationDetailsView() {
+    const destination = this.model.getDestinationByName(
+      this.view.destinationSelectView.getValue()
     );
+    const pictureStates = destination.pictures.map((picture) => [
+      picture.src,
+      picture.description,
+    ]);
 
     this.view.destinationDetailsView
       .setVisibility(!destination.pictures.length)
       .setPictures(pictureStates)
       .setDescription(destination.description);
+  }
+
+
+  onPointEdit(event) {
+    this.#point = this.model.getPointById(event.detail);
+
+    this.view.close();
+
+    this.#updateTypeSelectView();
+    this.#updateDestinationSelectView();
+    this.#updateDatePickerView();
+    this.#updatePriceInputView();
+    this.#updateOfferSelectView();
+    this.#updateDestinationDetailsView();
+
+    this.view.link(event.target).open();
+  }
+
+  onTypeSelectChange() {
+    const pointType = this.view.typeSelectView.getValue();
+    const key = Type.resolveKey(pointType);
+
+    this.view.destinationSelectView.setLabel(TypeLabel[key]);
+    this.#updateOfferSelectView();
+  }
+
+  onDestinationSelectChange() {
+    this.#updateDestinationDetailsView();
   }
 }

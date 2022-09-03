@@ -38,18 +38,21 @@ export default class TypeSelectView extends ComponentView {
   setOptions(states) {
     const views = states.map((state) => new TypeOptionView(...state));
 
-    this.querySelectorAll('legend ~ *').forEach((view) => view.remove());
     this.querySelector('legend').after(...views);
 
     return this;
   }
 
+  getValue() {
+    return this.querySelector('[type=radio]:checked').value;
+  }
+
   /**
-   * @param {PointType} type
+   * @param {string} value
    */
-  select(type) {
-    this.querySelector('img').src = `img/icons/${type}.png`;
-    this.querySelector(`[value="${type}"]`).checked = true;
+  setValue(value) {
+    this.querySelector('img').src = `img/icons/${value}.png`;
+    this.querySelector(`[value="${value}"]`).checked = true;
 
     return this.expand(false);
   }
@@ -67,14 +70,12 @@ export default class TypeSelectView extends ComponentView {
     const {type, value} = event.target;
 
     if (type === 'checkbox') {
-      return ;
+      event.stopPropagation();
+      return;
     }
 
     if (type === 'radio') {
-      this.select(value);
-      this.dispatchEvent(
-        new CustomEvent('select', {detail: value})
-      );
+      this.setValue(value);
     }
   }
 }
