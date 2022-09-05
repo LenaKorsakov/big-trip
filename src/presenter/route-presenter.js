@@ -35,7 +35,7 @@ export default class RoutePresenter {
 
     this.#addPoints(this.message.EVERYTHING, points);
 
-    document.addEventListener('select', this.onFilterSelect.bind(this));
+    document.addEventListener('filter-select', this.onFilterSelect.bind(this));
     document.addEventListener('sort-select', this.onSortSelect.bind(this));
   }
 

@@ -27,7 +27,7 @@ export default class FilterSelectPresenter {
       return;
     }
     this.#currentFilter = filter;
-    this.view.dispatchEvent(new CustomEvent('select',{
+    this.view.dispatchEvent(new CustomEvent('filter-select',{
       detail: filter,
       bubbles: true}
     ));

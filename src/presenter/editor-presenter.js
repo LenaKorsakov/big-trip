@@ -60,7 +60,9 @@ export default class EditorPresenter {
   #updateDatePickerView() {
     this.view.dataPickerView
       .setStartTime(formatStringToFullFDate(this.#point.startDate))
-      .setEndTime(formatStringToFullFDate(this.#point.endDate));
+      .setEndTime(formatStringToFullFDate(this.#point.endDate))
+      .setStartTimepicker()
+      .setEndTimepicker();
   }
 
   #updatePriceInputView() {

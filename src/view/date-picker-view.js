@@ -1,10 +1,18 @@
 import ComponentView, {html} from './component-view.js';
+import { formatStringToFullFDate } from '../format.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
+
 /**
  * View для ввода даты с использованием библиотеки flatpickr.js
  */
 export default class DatePickerView extends ComponentView {
+  #datepicker = null;
   constructor() {
     super(...arguments);
+
+    this.defaultTime = formatStringToFullFDate(Date.now());
 
     this.classList.add('event__field-group', 'event__field-group--destination');
   }
@@ -41,6 +49,51 @@ export default class DatePickerView extends ComponentView {
 
     return this;
   }
+
+  removeElement = () => {
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  };
+
+  #onStartDateChange = ([userDate]) => {
+    this.setStartTime(formatStringToFullFDate(userDate));
+  };
+
+  #onEndDateChange = ([userDate]) => {
+    this.setEndTime(formatStringToFullFDate(userDate));
+  };
+
+  // TODO flatpickr есть смысл инициализировать только в случае,
+  // если поле выбора даты доступно для заполнения
+  setStartTimepicker = () => {
+    this.#datepicker = flatpickr(
+      this.querySelector('#event-start-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y h:m',
+        //defaultDate: this.defaultTime,
+        onChange: this.#onStartDateChange, // На событие flatpickr передаём наш колбэк
+      },
+    );
+
+    return this;
+  };
+
+  setEndTimepicker = () => {
+    this.#datepicker = flatpickr(
+      this.querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y h:m',
+        //defaultDate: this.defaultTime,
+        onChange: this.#onEndDateChange
+      },
+    );
+
+    return this;
+  };
 }
 
 customElements.define(String(DatePickerView), DatePickerView);
