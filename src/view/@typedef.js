@@ -5,3 +5,5 @@
 /** @typedef {import('./offer-toggle-view').OfferToggleState} OfferToggleState  */
 /** @typedef {import('./sort-options-view').SortOptionState} SortOptionState */
 /** @typedef {import('./type-option-view').TypeOptionState} TypeOptionState */
+/** @typedef {import('./point-view').PointState} PointState */
+/** @typedef {import('./point-list-view').default} PointListView */

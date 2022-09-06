@@ -7,3 +7,14 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 export const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
 
+export const getRandomHeader = (HEADER_LENGTH) => {
+  const SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  let header = '';
+
+  for (let i = 0; i < HEADER_LENGTH; i++){
+    header += SYMBOLS.charAt(Math.floor(Math.random() * SYMBOLS.length));
+  }
+  return header;
+};
+

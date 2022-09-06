@@ -1,6 +1,11 @@
 import Model from './model';
 
 export default class ApplicationModel extends Model {
+  /**
+   * @param {DataTableModel<Point, PointAdapter>} points
+   * @param {CollectionModel<Destination, DestinationAdapter>} destinations
+   * @param {CollectionModel<OfferGroup, OfferGroupAdapter>} offerGroups
+   */
   constructor(points, destinations, offerGroups) {
     super();
 

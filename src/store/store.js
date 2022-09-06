@@ -12,7 +12,7 @@ export default class Store {
     this.#auth = auth;
   }
 
-  query(path, options = {}) {
+  #query(path, options = {}) {
     const url = this.#baseUrl + path;
     const headers = {
       'authorization': this.#auth,
@@ -31,7 +31,7 @@ export default class Store {
    * @return {Promise<Item[]>}
    */
   list() {
-    return this.query('/', {
+    return this.#query('/', {
       method: 'get'
     });
   }

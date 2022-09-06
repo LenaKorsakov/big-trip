@@ -41,10 +41,6 @@ export default class RouteView extends ComponentView {
     return !!this.querySelector('.trip-events__item');
   }
 
-  /**
-   * Oбертка для существующего метода append, которая добавляет класс всем элементам перед их вставкой
-   * @override
-   */
   setPoints(...views) {
     views.forEach((view) => view.classList.add('trip-events__item'));
 

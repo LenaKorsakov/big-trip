@@ -9,5 +9,3 @@ export default class SortCallback extends Enum {
   static DAY = (pointA, pointB) => Date.parse(pointA.startDate) - Date.parse(pointB.startDate);
   static PRICE = (pointA, pointB) => Number(pointB.basePrice) - Number(pointA.basePrice);
 }
-
-export const sortPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;

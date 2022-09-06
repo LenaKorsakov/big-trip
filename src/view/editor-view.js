@@ -1,4 +1,4 @@
-import ComponentView, {html} from './component-view';
+import ListItemView, {html} from './list-item-view';
 import TypeSelectView from './type-select-view';
 import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
@@ -9,7 +9,7 @@ import DestinationSelectView from './destination-select-view';
 /**
  * View редактора точки маршрута
  */
-export default class EditorView extends ComponentView {
+export default class EditorView extends ListItemView {
   #linkedView = null;
 
   constructor() {
