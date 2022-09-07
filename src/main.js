@@ -16,9 +16,10 @@ import SortSelectPresenter from './presenter/sort-select-presenter';
 import PointListPresenter from './presenter/point-list-presenter';
 
 import PointListView from './view/point-list-view';
+import EditorView from './view/editor-view';
 
-import FilterCallback from './enum/filter-callback';
-import SortCallback from './enum/sort-callback';
+import FilterPredicate from './enum/filter-predicate';
+import SortCompare from './enum/sort-compare';
 import {getRandomHeader} from './utils';
 
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
@@ -38,9 +39,11 @@ const destinationStore = new Store(DESTINATIONS_URL, AUTH);
 /** @type {Store<OfferGroup}*/
 const offersStore = new Store(OFFERS_URL, AUTH);
 
-const points = new DataTableModel(pointStore, (point) => new PointAdapter(point))
-  .setFilter(FilterCallback.EVERYTHING)
-  .setSort(SortCallback.DAY);
+const collectionModel = new DataTableModel(pointStore, (point) => new PointAdapter(point));
+
+const points = collectionModel
+  .setFilter(FilterPredicate.EVERYTHING)
+  .setSort(SortCompare.DAY);
 
 const destinations = new CollectionModel(destinationStore, (destination) => new DestinationAdapter(destination));
 
@@ -54,14 +57,15 @@ const pointListView = document.querySelector(String(PointListView));
 
 applicationModel.ready().then(() => {
   new PointListPresenter(applicationModel, pointListView);
+  new EditorPresenter(applicationModel, new EditorView());
   //TODO остальные
 });
 
-Object.assign(globalThis, {
-  applicationModel,
-  FilterCallback,
-  SortCallback
-});
+// Object.assign(globalThis, {
+//   applicationModel,
+//   FilterPredicate: FilterCallback,
+//   SortCompare: SortCallback
+// });
 
 //const routeContainerView = document.querySelector('.trip-events');
 
@@ -71,7 +75,7 @@ const model = new RouteModel();
 //routePresenter.init();
 //routeContainerView.append(routePresenter.view);
 
-new EditorPresenter(model);
+//new EditorPresenter(model);
 new FilterSelectPresenter(model);
 new SortSelectPresenter(model);
 

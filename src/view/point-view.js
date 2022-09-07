@@ -76,66 +76,6 @@ export default class PointView extends ListItemView {
   }
 
   /**
-   * Установит дату события
-   * @param {string}
-   */
-  setDate(date) {
-    this.querySelector('.event__date').textContent = date;
-
-    return this;
-  }
-
-  /**
-   * Установит название события
-   * @param {string}
-   */
-  setTitle(title) {
-    this.querySelector('.event__title').textContent = title;
-
-    return this;
-  }
-
-  /**
-   * Установит иконку события
-   * @param {string}
-   */
-  setIcon(type){
-    this.querySelector('.event__type-icon').src = `img/icons/${type}.png`;
-
-    return this;
-  }
-
-  /**
-   * Установит время начала события
-   * @param {string}
-   */
-  setTimeFrom(time) {
-    this.querySelector('.event__start-time').textContent = time;
-
-    return this;
-  }
-
-  /**
-     * Установит время окончания события
-     * @param {string}
-     */
-  setTimeTo(time) {
-    this.querySelector('.event__end-time').textContent = time;
-
-    return this;
-  }
-
-  /**
-     * Установит цену события
-     * @param {number}
-     */
-  setPrice(price) {
-    this.querySelector('.event__price-value').textContent = price;
-
-    return this;
-  }
-
-  /**
      * @param  {OfferState[]} states
      */
   setOffers(states) {

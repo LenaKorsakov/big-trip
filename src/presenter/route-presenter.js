@@ -2,8 +2,8 @@ import RouteView from '../view/route-view';
 import PointView from '../view/point-view';
 import { formatStringToDate,formatStringToHour} from '../format';
 import PlaceholderMessage from '../enum/filter-placeholder';
-import FilterCallback from '../enum/filter-callback';
-import SortCallback from '../enum/sort-callback';
+import FilterPredicate from '../enum/filter-predicate';
+import SortCompare from '../enum/sort-compare';
 export default class RoutePresenter {
   constructor(model) {
     this.view = new RouteView();
@@ -52,14 +52,14 @@ export default class RoutePresenter {
   onFilterSelect(event) {
     const filter = event.detail;
     const filteredPoints = this.model.getPoints().slice().filter(
-      (point) => FilterCallback[String(filter).toUpperCase()](point)
+      (point) => FilterPredicate[String(filter).toUpperCase()](point)
     );
     this.#addPoints(this.message[filter.toUpperCase()], filteredPoints);
   }
 
   onSortSelect(event) {
     const sortType = event.detail;
-    const sortedPoints = this.model.getPoints().slice().sort(SortCallback[String(sortType).toUpperCase()]);
+    const sortedPoints = this.model.getPoints().slice().sort(SortCompare[String(sortType).toUpperCase()]);
     this.view.setPoints(
       ...sortedPoints.map(this.createPointView, this));
   }

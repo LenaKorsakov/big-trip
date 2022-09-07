@@ -3,7 +3,7 @@
 
 import Enum from './enum';
 
-export default class FilterCallback extends Enum {
+export default class FilterPredicate extends Enum {
   /**
    * @type {PointPredicate}
    */
