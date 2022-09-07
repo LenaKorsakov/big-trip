@@ -12,6 +12,11 @@ export default class Store {
     this.#auth = auth;
   }
 
+  /**
+   *
+   * @param {URL} path
+   * @param {RequestInit} options
+   */
   #query(path, options = {}) {
     const url = this.#baseUrl + path;
     const headers = {

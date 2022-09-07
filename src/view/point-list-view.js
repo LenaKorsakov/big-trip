@@ -1,7 +1,7 @@
-import ComponentView from './component-view.js';
+import ListView from './list-view';
 import PointView from './point-view.js';
 
-export default class PointListView extends ComponentView {
+export default class PointListView extends ListView {
   /**
    * @param {PointState[]} states
    */

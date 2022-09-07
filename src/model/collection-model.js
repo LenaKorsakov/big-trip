@@ -35,10 +35,17 @@ export default class CollectionModel extends Model {
     return this.#items.map(this.#adapt);
   }
 
+  /**
+   * @param {string} key
+   * @param {any} value
+   */
   findBy(key, value) {
     return this.listAll().find((item) => item[key] === value);
   }
 
+  /**
+   * @param {any} value
+   */
   findById(value) {
     return this.findBy('id', value);
   }

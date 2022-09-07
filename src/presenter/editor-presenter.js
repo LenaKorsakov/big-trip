@@ -74,7 +74,7 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updatePriceInputView() {
-    this.view.priceInputView.setPrice(this.#point.basePrice);
+    this.view.priceInputView(this.#point.basePrice);
   }
 
   #updateOfferSelectView() {

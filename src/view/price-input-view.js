@@ -1,16 +1,17 @@
 import ComponentView, {html} from './component-view.js';
 
 export default class PriceInputView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  constructor(value) {
+    super(value);
 
     this.classList.add('event__field-group', 'event__field-group--price');
   }
 
   /**
    * @override
+   * @param {number} value
    */
-  createAdjacentHtml() {
+  createAdjacentHtml(value) {
     return html`
       <label class="event__label" for="event-price-1">
         <span class="visually-hidden">Price</span>
@@ -22,18 +23,8 @@ export default class PriceInputView extends ComponentView {
       id="event-price-1"
       type="text"
       name="event-price"
-      value="">
+      value="${value}">
     `;
-  }
-
-  /**
-     * Установит цену события
-     * @param {number}
-     */
-  setPrice(price) {
-    this.querySelector('.event__input--price').value = price;
-
-    return this;
   }
 }
 
