@@ -1,24 +1,32 @@
 import Presenter from './presenter';
 import FilterPlaceholderMessage from '../enum/filter-placeholder';
+import FilterPredicate from '../enum/filter-predicate';
 
 /**
- * @template {FilterPlaceholderModel} Model
- * @template {FilterPlaceholderView} View
+ * @template {ApplicationModel} Model
+ * @template {HTMLParagraphElement} View
  * @extends Presenter<Model,View>
  */
-export default class FilterPlaceholderPresenter extends Presenter {
+export default class PlaceholderPresenter extends Presenter {
   /**
    * @param {[model: Model, view: View]} init
    */
   constructor(...init) {
     super(...init);
 
+    this.updateView();
+    this.model.points.addEventListener(
+      ['add', 'update', 'remove', 'filter'],
+      this.updateView.bind(this)
+    );
   }
 
-  togglePlaceholderMessage() {
-    //проверить, есть ли точки (спросить у модели)
-    //если их нет, то через getFilter(?) узнать, какой фильтер выбран по предикату?
-    //передать message во view (message можно узнать в enum через ключ фильтра)
-    //вызвать у view метод, который уберет hidden
+  updateView() {
+    const key = FilterPredicate.findKey(this.model.points.getFilter());
+    const message = FilterPlaceholderMessage[key];
+    const isHidden = Boolean(this.model.points.list().length);
+
+    this.view.hidden = isHidden;
+    this.view.textContent = isHidden ? '' : message;
   }
 }

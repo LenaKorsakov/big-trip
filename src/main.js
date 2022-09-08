@@ -13,7 +13,7 @@ import EditorPresenter from './presenter/editor-presenter';
 import FilterSelectPresenter from './presenter/filter-select-presenter';
 import SortSelectPresenter from './presenter/sort-select-presenter';
 import PointListPresenter from './presenter/point-list-presenter';
-import FilterPlaceholderPresenter from './presenter/filter-placeholder-presentor';
+import PlaceholderPresenter from './presenter/filter-placeholder-presentor';
 
 import PointListView from './view/point-list-view';
 import EditorView from './view/editor-view';
@@ -61,14 +61,14 @@ const filterSelectView = document.querySelector(String(FilterSelectView));
 /** @type {SortSelectView} */
 const sortSelectView = document.querySelector(String(SortSelectView));
 /** @type {SortSelectView} */
-const filterPlaceholderView = document.querySelector(String(FilterPlaceholderView));
+const placeholderView = document.querySelector('.trip-events__msg');
 
 applicationModel.ready().then(() => {
   new PointListPresenter(applicationModel, pointListView);
   new EditorPresenter(applicationModel, new EditorView());
   new FilterSelectPresenter(applicationModel, filterSelectView);
   new SortSelectPresenter(applicationModel, sortSelectView);
-  new FilterPlaceholderPresenter(filterPlaceholderModel,filterPlaceholderView);
+  new PlaceholderPresenter(applicationModel,placeholderView);
 });
 
 // Object.assign(globalThis, {

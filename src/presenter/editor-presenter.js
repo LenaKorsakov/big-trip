@@ -61,7 +61,7 @@ export default class EditorPresenter extends Presenter {
 
   #updateDestinationSelectView() {
     const destination = this.model.destinations.findById(this.#point.destinationId);
-    const key = Type.resolveKey(this.#point.type);
+    const key = Type.findKey(this.#point.type);
 
     this.view.destinationSelectView
       .setValue(destination.name)
@@ -125,7 +125,7 @@ export default class EditorPresenter extends Presenter {
 
   onTypeSelectChange() {
     const pointType = this.view.typeSelectView.getValue();
-    const key = Type.resolveKey(pointType);
+    const key = Type.findKey(pointType);
 
     this.view.destinationSelectView.setLabel(TypeLabel[key]);
     this.#updateOfferSelectView();
