@@ -30,7 +30,10 @@ export default class EditorPresenter extends Presenter {
       this.onDestinationSelectChange.bind(this)
     );
 
-    document.addEventListener('point-edit', this.onPointEdit.bind(this));
+    document.addEventListener(
+      'point-edit',
+      this.onPointEdit.bind(this)
+    );
   }
 
   #buildTypeSelectView() {
@@ -74,7 +77,7 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updatePriceInputView() {
-    this.view.priceInputView(this.#point.basePrice);
+    this.view.priceInputView.setPrice(this.#point.basePrice);
   }
 
   #updateOfferSelectView() {
@@ -107,7 +110,6 @@ export default class EditorPresenter extends Presenter {
 
   onPointEdit(event) {
     this.#point = this.model.points.findById(event.detail);
-
 
     this.view.close();
 

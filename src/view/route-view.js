@@ -1,6 +1,6 @@
 import ComponentView, { html } from './component-view.js';
 import SortSelectView from './sort-select-view.js';
-import NoPointsView from './no-points-view.js';
+import FilterPlaceholderView from './filter-placeholder-view.js';
 
 /**
  * Trip route
@@ -22,7 +22,7 @@ export default class RouteView extends ComponentView {
   }
 
   showPlaceholder(text) {
-    this.noPointsView = new NoPointsView(text);
+    this.noPointsView = new FilterPlaceholderView(text);
     this.sortView.replaceWith(this.noPointsView);
 
     return this;

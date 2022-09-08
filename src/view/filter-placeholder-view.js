@@ -1,15 +1,15 @@
 import ComponentView, {html} from './component-view.js';
 
-/**
- * View сообщения с приглашением добавить первую точку маршрута
- */
-export default class NoPointsView extends ComponentView {
+export default class FilterPlaceholderView extends ComponentView {
   constructor() {
     super(...arguments);
+
+    this.classList.add('hidden');
   }
 
   /**
    * @override
+   * @param {string} message
    */
   createAdjacentHtml(message = 'Loading...') {
     return html`
@@ -22,6 +22,16 @@ export default class NoPointsView extends ComponentView {
         -->
       `;
   }
+
+  toggleVisibility() {
+    if (this.сlassList.contains('hidden')) {
+      this.classList.remove('hidden');
+    } else {
+      this.classList.add('hidden');
+    }
+
+    return this;
+  }
 }
 
-customElements.define(String(NoPointsView), NoPointsView);
+customElements.define(String(FilterPlaceholderView), FilterPlaceholderView);

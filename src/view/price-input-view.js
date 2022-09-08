@@ -1,8 +1,8 @@
 import ComponentView, {html} from './component-view.js';
 
 export default class PriceInputView extends ComponentView {
-  constructor(value) {
-    super(value);
+  constructor() {
+    super(...arguments);
 
     this.classList.add('event__field-group', 'event__field-group--price');
   }
@@ -25,6 +25,16 @@ export default class PriceInputView extends ComponentView {
       name="event-price"
       value="${value}">
     `;
+  }
+
+  /**
+     * Установит цену события
+     * @param {number}
+     */
+  setPrice(price) {
+    this.querySelector('.event__input--price').value = price;
+
+    return this;
   }
 }
 

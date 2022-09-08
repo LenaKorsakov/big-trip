@@ -49,5 +49,23 @@ export default class CollectionModel extends Model {
   findById(value) {
     return this.findBy('id', value);
   }
-  //TODO добавить add update remove
+
+  update() {
+    this.dispatchEvent(new CustomEvent('update'));
+
+    return this;
+  }
+
+  add() {
+    this.dispatchEvent(new CustomEvent('add'));
+
+    return this;
+  }
+
+  remove() {
+    this.dispatchEvent(new CustomEvent('remove'));
+
+    return this;
+  }
+  //TODO доработать add update remove
 }
