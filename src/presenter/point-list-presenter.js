@@ -1,5 +1,6 @@
 import Presenter from './presenter.js';
 import { formatStringToDate,formatStringToHour} from '../format';
+import Mode from '../enum/mode.js';
 
 /**
  * @template {ApplicationModel} Model
@@ -13,7 +14,9 @@ export default class PointListPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.updateView();
+    this.updateView().addEventListener('point-edit', (/** @type {CustomEvent} */ event) => {
+      this.model.setMode(Mode.EDIT, event.detail);
+    });
 
     this.model.points.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
@@ -51,6 +54,7 @@ export default class PointListPresenter extends Presenter {
         title: destination.name
       };
     });
-    this.view.setItems(states);
+
+    return this.view.setItems(states);
   }
 }

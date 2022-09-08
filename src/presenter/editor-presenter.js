@@ -1,6 +1,4 @@
-/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
-/** @typedef {import('../view/point-view').default} PointView  */
-
+import Mode from '../enum/mode';
 import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
 import { formatStringToFullFDate } from '../format';
@@ -12,8 +10,6 @@ import Presenter from './presenter';
  * @extends Presenter<Model,View>
  */
 export default class EditorPresenter extends Presenter {
-  /** @type {PointAdapter} */
-  #point;
   /**
    * @param {[model: Model, view: View]} init
    */
@@ -30,9 +26,13 @@ export default class EditorPresenter extends Presenter {
       this.onDestinationSelectChange.bind(this)
     );
 
-    document.addEventListener(
-      'point-edit',
-      this.onPointEdit.bind(this)
+    this.view.addEventListener('close', () => {
+      this.model.setMode(Mode.VIEW);
+    });
+
+    this.model.addEventListener(
+      'mode',
+      this.onModelMode.bind(this)
     );
   }
 
@@ -56,12 +56,12 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateTypeSelectView() {
-    this.view.typeSelectView.setValue(this.#point.type);
+    this.view.typeSelectView.setValue(this.model.editablePoint.type);
   }
 
   #updateDestinationSelectView() {
-    const destination = this.model.destinations.findById(this.#point.destinationId);
-    const key = Type.findKey(this.#point.type);
+    const destination = this.model.destinations.findById(this.model.editablePoint.destinationId);
+    const key = Type.findKey(this.model.editablePoint.type);
 
     this.view.destinationSelectView
       .setValue(destination.name)
@@ -70,21 +70,21 @@ export default class EditorPresenter extends Presenter {
 
   #updateDatePickerView() {
     this.view.dataPickerView
-      .setStartTime(formatStringToFullFDate(this.#point.startDate))
-      .setEndTime(formatStringToFullFDate(this.#point.endDate))
+      .setStartTime(formatStringToFullFDate(this.model.editablePoint.startDate))
+      .setEndTime(formatStringToFullFDate(this.model.editablePoint.endDate))
       .setStartTimepicker()
       .setEndTimepicker();
   }
 
   #updatePriceInputView() {
-    this.view.priceInputView.setPrice(this.#point.basePrice);
+    this.view.priceInputView.setPrice(this.model.editablePoint.basePrice);
   }
 
   #updateOfferSelectView() {
     const selectedType = this.view.typeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
-    const offers = availableOffers.map((offer) => [offer.title, offer.price, this.#point.offerIds.includes(offer.id)]);
+    const offers = availableOffers.map((offer) => [offer.title, offer.price, this.model.editablePoint.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
       .setVisibility(!availableOffers.length)
@@ -108,10 +108,13 @@ export default class EditorPresenter extends Presenter {
   }
 
 
-  onPointEdit(event) {
-    this.#point = this.model.points.findById(event.detail);
+  onModelMode() {
+    if (this.model.getMode() !== Mode.EDIT) {
+      return;
+    }
 
-    this.view.close();
+    const pointView = document.querySelector(`#item-${this.model.editablePoint.id}`);
+    this.view.close(true);
 
     this.#updateTypeSelectView();
     this.#updateDestinationSelectView();
@@ -120,7 +123,7 @@ export default class EditorPresenter extends Presenter {
     this.#updateOfferSelectView();
     this.#updateDestinationDetailsView();
 
-    this.view.link(event.target).open();
+    this.view.link(pointView).open();
   }
 
   onTypeSelectChange() {

@@ -24,8 +24,9 @@ export default class PointView extends ListItemView {
     super(state);
 
     this.#id = state.id;
-    this.setOffers(state.offers);
+    this.id = `item-${state.id}`;
 
+    this.setOffers(state.offers);
     this.addEventListener('click', this.onClick);
   }
 
@@ -35,7 +36,7 @@ export default class PointView extends ListItemView {
     }
     this.dispatchEvent(
       new CustomEvent('point-edit', {
-        detail:this.#id,
+        detail: this.#id,
         bubbles: true
       })
     );
@@ -48,7 +49,7 @@ export default class PointView extends ListItemView {
   createAdjacentHtml(state) {
 
     return html`
-      <div class="event">
+      <div class ="event">
         <time class="event__date" datetime="${state.isoStartDate}">${state.startDate}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${state.icon}.png" alt="Event type icon">
