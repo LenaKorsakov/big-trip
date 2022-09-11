@@ -1,10 +1,10 @@
 import ListItemView, {html} from './list-item-view';
 import TypeSelectView from './type-select-view';
+import DestinationSelectView from './destination-select-view';
 import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationDetailsView from './destination-details-view';
-import DestinationSelectView from './destination-select-view';
 
 /**
  * @implements EventListenerObject

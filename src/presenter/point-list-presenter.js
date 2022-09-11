@@ -1,6 +1,6 @@
 import Presenter from './presenter.js';
-import { formatStringToDate,formatStringToHour} from '../format';
 import Mode from '../enum/mode.js';
+import { formatStringToDate,formatStringToHour} from '../format';
 
 /**
  * @template {ApplicationModel} Model

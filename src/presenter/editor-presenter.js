@@ -1,8 +1,8 @@
-import Mode from '../enum/mode';
+import Presenter from './presenter';
 import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
-import { formatStringToFullFDate } from '../format';
-import Presenter from './presenter';
+import Mode from '../enum/mode';
+import { getRandomCombination } from '../utils.js';
 
 /**
  * @template {ApplicationModel} Model
@@ -25,6 +25,8 @@ export default class EditorPresenter extends Presenter {
       'change',
       this.onDestinationSelectChange.bind(this)
     );
+
+    this.#buildDatePickerView();
 
     this.view.addEventListener('close', () => {
       this.model.setMode(Mode.VIEW);
@@ -55,6 +57,22 @@ export default class EditorPresenter extends Presenter {
     );
   }
 
+  #buildDatePickerView() {
+    const DATE_FORMAT = 'd/m/y h:m';
+
+    const today = Date.now();
+
+    const options = {
+      dateFormat: DATE_FORMAT,
+      locale: {firstDayOfWeek: 1},
+      //minDate: today
+    };
+
+    this.view.dataPickerView
+      .setStartDate(today, options)
+      .setEndDate(today, options);
+  }
+
   #updateTypeSelectView() {
     this.view.typeSelectView.setValue(this.model.editablePoint.type);
   }
@@ -70,10 +88,8 @@ export default class EditorPresenter extends Presenter {
 
   #updateDatePickerView() {
     this.view.dataPickerView
-      .setStartTime(formatStringToFullFDate(this.model.editablePoint.startDate))
-      .setEndTime(formatStringToFullFDate(this.model.editablePoint.endDate))
-      .setStartTimepicker()
-      .setEndTimepicker();
+      .setStartDate(this.model.editablePoint.startDate)
+      .setEndDate(this.model.editablePoint.endDate, {minDate: this.model.editablePoint.startDate});
   }
 
   #updatePriceInputView() {
@@ -81,10 +97,12 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateOfferSelectView() {
+    const ID_LENGTH = 5;
+
     const selectedType = this.view.typeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
-    const offers = availableOffers.map((offer) => [offer.title, offer.price, this.model.editablePoint.offerIds.includes(offer.id)]);
+    const offers = availableOffers.map((offer) => [offer.title, offer.price, getRandomCombination(ID_LENGTH), this.model.editablePoint.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
       .setVisibility(!availableOffers.length)

@@ -1,5 +1,5 @@
-import Mode from '../enum/mode.js';
 import Presenter from './presenter.js';
+import Mode from '../enum/mode.js';
 
 /**
  * @template {ApplicationModel} Model

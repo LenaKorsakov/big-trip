@@ -1,36 +1,37 @@
 import Store from './store/store';
-import Mode from './enum/mode';
 
 import ApplicationModel from './model/application-model';
-import DataTableModel from './model/data-table-model';
 import CollectionModel from './model/collection-model';
+import DataTableModel from './model/data-table-model';
 
+import PointAdapter from './adapter/point-adapter';
 import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
-import PointAdapter from './adapter/point-adapter';
 
-import EditorPresenter from './presenter/editor-presenter';
+import NewPointButtonPresenter from './presenter/new-point-button-presenter';
 import FilterSelectPresenter from './presenter/filter-select-presenter';
 import SortSelectPresenter from './presenter/sort-select-presenter';
-import PointListPresenter from './presenter/point-list-presenter';
 import PlaceholderPresenter from './presenter/filter-placeholder-presentor';
-import NewPointButtonPresenter from './presenter/new-point-button-presenter';
+import PointListPresenter from './presenter/point-list-presenter';
+import EditorPresenter from './presenter/editor-presenter';
 
-import PointListView from './view/point-list-view';
-import EditorView from './view/editor-view';
 import FilterSelectView from './view/filter-select-view';
 import SortSelectView from './view/sort-select-view';
+import PointListView from './view/point-list-view';
+import EditorView from './view/editor-view';
 
 import FilterPredicate from './enum/filter-predicate';
 import SortCompare from './enum/sort-compare';
-import {getRandomHeader} from './utils';
+import Mode from './enum/mode';
+
+import {getRandomCombination} from './utils';
 
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
 const POINTS_URL = `${BASE_URL}/points`;
 const DESTINATIONS_URL = `${BASE_URL}/destinations`;
 const OFFERS_URL = `${BASE_URL}/offers`;
 const HEADER_LENGTH = 11;
-const AUTH = `Basic ${getRandomHeader(HEADER_LENGTH)}`;
+const AUTH = `Basic ${getRandomCombination(HEADER_LENGTH)}`;
 
 
 /** @type {Store<Point>}*/
@@ -62,7 +63,7 @@ const filterSelectView = document.querySelector(String(FilterSelectView));
 /** @type {SortSelectView} */
 const sortSelectView = document.querySelector(String(SortSelectView));
 
-/** @type {SortSelectView} */
+/** @type {PlaceholdersView} */
 const placeholderView = document.querySelector('.trip-events__msg');
 
 /** @type {HTMLButtonElement} */
@@ -72,9 +73,9 @@ applicationModel.ready().then(() => {
   new NewPointButtonPresenter(applicationModel, newPointButtonView);
   new FilterSelectPresenter(applicationModel, filterSelectView);
   new SortSelectPresenter(applicationModel, sortSelectView);
+  new PlaceholderPresenter(applicationModel,placeholderView);
   new PointListPresenter(applicationModel, pointListView);
   new EditorPresenter(applicationModel, new EditorView());
-  new PlaceholderPresenter(applicationModel,placeholderView);
 });
 
 const {group, groupEnd, trace} = console;

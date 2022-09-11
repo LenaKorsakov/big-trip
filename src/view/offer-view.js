@@ -1,9 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 /** @typedef {[title: string, price: string]} OfferState  */
 
-/**
- * View выбранных предложений для точки маршрута
- */
 export default class OfferView extends ComponentView {
 /**
  * @param  {OfferState} state
