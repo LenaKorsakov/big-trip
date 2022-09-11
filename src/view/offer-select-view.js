@@ -1,5 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 import OfferToggleView from './offer-toggle-view.js';
+
 /** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
 
 export default class OfferSelectView extends ComponentView {
@@ -8,6 +9,8 @@ export default class OfferSelectView extends ComponentView {
 
     this.classList.add('event__section', 'event__section--offers');
     this.style.display = 'block';
+
+    this.addEventListener('click', this.onClick);
   }
 
   /**
@@ -29,7 +32,7 @@ export default class OfferSelectView extends ComponentView {
      * @param  {OfferSelectState} states
      */
   setOffers(states) {
-    const views = states.map(([title, price, isChecked]) => new OfferToggleView(title, price).setChecked(isChecked));
+    const views = states.map(([title, price, id, isChecked]) => new OfferToggleView(title, price, id).setChecked(isChecked));
 
     this.querySelector('.event__available-offers').replaceChildren(...views);
 
@@ -42,6 +45,16 @@ export default class OfferSelectView extends ComponentView {
     return this;
   }
 
+
+  /**
+   * @param {Event & {target: HTMLInputElement}} event
+   */
+  onClick(event) {
+    //if (event.target.type === 'checkbox') {
+    //  const ggg = Boolean(event.target.checked);
+    //  event.target.checked = ggg;
+    //}
+  }
 }
 
 customElements.define(String(OfferSelectView), OfferSelectView);

@@ -1,16 +1,12 @@
 import ComponentView, {html} from './component-view.js';
 /** @typedef {[title: string, price: string]} OfferToggleState  */
 
-/**
- * View предложений для точки маршрута в форме редактирования/создания
- */
 export default class OfferToggleView extends ComponentView {
   /**
    * @param {OfferToggleState} state
    */
   constructor(...state) {
     super(...state);
-
   }
 
   /**
@@ -18,14 +14,14 @@ export default class OfferToggleView extends ComponentView {
    * @param {OfferToggleState} state
    */
   createAdjacentHtml(...state) {
-    const [title, price] = state;
+    const [title, price, id] = state;
     return html`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden"
-        id="event-offer-comfort-1"
+        id="event-offer-comfort-${id}"
         type="checkbox"
         name="event-offer-comfort">
-      <label class="event__offer-label" for="event-offer-comfort-1">
+      <label class="event__offer-label" for="event-offer-comfort-${id}">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
@@ -35,11 +31,10 @@ export default class OfferToggleView extends ComponentView {
   }
 
   /**
-   * Установит атрибут checked
-   * @param {boolean} checked
+   * @param {boolean} flag
    */
-  setChecked(checked) {
-    this.querySelector('.event__offer-checkbox').checked = checked;
+  setChecked(flag) {
+    this.querySelector('.event__offer-checkbox').checked = flag;
 
     return this;
   }

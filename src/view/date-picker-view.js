@@ -1,12 +1,33 @@
 import ComponentView, {html} from './component-view.js';
-/**
- * View для ввода даты с использованием библиотеки flatpickr.js
- */
+import initCalendar from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
+
+/** @typedef {import('flatpickr/dist/types/instance').Instance} Calendar */
+/** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
+/** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
+
 export default class DatePickerView extends ComponentView {
+  #startDateCalendar;
+  #endDateCalendar;
+
   constructor() {
     super(...arguments);
 
     this.classList.add('event__field-group', 'event__field-group--destination');
+
+    this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'), {
+      enableTime: true,
+      onChange: [(dates) =>
+        this.#endDateCalendar.set('minDate', dates[0])
+      ]
+    });
+    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'), {
+      enableTime: true,
+      onChange: [(dates) =>
+        this.#startDateCalendar.set('maxDate', dates[0])
+      ]
+    });
   }
 
   /**
@@ -23,21 +44,23 @@ export default class DatePickerView extends ComponentView {
   }
 
   /**
-   * Установит время начала события
-   * @param {string}
+   * @param {CalendarDate} date
+   * @param {CalendarOptions} options
    */
-  setStartTime(date) {
-    this.querySelector('#event-start-time-1').value = date;
+  setStartDate(date, options = {}) {
+    this.#startDateCalendar.set(options);
+    this.#startDateCalendar.setDate(date);
 
     return this;
   }
 
   /**
-   * Установит время окончания события
-   * @param {string}
+   * @param {CalendarDate} date
+   * @param {CalendarOptions} options
    */
-  setEndTime(date) {
-    this.querySelector('#event-end-time-1').value = date;
+  setEndDate(date, options = {}) {
+    this.#endDateCalendar.set(options);
+    this.#endDateCalendar.setDate(date);
 
     return this;
   }

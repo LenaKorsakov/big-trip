@@ -9,8 +9,9 @@ export default class PriceInputView extends ComponentView {
 
   /**
    * @override
+   * @param {number} value
    */
-  createAdjacentHtml() {
+  createAdjacentHtml(value) {
     return html`
       <label class="event__label" for="event-price-1">
         <span class="visually-hidden">Price</span>
@@ -22,7 +23,7 @@ export default class PriceInputView extends ComponentView {
       id="event-price-1"
       type="text"
       name="event-price"
-      value="">
+      value="${value}">
     `;
   }
 

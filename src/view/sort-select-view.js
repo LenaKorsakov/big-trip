@@ -1,9 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 import SortOptionView from './sort-options-view.js';
 
-/**
- * View сортировки
- */
 export default class SortSelectView extends ComponentView {
   constructor() {
     super(...arguments);

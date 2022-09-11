@@ -1,15 +1,23 @@
-import FilterSelectView from '../view/filter-select-view';
-import FilterLabel from '../enum/filter-label';
+import Presenter from './presenter';
 import Filter from '../enum/filter';
+import FilterLabel from '../enum/filter-label';
+import FilterPredicate from '../enum/filter-predicate';
 
-export default class FilterSelectPresenter {
+/**
+ * @template {ApplicationModel} Model
+ * @template {FilterSelectView} View
+ * @extends Presenter<Model,View>
+ */
+export default class FilterSelectPresenter extends Presenter {
   #currentFilter = Filter.EVERYTHING;
 
-  constructor(model) {
-    this.model = model;
-    this.view = document.querySelector(String(FilterSelectView));
+  /**
+   * @param {[model: Model, view: View]} init
+   */
+  constructor(...init) {
+    super(...init);
 
-    this.#buildFilterSelectView().addEventListener('click', this.onFilterClick.bind(this));
+    this.#buildFilterSelectView().addEventListener('change', this.onFilterChange.bind(this));
   }
 
   #buildFilterSelectView() {
@@ -20,16 +28,10 @@ export default class FilterSelectPresenter {
       .setValue(this.#currentFilter);
   }
 
-  onFilterClick() {
-    const filter = this.view.getValue();
+  onFilterChange() {
+    const key = this.view.getValue().toUpperCase();
 
-    if (this.#currentFilter === Filter[String(filter).toUpperCase()]) {
-      return;
-    }
-    this.#currentFilter = filter;
-    this.view.dispatchEvent(new CustomEvent('select',{
-      detail: filter,
-      bubbles: true}
-    ));
+    this.#currentFilter = Filter[key];
+    this.model.points.setFilter(FilterPredicate[key]);
   }
 }

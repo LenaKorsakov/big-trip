@@ -1,38 +1,48 @@
-import SortSelectView from '../view/sort-select-view';
+import Presenter from './presenter';
 import Sort from '../enum/sort';
 import SortLabel from '../enum/sort-label';
+import SortCompare from '../enum/sort-compare';
+import SortDisabled from '../enum/sort-disabled';
+import Mode from '../enum/mode';
 
-export default class SortSelectPresenter {
-  #currentSort = Sort.DAY;
+/**
+ * @template {ApplicationModel} Model
+ * @template {SortSelectView} View
+ * @extends Presenter<Model,View>
+ */
+export default class SortSelectPresenter extends Presenter{
+  /**
+   * @param {[model: Model, view: View]} init
+   */
+  constructor(...init) {
+    super(...init);
 
-  constructor(model) {
-    this.model = model;
-    this.view = document.querySelector(String(SortSelectView));
+    this.model.addEventListener('mode', () => {
+      const flags = Object.values(SortDisabled);
 
-    this.#buildSortSelectView().addEventListener('click', this.onSortClick.bind(this));
+      if (this.model.getMode() !== Mode.VIEW) {
+        flags.fill(true);
+      }
+      this.view.setOptionsDisabled(flags);
+    });
+
+    this.#buildSortSelectView().addEventListener('change', this.onSortChange.bind(this));
   }
 
   #buildSortSelectView() {
+    const flags = Object.values(SortDisabled);
     const sortOptions = Object.keys(Sort).map((key) => [SortLabel[key], Sort[key]]);
-    const flags = [false, true, true, false, true];
+    const sortKey = SortCompare.findKey(this.model.points.getSort());
 
     return this.view
       .setOptions(sortOptions)
-      .setValue(Sort.DAY)
+      .setValue(Sort[sortKey])
       .setOptionsDisabled(flags);
-
   }
 
-  onSortClick() {
-    const sort = this.view.getValue();
+  onSortChange() {
+    const key = this.view.getValue().toUpperCase();
 
-    if (this.#currentSort === Sort[String(sort).toUpperCase()]) {
-      return;
-    }
-    this.#currentSort = sort;
-    this.view.dispatchEvent(new CustomEvent('sort-select',{
-      detail: sort,
-      bubbles: true}
-    ));
+    this.model.points.setSort(SortCompare[key]);
   }
 }

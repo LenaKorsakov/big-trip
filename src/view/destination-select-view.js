@@ -1,5 +1,5 @@
-import './destination-select-view.css';
 import ComponentView, {html} from './component-view.js';
+import './destination-select-view.css';
 /** @typedef {[string, string][]} DestinationOptionState  */
 
 export default class DestinationSelectView extends ComponentView {

@@ -1,9 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 /** @typedef {[label: string, value: PointType]} TypeOptionState  */
 
-/**
- * View для одного компонента меню
- */
 export default class TypeOptionView extends ComponentView {
   /**
    * @param {TypeOptionState} state
