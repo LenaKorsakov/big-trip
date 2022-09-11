@@ -1,5 +1,6 @@
 import ComponentView, {html} from './component-view.js';
 import TypeOptionView from './type-option-view.js';
+/** @typedef {[label: string, value: PointType]} TypeOptionState  */
 
 export default class TypeSelectView extends ComponentView {
   constructor() {
@@ -29,12 +30,35 @@ export default class TypeSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, PointType][]} states
+   * @param {TypeOptionState} states
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`
+    <div class="event__type-item">
+      <input
+          id="event-type-${value}-1"
+          class="event__type-input  visually-hidden"
+          type="radio"
+          name="event-type"
+          value="${value}"
+        >
+        <label class="event__type-label  event__type-label--${value}" for="event-type-${value}-1">
+          ${label}
+        </label>
+    </div>
+    `;
+  }
+
+  /**
+   * @param {TypeOptionState[]} states
    */
   setOptions(states) {
-    const views = states.map((state) => new TypeOptionView(...state));
+    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
 
-    this.querySelector('legend').after(...views);
+    this.querySelector('legend')
+      .insertAdjacentHTML('afterend', html`${htmlOptions}`);
 
     return this;
   }

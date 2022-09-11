@@ -1,7 +1,10 @@
 import Presenter from './presenter';
 import Filter from '../enum/filter';
+import SortCompare from '../enum/sort-compare';
 import FilterLabel from '../enum/filter-label';
 import FilterPredicate from '../enum/filter-predicate';
+import FilterDisabled from '../enum/filter-disabled';
+import Mode from '../enum/mode';
 
 /**
  * @template {ApplicationModel} Model
@@ -17,21 +20,30 @@ export default class FilterSelectPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
+    this.model.addEventListener('mode', () => {
+      const flags = Object.values(FilterDisabled);
+
+      if (this.model.getMode() !== Mode.VIEW) {
+        flags.fill(true);
+      }
+      this.view.setOptionsDisabled(flags);
+    });
+
     this.#buildFilterSelectView().addEventListener('change', this.onFilterChange.bind(this));
   }
 
   #buildFilterSelectView() {
     const filterOptions = Object.keys(Filter).map((key) => [FilterLabel[key], Filter[key]]);
+    const filterKey = FilterPredicate.findKey(this.model.points.getFilter());
 
     return this.view
       .setOptions(filterOptions)
-      .setValue(this.#currentFilter);
+      .setValue(Filter[filterKey]);
   }
 
   onFilterChange() {
-    const key = this.view.getValue().toUpperCase();
+    const filterKey = this.view.getValue().toUpperCase();
 
-    this.#currentFilter = Filter[key];
-    this.model.points.setFilter(FilterPredicate[key]);
+    this.model.points.setFilter(FilterPredicate[filterKey]);
   }
 }

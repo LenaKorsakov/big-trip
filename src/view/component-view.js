@@ -47,6 +47,9 @@ export function html(strings, ...values) {
     if (typeof value === 'function') {
       value = `<${value}></${value}>`;
     }
+    if (Array.isArray(value)) {
+      value = value.join('');
+    }
     return result + value + strings[index + 1];
 
   }, strings[0]);

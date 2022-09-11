@@ -41,8 +41,8 @@ export default class SortSelectPresenter extends Presenter{
   }
 
   onSortChange() {
-    const key = this.view.getValue().toUpperCase();
+    const sortKey = this.view.getValue().toUpperCase();
 
-    this.model.points.setSort(SortCompare[key]);
+    this.model.points.setSort(SortCompare[sortKey]);
   }
 }

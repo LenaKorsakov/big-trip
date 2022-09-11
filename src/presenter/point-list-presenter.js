@@ -22,7 +22,7 @@ export default class PointListPresenter extends Presenter {
       ['add', 'update', 'remove', 'filter', 'sort'],
       this.updateView.bind(this)
     );
-
+    //когда происходит событие filter в list() аргументом надо передать SortCompare.DAY
     // this.model
     // this.view
   }

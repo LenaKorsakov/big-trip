@@ -34,8 +34,6 @@ export default class DestinationSelectView extends ComponentView {
         <datalist id="destination-list-1">
         <!--options-->
         </datalist>
-
-      </input>
     `;
   }
 

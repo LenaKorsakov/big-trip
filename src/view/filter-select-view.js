@@ -1,5 +1,5 @@
 import ComponentView, {html} from './component-view.js';
-import FilterOptionView from './filter-option-view.js';
+/** @typedef {[label: string, value: string]} FilterOptionState  */
 
 export default class FilterSelectView extends ComponentView {
   constructor() {
@@ -21,12 +21,40 @@ export default class FilterSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, string][]} states
+   *
+   * @param  {FilterOptionState} state
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`
+      <div class="trip-filters__filter">
+        <input
+          id="filter-${value}"
+          class="trip-filters__filter-input  visually-hidden"
+          type="radio"
+          name="trip-filter"
+          value="${value}"
+        >
+        <label
+          class="trip-filters__filter-label"
+          for="filter-${value}"
+        >
+          ${label}
+        </label>
+      </div>
+    `;
+  }
+
+  /**
+   * @param {FilterOptionState[]} states
    */
   setOptions(states) {
-    const views = states.map((state) => new FilterOptionView(...state));
+    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
 
-    this.querySelector('button').before(...views);
+    this.querySelector('button')
+      .insertAdjacentHTML('beforebegin', html`${htmlOptions}`
+      );
 
     return this;
   }
@@ -55,7 +83,4 @@ export default class FilterSelectView extends ComponentView {
   }
 }
 
-/**
- * Теперь для любых HTML-элементов с тегом <trip-filter-select> создаётся экземпляр FilterView и вызываются его методы
- */
 customElements.define(String(FilterSelectView), FilterSelectView);

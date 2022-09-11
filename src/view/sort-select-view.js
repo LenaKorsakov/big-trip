@@ -1,5 +1,5 @@
 import ComponentView, {html} from './component-view.js';
-import SortOptionView from './sort-options-view.js';
+/** @typedef {[label: string, value: string]} SortOptionState  */
 
 export default class SortSelectView extends ComponentView {
   constructor() {
@@ -17,6 +17,32 @@ export default class SortSelectView extends ComponentView {
   `;
   }
 
+  /**
+   *  * @param {OfferState} state
+   *  @override
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`
+      <div class="trip-sort__item trip-sort__item--${value}">
+        <input
+          id="sort-${value}"
+          class="trip-sort__input  visually-hidden"
+          type="radio"
+          name="trip-sort"
+          value="${value}"
+        >
+        <label
+          class="trip-sort__btn"
+          for="sort-${value}"
+        >
+          ${label}
+        </label>
+      </div>
+    `;
+  }
+
   getValue() {
     return this.querySelector('input:checked').value;
   }
@@ -28,12 +54,14 @@ export default class SortSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, string][]} states
+   * @param {SortOptionState[]} states
    */
   setOptions(states) {
-    const views = states.map((state) => new SortOptionView(...state));
+    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
 
-    this.querySelector('.trip-events__trip-sort').append(...views);
+    this.querySelector('.trip-events__trip-sort')
+      .insertAdjacentHTML('afterbegin', html`${htmlOptions}`
+      );
 
     return this;
   }
@@ -43,7 +71,6 @@ export default class SortSelectView extends ComponentView {
    */
   setOptionsDisabled(flags) {
     const views = this.querySelectorAll('input');
-
     flags.forEach((flag, index) => {
       views[index].disabled = flag;
     });

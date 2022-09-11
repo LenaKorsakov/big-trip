@@ -9,8 +9,6 @@ export default class OfferSelectView extends ComponentView {
 
     this.classList.add('event__section', 'event__section--offers');
     this.style.display = 'block';
-
-    this.addEventListener('click', this.onClick);
   }
 
   /**
@@ -43,17 +41,6 @@ export default class OfferSelectView extends ComponentView {
     this.style.display = flag ? 'none' : 'block';
 
     return this;
-  }
-
-
-  /**
-   * @param {Event & {target: HTMLInputElement}} event
-   */
-  onClick(event) {
-    //if (event.target.type === 'checkbox') {
-    //  const ggg = Boolean(event.target.checked);
-    //  event.target.checked = ggg;
-    //}
   }
 }
 

@@ -1,5 +1,4 @@
 import ListItemView, {html} from './list-item-view.js';
-import OfferView from './offer-view.js';
 
 /**
  * @typedef PointState
@@ -26,7 +25,6 @@ export default class PointView extends ListItemView {
     this.#id = state.id;
     this.id = `item-${state.id}`;
 
-    this.setOffers(state.offers);
     this.addEventListener('click', this.onClick);
   }
 
@@ -67,23 +65,19 @@ export default class PointView extends ListItemView {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <div class="event__selected-offers">
-        <!--offers-->
+          ${state.offers.map(([title, price]) => html`
+          <div class = "event__offer">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+         </div>
+        `)}
         </div>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
   `;
-  }
-
-  /**
-     * @param  {OfferState[]} states
-     */
-  setOffers(states) {
-    const views = states.map((state) => new OfferView(...state));
-    this.querySelector('.event__selected-offers').replaceChildren(...views);
-
-    return this;
   }
 }
 

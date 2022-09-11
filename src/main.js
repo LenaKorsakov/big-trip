@@ -45,7 +45,7 @@ const offersStore = new Store(OFFERS_URL, AUTH);
 
 const points = new DataTableModel(pointStore, (point) => new PointAdapter(point))
   .setFilter(FilterPredicate.EVERYTHING)
-  .setSort(SortCompare.PRICE);
+  .setSort(SortCompare.DAY);
 
 const destinations = new CollectionModel(destinationStore, (destination) => new DestinationAdapter(destination));
 
