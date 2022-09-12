@@ -48,13 +48,6 @@ export default class DestinationDetailsView extends ComponentView {
 
     return this;
   }
-
-  setVisibility(flag = true) {
-    this.style.display = flag ? 'none' : 'block';
-
-    return this;
-  }
-
 }
 
 customElements.define(String(DestinationDetailsView), DestinationDetailsView);

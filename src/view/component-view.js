@@ -22,6 +22,16 @@ export default class ComponentView extends HTMLElement {
     return data.join('');
   }
 
+  /**
+   * @param {string} key
+   * @param {any} value
+   */
+  set(key, value) {
+    this[key] = value;
+
+    return this;
+  }
+
   static get tagNamePrefix() {
     return 'trip';
   }

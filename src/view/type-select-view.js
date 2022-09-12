@@ -1,8 +1,6 @@
-import ComponentView, {html} from './component-view.js';
-import TypeOptionView from './type-option-view.js';
-/** @typedef {[label: string, value: PointType]} TypeOptionState  */
+import RadioGroupView, {html} from './radio-group-view';
 
-export default class TypeSelectView extends ComponentView {
+export default class TypeSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
@@ -57,24 +55,21 @@ export default class TypeSelectView extends ComponentView {
   setOptions(states) {
     const htmlOptions = states.map((state) => this.createOptionHtml(...state));
 
-    this.querySelector('legend')
-      .insertAdjacentHTML('afterend', html`${htmlOptions}`);
+    this.querySelector('legend').insertAdjacentHTML('afterend', html`${htmlOptions}`);
 
     return this;
   }
 
-  getValue() {
-    return this.querySelector('[type=radio]:checked').value;
-  }
-
   /**
+   * @override
    * @param {string} value
    */
   setValue(value) {
-    this.querySelector('img').src = `img/icons/${value}.png`;
-    this.querySelector(`[value="${value}"]`).checked = true;
+    super.setValue(value);
 
-    return this.expand(false);
+    this.querySelector('img').src = `img/icons/${value}.png`;
+
+    return this;
   }
 
   expand(flag = true) {
@@ -95,7 +90,7 @@ export default class TypeSelectView extends ComponentView {
     }
 
     if (type === 'radio') {
-      this.setValue(value);
+      this.setValue(value).expand(false);
     }
   }
 }

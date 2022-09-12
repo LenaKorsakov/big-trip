@@ -14,13 +14,16 @@ export default class OfferToggleView extends ComponentView {
    * @param {OfferToggleState} state
    */
   createAdjacentHtml(...state) {
-    const [title, price, id] = state;
+    const [title, price, id, checked] = state;
     return html`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden"
         id="event-offer-comfort-${id}"
         type="checkbox"
-        name="event-offer-comfort">
+        name="event-offer-comfort"
+        value="${id}";
+        ${checked ? 'checked' : ''}
+      >
       <label class="event__offer-label" for="event-offer-comfort-${id}">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;

@@ -2,7 +2,7 @@ import Presenter from './presenter';
 import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
 import Mode from '../enum/mode';
-import { getRandomCombination } from '../utils.js';
+import PointAdapter from '../adapter/point-adapter';
 
 /**
  * @template {ApplicationModel} Model
@@ -21,6 +21,9 @@ export default class EditorPresenter extends Presenter {
     this.#buildDestinationSelectView();
 
     this.view.addEventListener('close', this.onViewClose.bind(this));
+    this.view.addEventListener('reset', this.onViewReset.bind(this));
+    this.view.addEventListener('submit', this.onViewSubmit.bind(this));
+
 
     this.view.typeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
     this.view.destinationSelectView.addEventListener('change', this.onViewDestinationSelectChange.bind(this));
@@ -83,15 +86,13 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateOfferSelectView() {
-    const ID_LENGTH = 5;
-
     const selectedType = this.view.typeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
-    const offers = availableOffers.map((offer) => [offer.title, offer.price, getRandomCombination(ID_LENGTH), this.model.editablePoint.offerIds.includes(offer.id)]);
+    const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.editablePoint.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
-      .setVisibility(!availableOffers.length)
+      .set('hidden', !availableOffers.length)
       .setOffers(offers);
   }
 
@@ -106,11 +107,10 @@ export default class EditorPresenter extends Presenter {
     ]);
 
     this.view.destinationDetailsView
-      .setVisibility(!destination.pictures.length)
+      .set('hidden', !destination.pictures.length)
       .setPictures(pictureStates)
       .setDescription(destination.description);
   }
-
 
   onModelMode() {
     if (this.model.getMode() !== Mode.EDIT) {
@@ -144,5 +144,43 @@ export default class EditorPresenter extends Presenter {
 
   onViewClose() {
     this.model.setMode(Mode.VIEW);
+  }
+
+  async onViewReset() {
+    try {
+      await this.model.points.remove(this.model.editablePoint.id);
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+  }
+
+  async onViewSubmit() {
+    try {
+      await this.model.points.update(this.model.editablePoint.id, this.getFormData());
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+  }
+
+  getFormData() {
+    const point = new PointAdapter();
+    const destinationName = this.view.destinationSelectView.getValue();
+    const [startDate, endDate] = this.view.dataPickerView.getDates();
+
+    point.type = this.view.typeSelectView.getValue();
+    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
+    point.startDate = startDate;
+    point.endDate = endDate;
+    point.basePrice = Number(this.view.priceInputView.getPrice());
+    point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
+    point.isFavorite = false;
+
+    return point;
   }
 }

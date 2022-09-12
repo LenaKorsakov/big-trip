@@ -36,6 +36,10 @@ export default class PriceInputView extends ComponentView {
 
     return this;
   }
+
+  getPrice() {
+    return this.querySelector('.event__input--price').value;
+  }
 }
 
 customElements.define(String(PriceInputView), PriceInputView);

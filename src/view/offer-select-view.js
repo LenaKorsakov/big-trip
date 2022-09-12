@@ -1,14 +1,12 @@
 import ComponentView, {html} from './component-view.js';
 import OfferToggleView from './offer-toggle-view.js';
-
-/** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
+import './offer-select-view.css';
 
 export default class OfferSelectView extends ComponentView {
   constructor(...state) {
     super(...state);
 
     this.classList.add('event__section', 'event__section--offers');
-    this.style.display = 'block';
   }
 
   /**
@@ -37,10 +35,10 @@ export default class OfferSelectView extends ComponentView {
     return this;
   }
 
-  setVisibility(flag = true) {
-    this.style.display = flag ? 'none' : 'block';
+  getSelectedValues() {
+    const views = this.querySelectorAll(':checked');
 
-    return this;
+    return [...views].map((view) => view.value);
   }
 }
 

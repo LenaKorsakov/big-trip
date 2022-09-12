@@ -1,18 +1,6 @@
 import ListItemView, {html} from './list-item-view.js';
 
-/**
- * @typedef PointState
- * @prop {number} id
- * @prop {string} isoStartDate
- * @prop {string} isoEndDate
- * @prop {string} startDate
- * @prop {string} title
- * @prop {string} icon
- * @prop {string} startTime
- * @prop {string} endTime
- * @prop {string} price
- * @prop {OfferState[]} offers
- */
+
 export default class PointView extends ListItemView {
   #id;
 
