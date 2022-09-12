@@ -16,18 +16,20 @@ export default class DatePickerView extends ComponentView {
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
+    const onStartDateChange = ([date]) => {
+      this.#endDateCalendar.set('minDate', date);
+    };
+
+    const calendarDefaults = {
+      'enableTime': true,
+      'time_24hr': true
+    };
+
     this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'), {
-      enableTime: true,
-      onChange: [(dates) =>
-        this.#endDateCalendar.set('minDate', dates[0])
-      ]
+      ...calendarDefaults,
+      onChange: [onStartDateChange]
     });
-    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'), {
-      enableTime: true,
-      onChange: [(dates) =>
-        this.#startDateCalendar.set('maxDate', dates[0])
-      ]
-    });
+    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'), calendarDefaults);
   }
 
   /**
@@ -36,33 +38,38 @@ export default class DatePickerView extends ComponentView {
   createAdjacentHtml() {
     return html`
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time">
     `;
   }
 
   /**
-   * @param {CalendarDate} date
-   * @param {CalendarOptions} options
+   * @param {CalendarOptions} startDateOptions
+   * @param {CalendarOptions} endDateOptions
    */
-  setStartDate(date, options = {}) {
-    this.#startDateCalendar.set(options);
-    this.#startDateCalendar.setDate(date);
+  configure(startDateOptions, endDateOptions = startDateOptions) {
+    this.#startDateCalendar.set(startDateOptions);
+    this.#endDateCalendar.set(endDateOptions);
 
     return this;
   }
 
   /**
-   * @param {CalendarDate} date
-   * @param {CalendarOptions} options
+   * @param {CalendarDate} startDate
+   * @param {CalendarDate} endDate
    */
-  setEndDate(date, options = {}) {
-    this.#endDateCalendar.set(options);
-    this.#endDateCalendar.setDate(date);
+  setDates(startDate, endDate = startDate) {
+    this.#startDateCalendar.setDate(startDate, true);
+    this.#endDateCalendar.setDate(endDate, true);
+  }
 
-    return this;
+  getDates() {
+    return [
+      this.#startDateCalendar.selectedDates[0]?.toJSON(),
+      this.#endDateCalendar.selectedDates[0]?.toJSON()
+    ];
   }
 }
 

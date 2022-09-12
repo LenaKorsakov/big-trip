@@ -17,16 +17,10 @@ export default class SortSelectPresenter extends Presenter{
   constructor(...init) {
     super(...init);
 
-    this.model.addEventListener('mode', () => {
-      const flags = Object.values(SortDisabled);
-
-      if (this.model.getMode() !== Mode.VIEW) {
-        flags.fill(true);
-      }
-      this.view.setOptionsDisabled(flags);
-    });
+    this.model.addEventListener('mode', this.onModelMode.bind(this));
 
     this.#buildSortSelectView().addEventListener('change', this.onSortChange.bind(this));
+    this.model.points.addEventListener('filter', this.onModelFilter.bind(this));
   }
 
   #buildSortSelectView() {
@@ -44,5 +38,19 @@ export default class SortSelectPresenter extends Presenter{
     const sortKey = this.view.getValue().toUpperCase();
 
     this.model.points.setSort(SortCompare[sortKey]);
+  }
+
+  onModelMode() {
+    const flags = Object.values(SortDisabled);
+
+    if (this.model.getMode() !== Mode.VIEW) {
+      flags.fill(true);
+    }
+    this.view.setOptionsDisabled(flags);
+  }
+
+  onModelFilter() {
+    this.view.setValue(Sort.DAY);
+    this.model.points.setSort(SortCompare.DAY);
   }
 }

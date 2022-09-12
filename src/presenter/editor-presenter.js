@@ -16,26 +16,16 @@ export default class EditorPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.#buildTypeSelectView().addEventListener(
-      'change',
-      this.onTypeSelectChange.bind(this)
-    );
-
-    this.#buildDestinationSelectView().addEventListener(
-      'change',
-      this.onDestinationSelectChange.bind(this)
-    );
-
     this.#buildDatePickerView();
+    this.#buildTypeSelectView();
+    this.#buildDestinationSelectView();
 
-    this.view.addEventListener('close', () => {
-      this.model.setMode(Mode.VIEW);
-    });
+    this.view.addEventListener('close', this.onViewClose.bind(this));
 
-    this.model.addEventListener(
-      'mode',
-      this.onModelMode.bind(this)
-    );
+    this.view.typeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
+    this.view.destinationSelectView.addEventListener('change', this.onViewDestinationSelectChange.bind(this));
+
+    this.model.addEventListener('mode',this.onModelMode.bind(this));
   }
 
   #buildTypeSelectView() {
@@ -58,19 +48,15 @@ export default class EditorPresenter extends Presenter {
   }
 
   #buildDatePickerView() {
-    const DATE_FORMAT = 'd/m/y h:m';
-
-    const today = Date.now();
+    const DATE_FORMAT = 'd/m/y H:m';
 
     const options = {
       dateFormat: DATE_FORMAT,
       locale: {firstDayOfWeek: 1},
-      //minDate: today
     };
-
     this.view.dataPickerView
-      .setStartDate(today, options)
-      .setEndDate(today, options);
+      .configure(options)
+      .setDates('today');
   }
 
   #updateTypeSelectView() {
@@ -87,9 +73,9 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateDatePickerView() {
-    this.view.dataPickerView
-      .setStartDate(this.model.editablePoint.startDate)
-      .setEndDate(this.model.editablePoint.endDate, {minDate: this.model.editablePoint.startDate});
+    const {startDate, endDate} = this.model.editablePoint;
+
+    this.view.dataPickerView.setDates(startDate, endDate);
   }
 
   #updatePriceInputView() {
@@ -144,7 +130,7 @@ export default class EditorPresenter extends Presenter {
     this.view.link(pointView).open();
   }
 
-  onTypeSelectChange() {
+  onViewTypeSelectChange() {
     const pointType = this.view.typeSelectView.getValue();
     const key = Type.findKey(pointType);
 
@@ -152,7 +138,11 @@ export default class EditorPresenter extends Presenter {
     this.#updateOfferSelectView();
   }
 
-  onDestinationSelectChange() {
+  onViewDestinationSelectChange() {
     this.#updateDestinationDetailsView();
+  }
+
+  onViewClose() {
+    this.model.setMode(Mode.VIEW);
   }
 }
