@@ -3,6 +3,8 @@ import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
 import Mode from '../enum/mode';
 import PointAdapter from '../adapter/point-adapter';
+import ToggleSave from '../enum/toggle-save';
+import ToggleDelete from '../enum/toggle-delete';
 
 /**
  * @template {ApplicationModel} Model
@@ -147,34 +149,34 @@ export default class EditorPresenter extends Presenter {
   }
 
   async onViewReset() {
-    this.view.toggleDisabledButton('reset', true, 'Deleting...');
+    this.view.toggleDisabledButton('reset', true, ToggleDelete.BUTTON_TEXT_ACTION);
 
     try {
       await this.model.points.remove(this.model.editablePoint.id);
 
-      this.view.toggleDisabledButton('reset', false, 'Delete');
+      this.view.toggleDisabledButton('reset', false, ToggleDelete.BUTTON_TEXT_DEFAULT);
       this.view.close();
     }
 
     catch (exception) {
       //TODO эффект покачивания
-      this.view.toggleDisabledButton('reset', false, 'Delete');
+      this.view.toggleDisabledButton('reset', false, ToggleDelete.BUTTON_TEXT_DEFAULT);
     }
   }
 
   async onViewSubmit() {
-    this.view.toggleDisabledButton('submit', true, 'Saving...');
+    this.view.toggleDisabledButton('submit', true, ToggleSave.BUTTON_TEXT_ACTION);
 
     try {
       await this.model.points.update(this.model.editablePoint.id, this.getFormData());
 
-      this.view.toggleDisabledButton('submit', false, 'Save');
+      this.view.toggleDisabledButton('submit', false, ToggleSave.BUTTON_TEXT_DEFAULT);
       this.view.close();
     }
 
     catch (exception) {
       //TODO эффект покачивания
-      this.view.toggleDisabledButton('submit', false, 'Save');
+      this.view.toggleDisabledButton('submit', false, ToggleSave.BUTTON_TEXT_DEFAULT);
     }
   }
 
