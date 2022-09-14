@@ -44,7 +44,6 @@ export default class EditorPresenter extends Presenter {
 
   #buildDestinationSelectView() {
     const destinations = this.model.destinations.listAll();
-
     return this.view.destinationSelectView.setOptions(
       destinations.map((destination) => ['', destination.name])
     );
@@ -118,6 +117,7 @@ export default class EditorPresenter extends Presenter {
     }
 
     const pointView = document.querySelector(`#item-${this.model.editablePoint.id}`);
+
     this.view.close(true);
 
     this.#updateTypeSelectView();
@@ -147,24 +147,34 @@ export default class EditorPresenter extends Presenter {
   }
 
   async onViewReset() {
+    this.view.toggleDisabledButton('reset', true, 'Deleting...');
+
     try {
       await this.model.points.remove(this.model.editablePoint.id);
+
+      this.view.toggleDisabledButton('reset', false, 'Delete');
       this.view.close();
     }
 
     catch (exception) {
       //TODO эффект покачивания
+      this.view.toggleDisabledButton('reset', false, 'Delete');
     }
   }
 
   async onViewSubmit() {
+    this.view.toggleDisabledButton('submit', true, 'Saving...');
+
     try {
       await this.model.points.update(this.model.editablePoint.id, this.getFormData());
+
+      this.view.toggleDisabledButton('submit', false, 'Save');
       this.view.close();
     }
 
     catch (exception) {
       //TODO эффект покачивания
+      this.view.toggleDisabledButton('submit', false, 'Save');
     }
   }
 
@@ -173,12 +183,13 @@ export default class EditorPresenter extends Presenter {
     const destinationName = this.view.destinationSelectView.getValue();
     const [startDate, endDate] = this.view.dataPickerView.getDates();
 
-    point.type = this.view.typeSelectView.getValue();
-    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
+    point.basePrice = Number(this.view.priceInputView.getPrice());
     point.startDate = startDate;
     point.endDate = endDate;
-    point.basePrice = Number(this.view.priceInputView.getPrice());
+    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
+    point.id = this.model.editablePoint.id;
     point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
+    point.type = this.view.typeSelectView.getValue();
     point.isFavorite = false;
 
     return point;

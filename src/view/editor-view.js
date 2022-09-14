@@ -33,10 +33,9 @@ export default class EditorView extends ListItemView {
     /** @type {DestinationSelectView} */
     this.destinationSelectView = this.querySelector(String(DestinationSelectView));
 
-    this.addEventListener('submit', this.onSubmit);
-    this.addEventListener('reset', this.onReset);
-    this.addEventListener('click', this.onClick);
-
+    this.addEventListener('submit', this.#onViewSubmit);
+    this.addEventListener('reset', this.#onViewReset);
+    this.addEventListener('click', this.#onViewClick);
   }
 
   /**
@@ -63,6 +62,17 @@ export default class EditorView extends ListItemView {
         </section>
       </form>
     `;
+  }
+
+  /**
+   * @param {boolean} flag
+   * @param {string} value
+   */
+  toggleDisabledButton(type, flag, value) {
+    const submitButton = this.querySelector(`[type="${type}"]`);
+
+    submitButton.disabled = flag;
+    submitButton.textContent = value;
   }
 
   /**
@@ -106,15 +116,15 @@ export default class EditorView extends ListItemView {
     }
   }
 
-  onSubmit(event) {
+  #onViewSubmit(event) {
     event.preventDefault();
   }
 
-  onReset(event) {
+  #onViewReset(event) {
     event.preventDefault();
   }
 
-  onClick(event) {
+  #onViewClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }
