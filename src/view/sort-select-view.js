@@ -1,7 +1,6 @@
-import ComponentView, {html} from './component-view.js';
-/** @typedef {[label: string, value: string]} SortOptionState  */
+import RadioGroupView, {html} from './radio-group-view.js';
 
-export default class SortSelectView extends ComponentView {
+export default class SortSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
   }
@@ -43,37 +42,14 @@ export default class SortSelectView extends ComponentView {
     `;
   }
 
-  getValue() {
-    return this.querySelector('input:checked').value;
-  }
-
-  setValue(value) {
-    this.querySelector(`[value="${value}"]`).checked = true;
-
-    return this;
-  }
-
   /**
    * @param {SortOptionState[]} states
    */
   setOptions(states) {
-    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
-
     this.querySelector('.trip-events__trip-sort')
-      .insertAdjacentHTML('afterbegin', html`${htmlOptions}`
-      );
-
-    return this;
-  }
-
-  /**
-   * @param {boolean[]} flags
-   */
-  setOptionsDisabled(flags) {
-    const views = this.querySelectorAll('input');
-    flags.forEach((flag, index) => {
-      views[index].disabled = flag;
-    });
+      .insertAdjacentHTML('afterbegin', html`${
+        states.map((state) => this.createOptionHtml(...state))
+      }`);
 
     return this;
   }

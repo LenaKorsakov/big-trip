@@ -14,14 +14,15 @@ export default class PlaceholderPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.updateView();
+    this.onModelPointsChange();
+
     this.model.points.addEventListener(
       ['add', 'update', 'remove', 'filter'],
-      this.updateView.bind(this)
+      this.onModelPointsChange.bind(this)
     );
   }
 
-  updateView() {
+  onModelPointsChange() {
     const key = FilterPredicate.findKey(this.model.points.getFilter());
     const message = FilterPlaceholderMessage[key];
     const isHidden = Boolean(this.model.points.list().length);

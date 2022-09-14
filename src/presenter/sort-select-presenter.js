@@ -17,10 +17,13 @@ export default class SortSelectPresenter extends Presenter{
   constructor(...init) {
     super(...init);
 
+    this.#setVisibility();
+
     this.model.addEventListener('mode', this.onModelMode.bind(this));
+    this.model.points.addEventListener('filter', this.onModelFilter.bind(this));
+    this.model.points.addEventListener(['add','remove','filter'], this.onModelPointsChange.bind(this));
 
     this.#buildSortSelectView().addEventListener('change', this.onSortChange.bind(this));
-    this.model.points.addEventListener('filter', this.onModelFilter.bind(this));
   }
 
   #buildSortSelectView() {
@@ -34,10 +37,10 @@ export default class SortSelectPresenter extends Presenter{
       .setOptionsDisabled(flags);
   }
 
-  onSortChange() {
-    const sortKey = this.view.getValue().toUpperCase();
+  #setVisibility() {
+    const isHidden = Boolean(this.model.points.list().length);
 
-    this.model.points.setSort(SortCompare[sortKey]);
+    this.view.hidden = !isHidden;
   }
 
   onModelMode() {
@@ -51,6 +54,16 @@ export default class SortSelectPresenter extends Presenter{
 
   onModelFilter() {
     this.view.setValue(Sort.DAY);
-    this.model.points.setSort(SortCompare.DAY);
+    this.model.points.setSort(SortCompare.DAY, true);
+  }
+
+  onModelPointsChange(){
+    this.#setVisibility();
+  }
+
+  onSortChange() {
+    const sortKey = this.view.getValue().toUpperCase();
+
+    this.model.points.setSort(SortCompare[sortKey]);
   }
 }
