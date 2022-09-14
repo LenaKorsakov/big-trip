@@ -5,7 +5,7 @@ export default class TypeSelectView extends RadioGroupView {
     super(...arguments);
 
     this.classList.add('event__type-wrapper');
-    this.addEventListener('change', this.onChange);
+    this.addEventListener('change', this.onViewChange);
   }
 
   /**
@@ -81,7 +81,7 @@ export default class TypeSelectView extends RadioGroupView {
   /**
    * @param {Event & {target: HTMLInputElement}} event
    */
-  onChange(event) {
+  onViewChange(event) {
     const {type, value} = event.target;
 
     if (type === 'checkbox') {

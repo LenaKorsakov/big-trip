@@ -1,17 +1,16 @@
 import ComponentView, {html} from './component-view.js';
 import './destination-select-view.css';
-/** @typedef {[string, string][]} DestinationOptionState  */
 
 export default class DestinationSelectView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  constructor(states) {
+    super(states);
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
-    this.addEventListener('focus', this.onFocus, true);
-    this.addEventListener('change', this.onChange);
-    this.addEventListener('keydown', this.onKeyDown);
-    this.addEventListener('blur', this.onBlur, true);
+    this.addEventListener('focus', this.#onViewFocus, true);
+    this.addEventListener('change', this.#onViewChange);
+    this.addEventListener('keydown', this.#onViewKeyDown);
+    this.addEventListener('blur', this.#onViewBlur, true);
 
     this.inputView = this.querySelector('input');
   }
@@ -30,19 +29,9 @@ export default class DestinationSelectView extends ComponentView {
         name="event-destination"
         value=""
         list="destination-list-1">
-
         <datalist id="destination-list-1">
-        <!--options-->
         </datalist>
     `;
-  }
-
-  get allowedKeys() {
-    return ['Tab', 'ArrowUp', 'ArrowDown'];
-  }
-
-  setLabel(label) {
-    this.querySelector('.event__label').textContent = label;
   }
 
   /**
@@ -54,6 +43,15 @@ export default class DestinationSelectView extends ComponentView {
 
     return this;
   }
+
+  get allowedKeys() {
+    return ['Tab', 'ArrowUp', 'ArrowDown'];
+  }
+
+  setLabel(label) {
+    this.querySelector('.event__label').textContent = label;
+  }
+
 
   /**
    * @param {string} destination
@@ -82,21 +80,21 @@ export default class DestinationSelectView extends ComponentView {
     inputView.placeholder = '';
   }
 
-  onFocus() {
+  #onViewFocus() {
     this.#moveValueToPlaceholder();
   }
 
-  onChange() {
+  #onViewChange() {
     this.#moveValueToPlaceholder();
   }
 
-  onKeyDown(event) {
+  #onViewKeyDown(event) {
     if(!this.allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
   }
 
-  onBlur() {
+  #onViewBlur() {
     this.#movePlaceholderToValue();
   }
 

@@ -8,6 +8,14 @@
 
 /** @typedef {[label: string, value: PointType]} TypeOptionState  */
 /** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
+/** @typedef {[title: string, price: string]} OfferToggleState  */
+/** @typedef {[label: string, value: string]} SortOptionState  */
+/** @typedef {[label: string, value: string]} FilterOptionState  */
+/** @typedef {[string, string][]} DestinationOptionState  */
+/** @typedef {[URL, string][]} DestinationPictureState  */
+/** @typedef {import('flatpickr/dist/types/instance').Instance} Calendar */
+/** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
+/** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
 /**
  * @typedef PointState
  * @prop {number} id

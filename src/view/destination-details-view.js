@@ -1,5 +1,4 @@
 import ComponentView, {html} from './component-view.js';
-/** @typedef {[URL, string][]} DestinationPictureState  */
 
 export default class DestinationDetailsView extends ComponentView {
   /**
@@ -9,16 +8,15 @@ export default class DestinationDetailsView extends ComponentView {
     super(...state);
 
     this.classList.add('event__section', 'event__section--destination');
-    this.picturesContainer = this.querySelector('.event__photos-tape');
   }
 
   /**
    * @override
    */
-  createAdjacentHtml(description) {
+  createAdjacentHtml() {
     return html`
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
+        <p class="event__destination-description"></p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
@@ -29,7 +27,7 @@ export default class DestinationDetailsView extends ComponentView {
   }
 
   /**
-   * @param  {DestinationPictureState } states
+   * @param  {DestinationPictureState[]} states
    */
   setPictures(states) {
     const views = states.map(([src,alt]) =>

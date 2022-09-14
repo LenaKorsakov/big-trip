@@ -18,7 +18,7 @@ export default class PriceInputView extends ComponentView {
         &euro;
       </label>
       <input class="event__input  event__input--price"
-      title="Введите целое положительное чило"
+      title="Введите целое положительное число"
       pattern="^[0-9]+$"
       id="event-price-1"
       type="text"
@@ -28,7 +28,6 @@ export default class PriceInputView extends ComponentView {
   }
 
   /**
-     * Установит цену события
      * @param {number}
      */
   setPrice(price) {

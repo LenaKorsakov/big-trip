@@ -22,7 +22,6 @@ export default class RadioGroupView extends ComponentView {
    */
   setValue(value) {
     const view = this.querySelector(`${this.itemSelector}[value="${value}"]`);
-
     if (view) {
       view.checked = true;
     }

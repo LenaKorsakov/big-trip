@@ -1,5 +1,4 @@
 import ComponentView, {html} from './component-view.js';
-import OfferToggleView from './offer-toggle-view.js';
 import './offer-select-view.css';
 
 export default class OfferSelectView extends ComponentView {
@@ -24,13 +23,34 @@ export default class OfferSelectView extends ComponentView {
     `;
   }
 
+  createOptionHtml(...state) {
+    const [title, price, id, isChecked] = state;
+
+    return html`
+    <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden"
+        id="event-offer-comfort-${id}"
+        type="checkbox"
+        name="event-offer-comfort"
+        value="${id}";
+        ${isChecked ? 'checked' : ''}
+      >
+      <label class="event__offer-label" for="event-offer-comfort-${id}">
+        <span class="event__offer-title">${title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </label>
+    </div>
+  `;
+  }
+
   /**
-     * @param  {OfferSelectState} states
+     * @param  {OfferToggleState} states
      */
   setOffers(states) {
-    const views = states.map(([title, price, id, isChecked]) => new OfferToggleView(title, price, id).setChecked(isChecked));
-
-    this.querySelector('.event__available-offers').replaceChildren(...views);
+    this.querySelector('.event__available-offers').innerHTML = html`${states.map((
+      [title, price, id, isChecked]) => this.createOptionHtml(title, price, id, isChecked)
+    )}`;
 
     return this;
   }

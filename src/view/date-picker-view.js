@@ -3,10 +3,6 @@ import initCalendar from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
-/** @typedef {import('flatpickr/dist/types/instance').Instance} Calendar */
-/** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
-/** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
-
 export default class DatePickerView extends ComponentView {
   #startDateCalendar;
   #endDateCalendar;

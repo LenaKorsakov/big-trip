@@ -1,7 +1,6 @@
-import ComponentView, {html} from './component-view.js';
-/** @typedef {[label: string, value: string]} FilterOptionState  */
+import RadioGroupView, {html} from './radio-group-view.js';
 
-export default class FilterSelectView extends ComponentView {
+export default class FilterSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
@@ -50,34 +49,10 @@ export default class FilterSelectView extends ComponentView {
    * @param {FilterOptionState[]} states
    */
   setOptions(states) {
-    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
-
-    this.querySelector('button')
-      .insertAdjacentHTML('beforebegin', html`${htmlOptions}`
-      );
-
-    return this;
-  }
-
-  getValue() {
-    return this.querySelector('input:checked').value;
-  }
-
-  setValue(value) {
-    this.querySelector(`[value="${value}"]`).checked = true;
-
-    return this;
-  }
-
-  /**
-   * @param {boolean[]} flags
-   */
-  setOptionsDisabled(flags) {
-    const views = this.querySelectorAll('input');
-
-    flags.forEach((flag, index) => {
-      views[index].disabled = flag;
-    });
+    this.querySelector('button').insertAdjacentHTML('beforebegin', html`${
+      states.map((state) => this.createOptionHtml(...state)
+      )}`
+    );
 
     return this;
   }

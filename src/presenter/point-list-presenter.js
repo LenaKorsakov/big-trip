@@ -14,20 +14,17 @@ export default class PointListPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.updateView().addEventListener('point-edit', (/** @type {CustomEvent} */ event) => {
+    this.onModelPointsChange().addEventListener('point-edit', (/** @type {CustomEvent} */ event) => {
       this.model.setMode(Mode.EDIT, event.detail);
     });
 
     this.model.points.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
-      this.updateView.bind(this)
+      this.onModelPointsChange.bind(this)
     );
-    //когда происходит событие filter в list() аргументом надо передать SortCompare.DAY
-    // this.model
-    // this.view
   }
 
-  updateView() {
+  onModelPointsChange() {
     /** @type {PointState[]} */
     const states = this.model.points.list().map((point) => {
       const destination = this.model.destinations.findById(point.destinationId);

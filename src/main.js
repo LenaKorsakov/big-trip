@@ -24,14 +24,15 @@ import FilterPredicate from './enum/filter-predicate';
 import SortCompare from './enum/sort-compare';
 import Mode from './enum/mode';
 
-import {getRandomCombination} from './utils';
+//import {getRandomCombination} from './utils';
 
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
 const POINTS_URL = `${BASE_URL}/points`;
 const DESTINATIONS_URL = `${BASE_URL}/destinations`;
 const OFFERS_URL = `${BASE_URL}/offers`;
-const HEADER_LENGTH = 11;
-const AUTH = `Basic ${getRandomCombination(HEADER_LENGTH)}`;
+//const HEADER_LENGTH = 11;
+//const AUTH = `Basic ${getRandomCombination(HEADER_LENGTH)}`;
+const AUTH = 'Basic 60jd12ks';
 
 
 /** @type {Store<Point>}*/
