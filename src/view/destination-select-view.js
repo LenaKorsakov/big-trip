@@ -34,12 +34,17 @@ export default class DestinationSelectView extends ComponentView {
     `;
   }
 
+  createOptionHtml(state) {
+    return new Option(...state);
+  }
+
   /**
    * @param {DestinationOptionState} states
    */
   setOptions(states) {
-    const views = states.map((state) => new Option(...state));
-    this.querySelector('datalist').replaceChildren(...views);
+    this.querySelector('datalist').innerHTML = html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`;
 
     return this;
   }

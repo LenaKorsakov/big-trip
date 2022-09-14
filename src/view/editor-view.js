@@ -5,6 +5,8 @@ import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationDetailsView from './destination-details-view';
+import SaveButtonLabel from '../enum/toggle-save';
+import DeleteButtonLabel from '../enum/toggle-delete';
 
 /**
  * @implements EventListenerObject
@@ -18,6 +20,9 @@ export default class EditorView extends ListItemView {
     /** @type {TypeSelectView} */
     this.typeSelectView = this.querySelector(String(TypeSelectView));
 
+    /** @type {DestinationSelectView} */
+    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
+
     /** @type {DatePickerView} */
     this.dataPickerView = this.querySelector(String(DatePickerView));
 
@@ -29,9 +34,6 @@ export default class EditorView extends ListItemView {
 
     /** @type {DestinationDetailsView} */
     this.destinationDetailsView = this.querySelector(String(DestinationDetailsView));
-
-    /** @type {DestinationSelectView} */
-    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
 
     this.addEventListener('submit', this.#onViewSubmit);
     this.addEventListener('reset', this.#onViewReset);
@@ -50,8 +52,12 @@ export default class EditorView extends ListItemView {
           </div>
           ${DatePickerView}
           ${PriceInputView}
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit">
+          ${SaveButtonLabel.DEFAULT}
+          </button>
+          <button class="event__reset-btn" type="reset">
+          ${DeleteButtonLabel.DEFAULT}
+          </button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
@@ -66,13 +72,24 @@ export default class EditorView extends ListItemView {
 
   /**
    * @param {boolean} flag
-   * @param {string} value
    */
-  toggleDisabledButton(type, flag, value) {
-    const submitButton = this.querySelector(`[type="${type}"]`);
+  setSubmitButtonPressed(flag) {
+    /** @type {HTMLButtonElement} */
+    const view = this.querySelector('.event__save-btn');
 
-    submitButton.disabled = flag;
-    submitButton.textContent = value;
+    view.disabled = flag;
+    view.textContent = flag ? SaveButtonLabel.PRESSED : SaveButtonLabel.DEFAULT;
+  }
+
+  /**
+   * @param {boolean} flag
+   */
+  setDeleteButtonPressed(flag) {
+    /** @type {HTMLButtonElement} */
+    const view = this.querySelector('.event__reset-btn');
+
+    view.disabled = flag;
+    view.textContent = flag ? DeleteButtonLabel.PRESSED : DeleteButtonLabel.DEFAULT;
   }
 
   /**

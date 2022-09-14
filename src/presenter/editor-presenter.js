@@ -3,8 +3,6 @@ import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
 import Mode from '../enum/mode';
 import PointAdapter from '../adapter/point-adapter';
-import ToggleSave from '../enum/toggle-save';
-import ToggleDelete from '../enum/toggle-delete';
 
 /**
  * @template {ApplicationModel} Model
@@ -113,6 +111,62 @@ export default class EditorPresenter extends Presenter {
       .setDescription(destination.description);
   }
 
+  getFormData() {
+    const point = new PointAdapter();
+    const destinationName = this.view.destinationSelectView.getValue();
+    const [startDate, endDate] = this.view.dataPickerView.getDates();
+
+    point.basePrice = Number(this.view.priceInputView.getPrice());
+    point.startDate = startDate;
+    point.endDate = endDate;
+    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
+    point.id = this.model.editablePoint.id;
+    point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
+    point.type = this.view.typeSelectView.getValue();
+    point.isFavorite = false;
+
+    return point;
+  }
+
+  setDeleteRequest() {
+    return this.model.points.remove(this.model.editablePoint.id);
+  }
+
+  setSubmitButtonRequest() {
+    return this.model.points.update(this.model.editablePoint.id, this.getFormData());
+  }
+
+  async onViewReset() {
+    this.view.setDeleteButtonPressed(true);
+
+    try {
+      await this.setDeleteRequest();
+
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+
+    this.view.setDeleteButtonPressed(false);
+  }
+
+  async onViewSubmit() {
+    this.view.setSubmitButtonPressed(true);
+
+    try {
+      await this.setSubmitButtonRequest();
+
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+    this.view.setSubmitButtonPressed(false);
+  }
+
   onModelMode() {
     if (this.model.getMode() !== Mode.EDIT) {
       return;
@@ -146,54 +200,5 @@ export default class EditorPresenter extends Presenter {
 
   onViewClose() {
     this.model.setMode(Mode.VIEW);
-  }
-
-  async onViewReset() {
-    this.view.toggleDisabledButton('reset', true, ToggleDelete.BUTTON_TEXT_ACTION);
-
-    try {
-      await this.model.points.remove(this.model.editablePoint.id);
-
-      this.view.toggleDisabledButton('reset', false, ToggleDelete.BUTTON_TEXT_DEFAULT);
-      this.view.close();
-    }
-
-    catch (exception) {
-      //TODO эффект покачивания
-      this.view.toggleDisabledButton('reset', false, ToggleDelete.BUTTON_TEXT_DEFAULT);
-    }
-  }
-
-  async onViewSubmit() {
-    this.view.toggleDisabledButton('submit', true, ToggleSave.BUTTON_TEXT_ACTION);
-
-    try {
-      await this.model.points.update(this.model.editablePoint.id, this.getFormData());
-
-      this.view.toggleDisabledButton('submit', false, ToggleSave.BUTTON_TEXT_DEFAULT);
-      this.view.close();
-    }
-
-    catch (exception) {
-      //TODO эффект покачивания
-      this.view.toggleDisabledButton('submit', false, ToggleSave.BUTTON_TEXT_DEFAULT);
-    }
-  }
-
-  getFormData() {
-    const point = new PointAdapter();
-    const destinationName = this.view.destinationSelectView.getValue();
-    const [startDate, endDate] = this.view.dataPickerView.getDates();
-
-    point.basePrice = Number(this.view.priceInputView.getPrice());
-    point.startDate = startDate;
-    point.endDate = endDate;
-    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
-    point.id = this.model.editablePoint.id;
-    point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
-    point.type = this.view.typeSelectView.getValue();
-    point.isFavorite = false;
-
-    return point;
   }
 }

@@ -1,6 +1,6 @@
 import Enum from './enum.js';
 
-export default class ToggleDelete extends Enum {
-  static BUTTON_TEXT_DEFAULT = 'Delete';
-  static BUTTON_TEXT_ACTION = 'Deleting...';
+export default class DeleteButtonLabel extends Enum {
+  static DEFAULT = 'Delete';
+  static PRESSED = 'Deleting...';
 }

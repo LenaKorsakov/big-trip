@@ -53,9 +53,9 @@ export default class TypeSelectView extends RadioGroupView {
    * @param {TypeOptionState[]} states
    */
   setOptions(states) {
-    const htmlOptions = states.map((state) => this.createOptionHtml(...state));
-
-    this.querySelector('legend').insertAdjacentHTML('afterend', html`${htmlOptions}`);
+    this.querySelector('legend').insertAdjacentHTML('afterend', html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`);
 
     return this;
   }

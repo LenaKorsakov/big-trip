@@ -26,14 +26,19 @@ export default class DestinationDetailsView extends ComponentView {
     `;
   }
 
+  createPictureHTML(...state) {
+    const [src,alt] = state;
+
+    return html`<img class="event__photo" src=${src} alt=${alt}>`;
+  }
+
   /**
    * @param  {DestinationPictureState[]} states
    */
   setPictures(states) {
-    const views = states.map(([src,alt]) =>
-      Object.assign(new Image(), {src, alt, className: 'event__photo'})
-    );
-    this.querySelector('.event__photos-tape').replaceChildren(...views);
+    this.querySelector('.event__photos-tape').innerHTML = html`${
+      states.map((state) => this.createPictureHTML(...state))
+    }`;
 
     return this;
   }
