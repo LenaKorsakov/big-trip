@@ -111,7 +111,7 @@ export default class EditorPresenter extends Presenter {
       .setDescription(destination.description);
   }
 
-  getFormData() {
+  get editablePoint() {
     const point = new PointAdapter();
     const destinationName = this.view.destinationSelectView.getValue();
     const [startDate, endDate] = this.view.dataPickerView.getDates();
@@ -128,19 +128,19 @@ export default class EditorPresenter extends Presenter {
     return point;
   }
 
-  setDeleteRequest() {
+  deleteEditablePoint() {
     return this.model.points.remove(this.model.editablePoint.id);
   }
 
-  setSubmitButtonRequest() {
-    return this.model.points.update(this.model.editablePoint.id, this.getFormData());
+  saveEditablePoint() {
+    return this.model.points.update(this.model.editablePoint.id, this.editablePoint);
   }
 
   async onViewReset() {
     this.view.setDeleteButtonPressed(true);
 
     try {
-      await this.setDeleteRequest();
+      await this.deleteEditablePoint();
 
       this.view.close();
     }
@@ -153,10 +153,10 @@ export default class EditorPresenter extends Presenter {
   }
 
   async onViewSubmit() {
-    this.view.setSubmitButtonPressed(true);
+    this.view.setSaveButtonPressed(true);
 
     try {
-      await this.setSubmitButtonRequest();
+      await this.saveEditablePoint();
 
       this.view.close();
     }
@@ -164,7 +164,7 @@ export default class EditorPresenter extends Presenter {
     catch (exception) {
       //TODO эффект покачивания
     }
-    this.view.setSubmitButtonPressed(false);
+    this.view.setSaveButtonPressed(false);
   }
 
   onModelMode() {

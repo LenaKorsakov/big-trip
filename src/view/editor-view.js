@@ -53,10 +53,10 @@ export default class EditorView extends ListItemView {
           ${DatePickerView}
           ${PriceInputView}
           <button class="event__save-btn  btn  btn--blue" type="submit">
-          ${SaveButtonLabel.DEFAULT}
+            ${SaveButtonLabel.DEFAULT}
           </button>
           <button class="event__reset-btn" type="reset">
-          ${DeleteButtonLabel.DEFAULT}
+            ${DeleteButtonLabel.DEFAULT}
           </button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
@@ -73,7 +73,7 @@ export default class EditorView extends ListItemView {
   /**
    * @param {boolean} flag
    */
-  setSubmitButtonPressed(flag) {
+  setSaveButtonPressed(flag) {
     /** @type {HTMLButtonElement} */
     const view = this.querySelector('.event__save-btn');
 
