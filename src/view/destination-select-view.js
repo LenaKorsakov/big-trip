@@ -1,17 +1,16 @@
 import ComponentView, {html} from './component-view.js';
 import './destination-select-view.css';
-/** @typedef {[string, string][]} DestinationOptionState  */
 
 export default class DestinationSelectView extends ComponentView {
-  constructor() {
-    super(...arguments);
+  constructor(states) {
+    super(states);
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
-    this.addEventListener('focus', this.onFocus, true);
-    this.addEventListener('change', this.onChange);
-    this.addEventListener('keydown', this.onKeyDown);
-    this.addEventListener('blur', this.onBlur, true);
+    this.addEventListener('focus', this.#onViewFocus, true);
+    this.addEventListener('change', this.#onViewChange);
+    this.addEventListener('keydown', this.#onViewKeyDown);
+    this.addEventListener('blur', this.#onViewBlur, true);
 
     this.inputView = this.querySelector('input');
   }
@@ -30,13 +29,24 @@ export default class DestinationSelectView extends ComponentView {
         name="event-destination"
         value=""
         list="destination-list-1">
-
         <datalist id="destination-list-1">
-        <!--options-->
         </datalist>
-
-      </input>
     `;
+  }
+
+  createOptionHtml(state) {
+    return new Option(...state);
+  }
+
+  /**
+   * @param {DestinationOptionState} states
+   */
+  setOptions(states) {
+    this.querySelector('datalist').innerHTML = html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`;
+
+    return this;
   }
 
   get allowedKeys() {
@@ -47,15 +57,6 @@ export default class DestinationSelectView extends ComponentView {
     this.querySelector('.event__label').textContent = label;
   }
 
-  /**
-   * @param {DestinationOptionState} states
-   */
-  setOptions(states) {
-    const views = states.map((state) => new Option(...state));
-    this.querySelector('datalist').replaceChildren(...views);
-
-    return this;
-  }
 
   /**
    * @param {string} destination
@@ -84,21 +85,21 @@ export default class DestinationSelectView extends ComponentView {
     inputView.placeholder = '';
   }
 
-  onFocus() {
+  #onViewFocus() {
     this.#moveValueToPlaceholder();
   }
 
-  onChange() {
+  #onViewChange() {
     this.#moveValueToPlaceholder();
   }
 
-  onKeyDown(event) {
+  #onViewKeyDown(event) {
     if(!this.allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
   }
 
-  onBlur() {
+  #onViewBlur() {
     this.#movePlaceholderToValue();
   }
 

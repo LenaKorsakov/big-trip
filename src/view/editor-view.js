@@ -5,6 +5,8 @@ import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationDetailsView from './destination-details-view';
+import SaveButtonLabel from '../enum/toggle-save';
+import DeleteButtonLabel from '../enum/toggle-delete';
 
 /**
  * @implements EventListenerObject
@@ -18,6 +20,9 @@ export default class EditorView extends ListItemView {
     /** @type {TypeSelectView} */
     this.typeSelectView = this.querySelector(String(TypeSelectView));
 
+    /** @type {DestinationSelectView} */
+    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
+
     /** @type {DatePickerView} */
     this.dataPickerView = this.querySelector(String(DatePickerView));
 
@@ -30,13 +35,9 @@ export default class EditorView extends ListItemView {
     /** @type {DestinationDetailsView} */
     this.destinationDetailsView = this.querySelector(String(DestinationDetailsView));
 
-    /** @type {DestinationSelectView} */
-    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
-
-    this.addEventListener('submit', this.onSubmit);
-    this.addEventListener('reset', this.onReset);
-    this.addEventListener('click', this.onClick);
-
+    this.addEventListener('submit', this.#onViewSubmit);
+    this.addEventListener('reset', this.#onViewReset);
+    this.addEventListener('click', this.#onViewClick);
   }
 
   /**
@@ -51,8 +52,12 @@ export default class EditorView extends ListItemView {
           </div>
           ${DatePickerView}
           ${PriceInputView}
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit">
+            ${SaveButtonLabel.DEFAULT}
+          </button>
+          <button class="event__reset-btn" type="reset">
+            ${DeleteButtonLabel.DEFAULT}
+          </button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
@@ -63,6 +68,28 @@ export default class EditorView extends ListItemView {
         </section>
       </form>
     `;
+  }
+
+  /**
+   * @param {boolean} flag
+   */
+  setSaveButtonPressed(flag) {
+    /** @type {HTMLButtonElement} */
+    const view = this.querySelector('.event__save-btn');
+
+    view.disabled = flag;
+    view.textContent = flag ? SaveButtonLabel.PRESSED : SaveButtonLabel.DEFAULT;
+  }
+
+  /**
+   * @param {boolean} flag
+   */
+  setDeleteButtonPressed(flag) {
+    /** @type {HTMLButtonElement} */
+    const view = this.querySelector('.event__reset-btn');
+
+    view.disabled = flag;
+    view.textContent = flag ? DeleteButtonLabel.PRESSED : DeleteButtonLabel.DEFAULT;
   }
 
   /**
@@ -106,15 +133,15 @@ export default class EditorView extends ListItemView {
     }
   }
 
-  onSubmit(event) {
+  #onViewSubmit(event) {
     event.preventDefault();
   }
 
-  onReset(event) {
+  #onViewReset(event) {
     event.preventDefault();
   }
 
-  onClick(event) {
+  #onViewClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }

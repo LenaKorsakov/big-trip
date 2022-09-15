@@ -2,7 +2,7 @@ import Presenter from './presenter';
 import Type from '../enum/type';
 import TypeLabel from '../enum/type-label';
 import Mode from '../enum/mode';
-import { getRandomCombination } from '../utils.js';
+import PointAdapter from '../adapter/point-adapter';
 
 /**
  * @template {ApplicationModel} Model
@@ -16,26 +16,19 @@ export default class EditorPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.#buildTypeSelectView().addEventListener(
-      'change',
-      this.onTypeSelectChange.bind(this)
-    );
-
-    this.#buildDestinationSelectView().addEventListener(
-      'change',
-      this.onDestinationSelectChange.bind(this)
-    );
-
     this.#buildDatePickerView();
+    this.#buildTypeSelectView();
+    this.#buildDestinationSelectView();
 
-    this.view.addEventListener('close', () => {
-      this.model.setMode(Mode.VIEW);
-    });
+    this.view.addEventListener('close', this.onViewClose.bind(this));
+    this.view.addEventListener('reset', this.onViewReset.bind(this));
+    this.view.addEventListener('submit', this.onViewSubmit.bind(this));
 
-    this.model.addEventListener(
-      'mode',
-      this.onModelMode.bind(this)
-    );
+
+    this.view.typeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
+    this.view.destinationSelectView.addEventListener('change', this.onViewDestinationSelectChange.bind(this));
+
+    this.model.addEventListener('mode',this.onModelMode.bind(this));
   }
 
   #buildTypeSelectView() {
@@ -51,26 +44,21 @@ export default class EditorPresenter extends Presenter {
 
   #buildDestinationSelectView() {
     const destinations = this.model.destinations.listAll();
-
     return this.view.destinationSelectView.setOptions(
       destinations.map((destination) => ['', destination.name])
     );
   }
 
   #buildDatePickerView() {
-    const DATE_FORMAT = 'd/m/y h:m';
-
-    const today = Date.now();
+    const DATE_FORMAT = 'd/m/y H:m';
 
     const options = {
       dateFormat: DATE_FORMAT,
       locale: {firstDayOfWeek: 1},
-      //minDate: today
     };
-
     this.view.dataPickerView
-      .setStartDate(today, options)
-      .setEndDate(today, options);
+      .configure(options)
+      .setDates('today');
   }
 
   #updateTypeSelectView() {
@@ -87,9 +75,9 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateDatePickerView() {
-    this.view.dataPickerView
-      .setStartDate(this.model.editablePoint.startDate)
-      .setEndDate(this.model.editablePoint.endDate, {minDate: this.model.editablePoint.startDate});
+    const {startDate, endDate} = this.model.editablePoint;
+
+    this.view.dataPickerView.setDates(startDate, endDate);
   }
 
   #updatePriceInputView() {
@@ -97,15 +85,13 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateOfferSelectView() {
-    const ID_LENGTH = 5;
-
     const selectedType = this.view.typeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
-    const offers = availableOffers.map((offer) => [offer.title, offer.price, getRandomCombination(ID_LENGTH), this.model.editablePoint.offerIds.includes(offer.id)]);
+    const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.editablePoint.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
-      .setVisibility(!availableOffers.length)
+      .set('hidden', !availableOffers.length)
       .setOffers(offers);
   }
 
@@ -120,11 +106,66 @@ export default class EditorPresenter extends Presenter {
     ]);
 
     this.view.destinationDetailsView
-      .setVisibility(!destination.pictures.length)
+      .set('hidden', !destination.pictures.length)
       .setPictures(pictureStates)
       .setDescription(destination.description);
   }
 
+  get editablePoint() {
+    const point = new PointAdapter();
+    const destinationName = this.view.destinationSelectView.getValue();
+    const [startDate, endDate] = this.view.dataPickerView.getDates();
+
+    point.basePrice = Number(this.view.priceInputView.getPrice());
+    point.startDate = startDate;
+    point.endDate = endDate;
+    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
+    point.id = this.model.editablePoint.id;
+    point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
+    point.type = this.view.typeSelectView.getValue();
+    point.isFavorite = false;
+
+    return point;
+  }
+
+  deleteEditablePoint() {
+    return this.model.points.remove(this.model.editablePoint.id);
+  }
+
+  saveEditablePoint() {
+    return this.model.points.update(this.model.editablePoint.id, this.editablePoint);
+  }
+
+  async onViewReset() {
+    this.view.setDeleteButtonPressed(true);
+
+    try {
+      await this.deleteEditablePoint();
+
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+
+    this.view.setDeleteButtonPressed(false);
+  }
+
+  async onViewSubmit() {
+    this.view.setSaveButtonPressed(true);
+
+    try {
+      await this.saveEditablePoint();
+
+      this.view.close();
+    }
+
+    catch (exception) {
+      //TODO эффект покачивания
+    }
+    this.view.setSaveButtonPressed(false);
+  }
 
   onModelMode() {
     if (this.model.getMode() !== Mode.EDIT) {
@@ -132,6 +173,7 @@ export default class EditorPresenter extends Presenter {
     }
 
     const pointView = document.querySelector(`#item-${this.model.editablePoint.id}`);
+
     this.view.close(true);
 
     this.#updateTypeSelectView();
@@ -144,7 +186,7 @@ export default class EditorPresenter extends Presenter {
     this.view.link(pointView).open();
   }
 
-  onTypeSelectChange() {
+  onViewTypeSelectChange() {
     const pointType = this.view.typeSelectView.getValue();
     const key = Type.findKey(pointType);
 
@@ -152,7 +194,11 @@ export default class EditorPresenter extends Presenter {
     this.#updateOfferSelectView();
   }
 
-  onDestinationSelectChange() {
+  onViewDestinationSelectChange() {
     this.#updateDestinationDetailsView();
+  }
+
+  onViewClose() {
+    this.model.setMode(Mode.VIEW);
   }
 }

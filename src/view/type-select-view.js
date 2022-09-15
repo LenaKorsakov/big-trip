@@ -1,12 +1,11 @@
-import ComponentView, {html} from './component-view.js';
-import TypeOptionView from './type-option-view.js';
+import RadioGroupView, {html} from './radio-group-view';
 
-export default class TypeSelectView extends ComponentView {
+export default class TypeSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
     this.classList.add('event__type-wrapper');
-    this.addEventListener('change', this.onChange);
+    this.addEventListener('change', this.onViewChange);
   }
 
   /**
@@ -29,28 +28,48 @@ export default class TypeSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, PointType][]} states
+   * @param {TypeOptionState} states
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`
+    <div class="event__type-item">
+      <input
+          id="event-type-${value}-1"
+          class="event__type-input  visually-hidden"
+          type="radio"
+          name="event-type"
+          value="${value}"
+        >
+        <label class="event__type-label  event__type-label--${value}" for="event-type-${value}-1">
+          ${label}
+        </label>
+    </div>
+    `;
+  }
+
+  /**
+   * @param {TypeOptionState[]} states
    */
   setOptions(states) {
-    const views = states.map((state) => new TypeOptionView(...state));
-
-    this.querySelector('legend').after(...views);
+    this.querySelector('legend').insertAdjacentHTML('afterend', html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`);
 
     return this;
   }
 
-  getValue() {
-    return this.querySelector('[type=radio]:checked').value;
-  }
-
   /**
+   * @override
    * @param {string} value
    */
   setValue(value) {
-    this.querySelector('img').src = `img/icons/${value}.png`;
-    this.querySelector(`[value="${value}"]`).checked = true;
+    super.setValue(value);
 
-    return this.expand(false);
+    this.querySelector('img').src = `img/icons/${value}.png`;
+
+    return this;
   }
 
   expand(flag = true) {
@@ -62,7 +81,7 @@ export default class TypeSelectView extends ComponentView {
   /**
    * @param {Event & {target: HTMLInputElement}} event
    */
-  onChange(event) {
+  onViewChange(event) {
     const {type, value} = event.target;
 
     if (type === 'checkbox') {
@@ -71,7 +90,7 @@ export default class TypeSelectView extends ComponentView {
     }
 
     if (type === 'radio') {
-      this.setValue(value);
+      this.setValue(value).expand(false);
     }
   }
 }

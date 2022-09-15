@@ -1,7 +1,6 @@
-import ComponentView, {html} from './component-view.js';
-import FilterOptionView from './filter-option-view.js';
+import RadioGroupView, {html} from './radio-group-view.js';
 
-export default class FilterSelectView extends ComponentView {
+export default class FilterSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
@@ -21,41 +20,42 @@ export default class FilterSelectView extends ComponentView {
   }
 
   /**
-   * @param {[string, string][]} states
+   *
+   * @param  {FilterOptionState} state
    */
-  setOptions(states) {
-    const views = states.map((state) => new FilterOptionView(...state));
+  createOptionHtml(...state) {
+    const [label, value] = state;
 
-    this.querySelector('button').before(...views);
-
-    return this;
-  }
-
-  getValue() {
-    return this.querySelector('input:checked').value;
-  }
-
-  setValue(value) {
-    this.querySelector(`[value="${value}"]`).checked = true;
-
-    return this;
+    return html`
+      <div class="trip-filters__filter">
+        <input
+          id="filter-${value}"
+          class="trip-filters__filter-input  visually-hidden"
+          type="radio"
+          name="trip-filter"
+          value="${value}"
+        >
+        <label
+          class="trip-filters__filter-label"
+          for="filter-${value}"
+        >
+          ${label}
+        </label>
+      </div>
+    `;
   }
 
   /**
-   * @param {boolean[]} flags
+   * @param {FilterOptionState[]} states
    */
-  setOptionsDisabled(flags) {
-    const views = this.querySelectorAll('input');
-
-    flags.forEach((flag, index) => {
-      views[index].disabled = flag;
-    });
+  setOptions(states) {
+    this.querySelector('button').insertAdjacentHTML('beforebegin', html`${
+      states.map((state) => this.createOptionHtml(...state)
+      )}`
+    );
 
     return this;
   }
 }
 
-/**
- * Теперь для любых HTML-элементов с тегом <trip-filter-select> создаётся экземпляр FilterView и вызываются его методы
- */
 customElements.define(String(FilterSelectView), FilterSelectView);

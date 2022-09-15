@@ -13,6 +13,7 @@
  * @prop {string} id
  * @prop {number[]} offers
  * @prop {PointType} type
+ * @prop {boolean} is_favorite
  */
 
 

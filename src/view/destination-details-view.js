@@ -1,5 +1,4 @@
 import ComponentView, {html} from './component-view.js';
-/** @typedef {[URL, string][]} DestinationPictureState  */
 
 export default class DestinationDetailsView extends ComponentView {
   /**
@@ -9,16 +8,15 @@ export default class DestinationDetailsView extends ComponentView {
     super(...state);
 
     this.classList.add('event__section', 'event__section--destination');
-    this.picturesContainer = this.querySelector('.event__photos-tape');
   }
 
   /**
    * @override
    */
-  createAdjacentHtml(description) {
+  createAdjacentHtml() {
     return html`
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
+        <p class="event__destination-description"></p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
@@ -28,14 +26,19 @@ export default class DestinationDetailsView extends ComponentView {
     `;
   }
 
+  createPictureHTML(...state) {
+    const [src,alt] = state;
+
+    return html`<img class="event__photo" src=${src} alt=${alt}>`;
+  }
+
   /**
-   * @param  {DestinationPictureState } states
+   * @param  {DestinationPictureState[]} states
    */
   setPictures(states) {
-    const views = states.map(([src,alt]) =>
-      Object.assign(new Image(), {src, alt, className: 'event__photo'})
-    );
-    this.querySelector('.event__photos-tape').replaceChildren(...views);
+    this.querySelector('.event__photos-tape').innerHTML = html`${
+      states.map((state) => this.createPictureHTML(...state))
+    }`;
 
     return this;
   }
@@ -48,13 +51,6 @@ export default class DestinationDetailsView extends ComponentView {
 
     return this;
   }
-
-  setVisibility(flag = true) {
-    this.style.display = flag ? 'none' : 'block';
-
-    return this;
-  }
-
 }
 
 customElements.define(String(DestinationDetailsView), DestinationDetailsView);

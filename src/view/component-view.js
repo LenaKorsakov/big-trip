@@ -22,6 +22,16 @@ export default class ComponentView extends HTMLElement {
     return data.join('');
   }
 
+  /**
+   * @param {string} key
+   * @param {any} value
+   */
+  set(key, value) {
+    this[key] = value;
+
+    return this;
+  }
+
   static get tagNamePrefix() {
     return 'trip';
   }
@@ -46,6 +56,9 @@ export function html(strings, ...values) {
   return values.reduce((result, value, index) => {
     if (typeof value === 'function') {
       value = `<${value}></${value}>`;
+    }
+    if (Array.isArray(value)) {
+      value = value.join('');
     }
     return result + value + strings[index + 1];
 

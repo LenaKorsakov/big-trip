@@ -13,12 +13,16 @@ export default class NewPointButtonPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.view.addEventListener('click', () => {
-      this.model.setMode(Mode.CREATE);
-    });
+    this.view.addEventListener('click', this.onViewClick.bind(this));
 
-    this.model.addEventListener('mode', () => {
-      this.view.disabled = (this.model.getMode() === Mode.CREATE);
-    });
+    this.model.addEventListener('mode', this.onModelMode.bind(this));
+  }
+
+  onViewClick() {
+    this.model.setMode(Mode.CREATE);
+  }
+
+  onModelMode() {
+    this.view.disabled = (this.model.getMode() === Mode.CREATE);
   }
 }
