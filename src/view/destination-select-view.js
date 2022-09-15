@@ -1,7 +1,7 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 import './destination-select-view.css';
 
-export default class DestinationSelectView extends ComponentView {
+export default class DestinationSelectView extends View {
   constructor(states) {
     super(states);
 

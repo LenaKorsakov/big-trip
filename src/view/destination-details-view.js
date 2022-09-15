@@ -1,6 +1,6 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 
-export default class DestinationDetailsView extends ComponentView {
+export default class DestinationDetailsView extends View {
   /**
  * @param  {State} state
  */

@@ -32,7 +32,7 @@ const DESTINATIONS_URL = `${BASE_URL}/destinations`;
 const OFFERS_URL = `${BASE_URL}/offers`;
 //const HEADER_LENGTH = 11;
 //const AUTH = `Basic ${getRandomCombination(HEADER_LENGTH)}`;
-const AUTH = 'Basic 60jd12ks';
+const AUTH = 'Basic 60jd12k5';
 
 
 /** @type {Store<Point>}*/

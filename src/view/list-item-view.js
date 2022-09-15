@@ -1,8 +1,8 @@
-import ComponentView from './component-view.js';
+import View from './view.js';
 
-export * from './component-view.js';
+export * from './view.js';
 
-export default class ListItemView extends ComponentView {
+export default class ListItemView extends View {
   constructor() {
     super(...arguments);
 

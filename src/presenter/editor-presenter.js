@@ -146,7 +146,7 @@ export default class EditorPresenter extends Presenter {
     }
 
     catch (exception) {
-      //TODO эффект покачивания
+      this.view.shake();
     }
 
     this.view.setDeleteButtonPressed(false);
@@ -162,7 +162,7 @@ export default class EditorPresenter extends Presenter {
     }
 
     catch (exception) {
-      //TODO эффект покачивания
+      this.view.shake();
     }
     this.view.setSaveButtonPressed(false);
   }

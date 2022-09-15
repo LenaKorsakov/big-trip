@@ -1,9 +1,9 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 import initCalendar from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
-export default class DatePickerView extends ComponentView {
+export default class DatePickerView extends View {
   #startDateCalendar;
   #endDateCalendar;
 
