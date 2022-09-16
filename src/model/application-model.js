@@ -1,4 +1,3 @@
-import PointAdapter from '../adapter/point-adapter';
 import Mode from '../enum/mode';
 import PointType from '../enum/point-type';
 import Model from './model';
@@ -20,11 +19,10 @@ export default class ApplicationModel extends Model {
   }
 
   get defaultPoint() {
-    const point = new PointAdapter();
-    const [firstDestination] = this.destinations.listAll();
+    const point = this.points.blank;
 
     point.type = PointType.BUS;
-    point.destinationId = firstDestination.id;
+    point.destinationId = this.destinations.item(0).id;
     point.startDate = new Date().toJSON();
     point.endDate = point.startDate;
     point.basePrice = 0;
@@ -47,7 +45,7 @@ export default class ApplicationModel extends Model {
    * @param {number} mode
    * @param {number} editablePointId
    */
-  setMode(mode = Mode.VIEW, editablePointId = null) {
+  setMode(mode = this.#mode, editablePointId = null) {
     switch (mode) {
       case Mode.EDIT:
         this.editablePoint = this.points.findById(editablePointId);

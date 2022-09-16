@@ -13,13 +13,17 @@ export default class CollectionModel extends Model {
 
   /**
    * @param {Store<Item>} store
-   * @param {(item: Item) => ItemAdapter} adapt
+   * @param {(item?: Item) => ItemAdapter} adapt
    */
   constructor(store, adapt) {
     super();
 
     this.#store = store;
     this.#adapt = adapt;
+  }
+
+  get blank() {
+    return this.#adapt;
   }
 
   /**
@@ -66,19 +70,25 @@ export default class CollectionModel extends Model {
   }
 
   /**
+   * @param {number} index
+   */
+  item(index) {
+    const item = this.#items[index];
+
+    return item && this.#adapt(item);
+  }
+
+  /**
    *
    * @param {ItemAdapter} item
    */
   async add(item) {
     const newItem = await this.#store.add(item.toJSON());
+    const detail = this.#adapt(newItem);
 
     this.#items.push(newItem);
 
-    this.dispatchEvent(
-      new CustomEvent('add', {
-        detail: this.#adapt(newItem)
-      })
-    );
+    this.dispatchEvent(new CustomEvent('add', {detail}));
   }
 
   /**
@@ -88,14 +98,11 @@ export default class CollectionModel extends Model {
   async update(id, item) {
     const newItem = await this.#store.update(id, item);
     const index = this.findIndexById(id);
+    const detail = this.#adapt(newItem);
 
     this.#items.splice(index, 1, newItem);
 
-    this.dispatchEvent(
-      new CustomEvent('update',{
-        detail: this.#adapt(newItem)
-      })
-    );
+    this.dispatchEvent(new CustomEvent('update',{detail}));
   }
 
   /**
@@ -103,14 +110,10 @@ export default class CollectionModel extends Model {
    */
   async remove(id) {
     await this.#store.remove(id);
+
     const index = this.findIndexById(id);
+    const detail = this.#items.splice(index, 1).map(this.#adapt);
 
-    const [removedItem] = this.#items.splice(index, 1);
-
-    this.dispatchEvent(
-      new CustomEvent('remove', {
-        detail: this.#adapt(removedItem)
-      })
-    );
+    this.dispatchEvent(new CustomEvent('remove', {detail}));
   }
 }

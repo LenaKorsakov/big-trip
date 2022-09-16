@@ -26,7 +26,7 @@ export default class EditorPresenter extends Presenter {
     this.view.addEventListener('submit', this.onViewSubmit.bind(this));
 
 
-    this.view.pointTypeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
+    this.view.pointTypeSelectView.addEventListener('change',this.onViewPointTypeSelectChange.bind(this));
     this.view.destinationSelectView.addEventListener('change', this.onViewDestinationSelectChange.bind(this));
 
     this.model.addEventListener('mode',this.onModelMode.bind(this));
@@ -96,7 +96,7 @@ export default class EditorPresenter extends Presenter {
       .setOffers(offers);
   }
 
-  #updateDestinationDetailsView() {
+  #updateDestinationView() {
     const destination = this.model.destinations.findBy(
       'name',
       this.view.destinationSelectView.getValue()
@@ -187,12 +187,12 @@ export default class EditorPresenter extends Presenter {
     this.#updateDatePickerView();
     this.#updatePriceInputView();
     this.#updateOfferSelectView();
-    this.#updateDestinationDetailsView();
+    this.#updateDestinationView();
 
     this.view.target(pointView).open();
   }
 
-  onViewTypeSelectChange() {
+  onViewPointTypeSelectChange() {
     const pointType = this.view.pointTypeSelectView.getValue();
     const key = PointType.findKey(pointType);
 
@@ -201,7 +201,7 @@ export default class EditorPresenter extends Presenter {
   }
 
   onViewDestinationSelectChange() {
-    this.#updateDestinationDetailsView();
+    this.#updateDestinationView();
   }
 
   onViewClose() {
