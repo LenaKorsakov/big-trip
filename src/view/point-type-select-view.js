@@ -1,6 +1,6 @@
 import RadioGroupView, {html} from './radio-group-view';
 
-export default class TypeSelectView extends RadioGroupView {
+export default class PointTypeSelectView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
@@ -95,5 +95,5 @@ export default class TypeSelectView extends RadioGroupView {
   }
 }
 
-customElements.define(String(TypeSelectView), TypeSelectView);
+customElements.define(String(PointTypeSelectView), PointTypeSelectView);
 

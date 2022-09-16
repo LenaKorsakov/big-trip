@@ -1,5 +1,5 @@
 import Presenter from './presenter';
-import Filter from '../enum/filter';
+import FilterType from '../enum/filter-type';
 import FilterLabel from '../enum/filter-label';
 import FilterPredicate from '../enum/filter-predicate';
 import FilterDisabled from '../enum/filter-disabled';
@@ -23,12 +23,12 @@ export default class FilterSelectPresenter extends Presenter {
   }
 
   #buildFilterSelectView() {
-    const filterOptions = Object.keys(Filter).map((key) => [FilterLabel[key], Filter[key]]);
+    const filterOptions = Object.keys(FilterType).map((key) => [FilterLabel[key], FilterType[key]]);
     const filterKey = FilterPredicate.findKey(this.model.points.getFilter());
 
     return this.view
       .setOptions(filterOptions)
-      .setValue(Filter[filterKey]);
+      .setValue(FilterType[filterKey]);
   }
 
   onFilterChange() {

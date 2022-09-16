@@ -1,5 +1,5 @@
 import Presenter from './presenter';
-import Sort from '../enum/sort';
+import SortType from '../enum/sort-type';
 import SortLabel from '../enum/sort-label';
 import SortCompare from '../enum/sort-compare';
 import SortDisabled from '../enum/sort-disabled';
@@ -28,12 +28,12 @@ export default class SortSelectPresenter extends Presenter{
 
   #buildSortSelectView() {
     const flags = Object.values(SortDisabled);
-    const sortOptions = Object.keys(Sort).map((key) => [SortLabel[key], Sort[key]]);
+    const sortOptions = Object.keys(SortType).map((key) => [SortLabel[key], SortType[key]]);
     const sortKey = SortCompare.findKey(this.model.points.getSort());
 
     return this.view
       .setOptions(sortOptions)
-      .setValue(Sort[sortKey])
+      .setValue(SortType[sortKey])
       .setOptionsDisabled(flags);
   }
 
@@ -53,7 +53,7 @@ export default class SortSelectPresenter extends Presenter{
   }
 
   onModelFilter() {
-    this.view.setValue(Sort.DAY);
+    this.view.setValue(SortType.DAY);
     this.model.points.setSort(SortCompare.DAY, true);
   }
 

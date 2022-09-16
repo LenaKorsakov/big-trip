@@ -1,7 +1,10 @@
+import PointAdapter from '../adapter/point-adapter';
+import Mode from '../enum/mode';
+import PointType from '../enum/point-type';
 import Model from './model';
 
 export default class ApplicationModel extends Model {
-  #mode;
+  #mode = Mode.VIEW;
   /**
    * @param {DataTableModel<Point, PointAdapter>} points
    * @param {CollectionModel<Destination, DestinationAdapter>} destinations
@@ -14,6 +17,21 @@ export default class ApplicationModel extends Model {
     this.editablePoint = null;
     this.destinations = destinations;
     this.offerGroups = offerGroups;
+  }
+
+  get defaultPoint() {
+    const point = new PointAdapter();
+    const [firstDestination] = this.destinations.listAll();
+
+    point.type = PointType.BUS;
+    point.destinationId = firstDestination.id;
+    point.startDate = new Date().toJSON();
+    point.endDate = point.startDate;
+    point.basePrice = 0;
+    point.offerIds = [];
+    point.isFavorite = false;
+
+    return point;
   }
 
   async ready() {
@@ -30,11 +48,27 @@ export default class ApplicationModel extends Model {
    * @param {number} editablePointId
    */
   setMode(mode, editablePointId = null) {
-    this.#mode = mode;
-    this.editablePoint = this.points.findById(editablePointId);
+    switch (mode) {
+      case Mode.EDIT:
+        this.editablePoint = this.points.findById(editablePointId);
+        break;
 
+      case Mode.CREATE:
+        this.editablePoint = this.defaultPoint;
+        break;
+
+      case Mode.VIEW:
+        this.editablePoint = null;
+        break;
+
+      default:
+        throw new Error('Invalid mode');
+    }
+
+    this.#mode = mode;
     this.dispatchEvent(new CustomEvent('mode'));
   }
+
 
   getMode() {
     return this.#mode;

@@ -12,12 +12,12 @@ import NewPointButtonPresenter from './presenter/new-point-button-presenter';
 import FilterSelectPresenter from './presenter/filter-select-presenter';
 import SortSelectPresenter from './presenter/sort-select-presenter';
 import PlaceholderPresenter from './presenter/filter-placeholder-presentor';
-import PointListPresenter from './presenter/point-list-presenter';
+import ListPresenter from './presenter/list-presenter';
 import EditorPresenter from './presenter/editor-presenter';
 
 import FilterSelectView from './view/filter-select-view';
 import SortSelectView from './view/sort-select-view';
-import PointListView from './view/point-list-view';
+import ListView from './view/list-view';
 import EditorView from './view/editor-view';
 
 import FilterPredicate from './enum/filter-predicate';
@@ -55,8 +55,8 @@ const offerGroups = new CollectionModel(offersStore, (offerGroup) => new OfferGr
 const applicationModel = new ApplicationModel(points, destinations, offerGroups);
 
 
-/** @type {PointListView} */
-const pointListView = document.querySelector(String(PointListView));
+/** @type {ListView} */
+const pointListView = document.querySelector(String(ListView));
 
 /** @type {FilterSelectView} */
 const filterSelectView = document.querySelector(String(FilterSelectView));
@@ -70,12 +70,14 @@ const placeholderView = document.querySelector('.trip-events__msg');
 /** @type {HTMLButtonElement} */
 const newPointButtonView = document.querySelector('.trip-main__event-add-btn');
 
+//const creatorView = new CreatorView().target(pointListView);
+
 applicationModel.ready().then(() => {
   new NewPointButtonPresenter(applicationModel, newPointButtonView);
   new FilterSelectPresenter(applicationModel, filterSelectView);
   new SortSelectPresenter(applicationModel, sortSelectView);
   new PlaceholderPresenter(applicationModel,placeholderView);
-  new PointListPresenter(applicationModel, pointListView);
+  new ListPresenter(applicationModel, pointListView);
   new EditorPresenter(applicationModel, new EditorView());
 });
 

@@ -4,19 +4,19 @@ import { formatStringToDate,formatStringToHour} from '../format';
 
 /**
  * @template {ApplicationModel} Model
- * @template {PointListView} View
+ * @template {ListView} View
  * @extends Presenter<Model,View>
  */
-export default class PointListPresenter extends Presenter {
+export default class ListPresenter extends Presenter {
   /**
    * @param {[model: Model, view: View]} init
    */
   constructor(...init) {
     super(...init);
 
-    this.onModelPointsChange().addEventListener('point-edit', (/** @type {CustomEvent} */ event) => {
-      this.model.setMode(Mode.EDIT, event.detail);
-    });
+    this.updateView();
+
+    this.view.addEventListener('edit', this.onViewEdit.bind(this));
 
     this.model.points.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
@@ -24,7 +24,7 @@ export default class PointListPresenter extends Presenter {
     );
   }
 
-  onModelPointsChange() {
+  updateView() {
     /** @type {PointState[]} */
     const states = this.model.points.list().map((point) => {
       const destination = this.model.destinations.findById(point.destinationId);
@@ -52,6 +52,24 @@ export default class PointListPresenter extends Presenter {
       };
     });
 
-    return this.view.setItems(states);
+    return this.view.setPoints(states);
+  }
+
+  /**
+   * @param {CustomEvent & {target: PointView}} event
+   */
+  onViewEdit(event) {
+    this.model.setMode(Mode.EDIT, event.target.getId());
+  }
+
+  /**
+   *
+   * @param {CustomEvent<PointAdapter>} event
+   */
+  onModelPointsChange(event) {
+    if (event.type === 'remove') {
+      this.view.findById(event.detail.id)?.remove();
+    }
+    this.updateView();
   }
 }

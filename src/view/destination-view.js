@@ -1,6 +1,6 @@
 import View, {html} from './view.js';
 
-export default class DestinationDetailsView extends View {
+export default class DestinationView extends View {
   /**
  * @param  {State} state
  */
@@ -53,4 +53,4 @@ export default class DestinationDetailsView extends View {
   }
 }
 
-customElements.define(String(DestinationDetailsView), DestinationDetailsView);
+customElements.define(String(DestinationView), DestinationView);

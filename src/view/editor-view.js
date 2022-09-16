@@ -1,24 +1,26 @@
-import ListItemView, {html} from './list-item-view';
-import TypeSelectView from './type-select-view';
+import View, {html} from './view';
+import PointTypeSelectView from './point-type-select-view';
 import DestinationSelectView from './destination-select-view';
 import DatePickerView from './date-picker-view';
 import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
-import DestinationDetailsView from './destination-details-view';
-import SaveButtonLabel from '../enum/toggle-save';
-import DeleteButtonLabel from '../enum/toggle-delete';
+import DestinationView from './destination-view';
+import SaveButtonLabel from '../enum/save-button-label';
+import DeleteButtonLabel from '../enum/delete-button-label';
 
 /**
  * @implements EventListenerObject
  */
-export default class EditorView extends ListItemView {
-  #linkedView = null;
+export default class EditorView extends View {
+  #targetView = null;
 
   constructor() {
     super();
 
-    /** @type {TypeSelectView} */
-    this.typeSelectView = this.querySelector(String(TypeSelectView));
+    this.classList.add('trip-events__item');
+
+    /** @type {PointTypeSelectView} */
+    this.pointTypeSelectView = this.querySelector(String(PointTypeSelectView));
 
     /** @type {DestinationSelectView} */
     this.destinationSelectView = this.querySelector(String(DestinationSelectView));
@@ -32,8 +34,8 @@ export default class EditorView extends ListItemView {
     /** @type {OfferSelectView} */
     this.offerSelectView = this.querySelector(String(OfferSelectView));
 
-    /** @type {DestinationDetailsView} */
-    this.destinationDetailsView = this.querySelector(String(DestinationDetailsView));
+    /** @type {DestinationView} */
+    this.destinationView = this.querySelector(String(DestinationView));
 
     this.addEventListener('submit', this.#onViewSubmit);
     this.addEventListener('reset', this.#onViewReset);
@@ -47,26 +49,32 @@ export default class EditorView extends ListItemView {
     return html`
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
-          ${TypeSelectView}
+          ${PointTypeSelectView}
           ${DestinationSelectView}
           </div>
           ${DatePickerView}
           ${PriceInputView}
-          <button class="event__save-btn  btn  btn--blue" type="submit">
-            ${SaveButtonLabel.DEFAULT}
-          </button>
-          <button class="event__reset-btn" type="reset">
-            ${DeleteButtonLabel.DEFAULT}
-          </button>
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          ${this.createButtonsHtml()}
         </header>
         <section class="event__details">
           ${OfferSelectView}
-          ${DestinationDetailsView}
+          ${DestinationView}
         </section>
       </form>
+    `;
+  }
+
+  createButtonsHtml() {
+    return html`
+      <button class="event__save-btn  btn  btn--blue" type="submit">
+        ${SaveButtonLabel.DEFAULT}
+      </button>
+      <button class="event__reset-btn" type="reset">
+        ${DeleteButtonLabel.DEFAULT}
+      </button>
+      <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>
     `;
   }
 
@@ -95,14 +103,22 @@ export default class EditorView extends ListItemView {
   /**
    * @param {HTMLElement} view
    */
-  link(view) {
-    this.#linkedView = view;
+  target(view) {
+    this.#targetView = view;
 
     return this;
   }
 
+  connect() {
+    this.#targetView.replaceWith(this);
+  }
+
+  disconnect() {
+    this.replaceWith(this.#targetView);
+  }
+
   open() {
-    this.#linkedView.replaceWith(this);
+    this.connect();
 
     document.addEventListener('keydown', this);
 
@@ -113,7 +129,7 @@ export default class EditorView extends ListItemView {
    * @param {boolean} [silent]
    */
   close(silent) {
-    this.replaceWith(this.#linkedView);
+    this.disconnect();
 
     document.removeEventListener('keydown', this);
 

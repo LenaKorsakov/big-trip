@@ -1,8 +1,9 @@
 import Presenter from './presenter';
-import Type from '../enum/type';
-import TypeLabel from '../enum/type-label';
+import PointType from '../enum/point-type';
+import PointLabel from '../enum/point-label';
 import Mode from '../enum/mode';
 import PointAdapter from '../adapter/point-adapter';
+import PointView from '../view/point-view';
 
 /**
  * @template {ApplicationModel} Model
@@ -25,21 +26,21 @@ export default class EditorPresenter extends Presenter {
     this.view.addEventListener('submit', this.onViewSubmit.bind(this));
 
 
-    this.view.typeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
+    this.view.pointTypeSelectView.addEventListener('change',this.onViewTypeSelectChange.bind(this));
     this.view.destinationSelectView.addEventListener('change', this.onViewDestinationSelectChange.bind(this));
 
     this.model.addEventListener('mode',this.onModelMode.bind(this));
   }
 
   #buildTypeSelectView() {
-    const optionStates = Object.keys(Type).map((key) => [
-      TypeLabel[key],
-      Type[key],
+    const optionStates = Object.keys(PointType).map((key) => [
+      PointLabel[key],
+      PointType[key],
     ]);
 
-    return this.view.typeSelectView
+    return this.view.pointTypeSelectView
       .setOptions(optionStates)
-      .setValue(Type.TAXI);
+      .setValue(PointType.TAXI);
   }
 
   #buildDestinationSelectView() {
@@ -62,16 +63,16 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateTypeSelectView() {
-    this.view.typeSelectView.setValue(this.model.editablePoint.type);
+    this.view.pointTypeSelectView.setValue(this.model.editablePoint.type);
   }
 
   #updateDestinationSelectView() {
     const destination = this.model.destinations.findById(this.model.editablePoint.destinationId);
-    const key = Type.findKey(this.model.editablePoint.type);
+    const key = PointType.findKey(this.model.editablePoint.type);
 
     this.view.destinationSelectView
       .setValue(destination.name)
-      .setLabel(TypeLabel[key]);
+      .setLabel(PointLabel[key]);
   }
 
   #updateDatePickerView() {
@@ -85,7 +86,7 @@ export default class EditorPresenter extends Presenter {
   }
 
   #updateOfferSelectView() {
-    const selectedType = this.view.typeSelectView.getValue();
+    const selectedType = this.view.pointTypeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
     const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.editablePoint.offerIds.includes(offer.id)]);
@@ -105,7 +106,7 @@ export default class EditorPresenter extends Presenter {
       picture.description,
     ]);
 
-    this.view.destinationDetailsView
+    this.view.destinationView
       .set('hidden', !destination.pictures.length)
       .setPictures(pictureStates)
       .setDescription(destination.description);
@@ -122,7 +123,7 @@ export default class EditorPresenter extends Presenter {
     point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
     point.id = this.model.editablePoint.id;
     point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
-    point.type = this.view.typeSelectView.getValue();
+    point.type = this.view.pointTypeSelectView.getValue();
     point.isFavorite = false;
 
     return point;
@@ -172,7 +173,7 @@ export default class EditorPresenter extends Presenter {
       return;
     }
 
-    const pointView = document.querySelector(`#item-${this.model.editablePoint.id}`);
+    const pointView = PointView.findById(this.model.editablePoint.id);
 
     this.view.close(true);
 
@@ -183,14 +184,14 @@ export default class EditorPresenter extends Presenter {
     this.#updateOfferSelectView();
     this.#updateDestinationDetailsView();
 
-    this.view.link(pointView).open();
+    this.view.target(pointView).open();
   }
 
   onViewTypeSelectChange() {
-    const pointType = this.view.typeSelectView.getValue();
-    const key = Type.findKey(pointType);
+    const pointType = this.view.pointTypeSelectView.getValue();
+    const key = PointType.findKey(pointType);
 
-    this.view.destinationSelectView.setLabel(TypeLabel[key]);
+    this.view.destinationSelectView.setLabel(PointLabel[key]);
     this.#updateOfferSelectView();
   }
 

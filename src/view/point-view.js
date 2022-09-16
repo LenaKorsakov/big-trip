@@ -1,7 +1,6 @@
-import ListItemView, {html} from './list-item-view.js';
+import View, {html} from './view.js';
 
-
-export default class PointView extends ListItemView {
+export default class PointView extends View {
   #id;
 
   /**
@@ -10,12 +9,13 @@ export default class PointView extends ListItemView {
   constructor(state) {
     super(state);
 
+    this.classList.add('trip-events__item');
+
     this.#id = state.id;
-    this.id = `item-${state.id}`;
+    this.id = `${this.constructor}-${state.id}`;
 
-    this.addEventListener('click', this.#onViewClick);
+    this.addEventListener('click', this.#onClick);
   }
-
 
   /**
    * @type {PointState} state
@@ -58,16 +58,24 @@ export default class PointView extends ListItemView {
   `;
   }
 
-  #onViewClick(event) {
-    if (!event.target.closest('.event__rollup-btn')) {
-      return;
+  getId() {
+    return this.#id;
+  }
+
+  /**
+   * @param {MouseEvent & {target: Element}} event
+   */
+  #onClick(event) {
+    if (event.target.closest('.event__rollup-btn')) {
+      this.dispatchEvent(new CustomEvent('edit', {bubbles: true}));
     }
-    this.dispatchEvent(
-      new CustomEvent('point-edit', {
-        detail: this.#id,
-        bubbles: true
-      })
-    );
+  }
+
+  /**
+   * @param {number} id
+   */
+  static findById(id, rootView = document) {
+    return rootView.querySelector(`#${this}-${id}`);
   }
 }
 
