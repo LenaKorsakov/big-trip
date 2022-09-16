@@ -139,6 +139,7 @@ export default class EditorPresenter extends Presenter {
 
   async onViewReset() {
     this.view.setDeleteButtonPressed(true);
+    this.view.setFormDisabled(true);
 
     try {
       await this.deleteEditablePoint();
@@ -151,10 +152,12 @@ export default class EditorPresenter extends Presenter {
     }
 
     this.view.setDeleteButtonPressed(false);
+    this.view.setFormDisabled(false);
   }
 
   async onViewSubmit() {
     this.view.setSaveButtonPressed(true);
+    this.view.setFormDisabled(true);
 
     try {
       await this.saveEditablePoint();
@@ -165,7 +168,9 @@ export default class EditorPresenter extends Presenter {
     catch (exception) {
       this.view.shake();
     }
+
     this.view.setSaveButtonPressed(false);
+    this.view.setFormDisabled(false);
   }
 
   onModelMode() {

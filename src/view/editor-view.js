@@ -37,9 +37,9 @@ export default class EditorView extends View {
     /** @type {DestinationView} */
     this.destinationView = this.querySelector(String(DestinationView));
 
-    this.addEventListener('submit', this.#onViewSubmit);
-    this.addEventListener('reset', this.#onViewReset);
-    this.addEventListener('click', this.#onViewClick);
+    this.addEventListener('submit', this.#onSubmit);
+    this.addEventListener('reset', this.#onReset);
+    this.addEventListener('click', this.#onClick);
   }
 
   /**
@@ -101,6 +101,18 @@ export default class EditorView extends View {
   }
 
   /**
+   * @param {boolean} flag
+   */
+  setFormDisabled(flag) {
+    /** @type {HTMLFormElement[]} */
+    const views = Array.from(...this.children);
+
+    views.forEach((view) => {
+      view.disabled = flag;
+    });
+  }
+
+  /**
    * @param {HTMLElement} view
    */
   target(view) {
@@ -149,15 +161,15 @@ export default class EditorView extends View {
     }
   }
 
-  #onViewSubmit(event) {
+  #onSubmit(event) {
     event.preventDefault();
   }
 
-  #onViewReset(event) {
+  #onReset(event) {
     event.preventDefault();
   }
 
-  #onViewClick(event) {
+  #onClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }
