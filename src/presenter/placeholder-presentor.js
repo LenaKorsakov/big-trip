@@ -18,7 +18,7 @@ export default class PlaceholderPresenter extends Presenter {
 
     this.model.points.addEventListener(
       ['add', 'update', 'remove', 'filter'],
-      this.onModelPointsChange.bind(this)
+      this.#onModelPointsChange.bind(this)
     );
   }
 
@@ -31,7 +31,7 @@ export default class PlaceholderPresenter extends Presenter {
     this.view.textContent = isHidden ? '' : message;
   }
 
-  onModelPointsChange() {
+  #onModelPointsChange() {
     this.#updatePlaceholder();
   }
 }

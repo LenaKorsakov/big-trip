@@ -10,19 +10,19 @@ import Mode from '../enum/mode';
  * @template {FilterSelectView} View
  * @extends Presenter<Model,View>
  */
-export default class FilterSelectPresenter extends Presenter {
+export default class FilterPresenter extends Presenter {
   /**
    * @param {[model: Model, view: View]} init
    */
   constructor(...init) {
     super(...init);
 
-    this.model.addEventListener('mode', this.onModelMode.bind(this));
+    this.model.addEventListener('mode', this.#onModelMode.bind(this));
 
-    this.#buildFilterSelectView().addEventListener('change', this.onFilterChange.bind(this));
+    this.#buildFilterView().addEventListener('change', this.#onFilterChange.bind(this));
   }
 
-  #buildFilterSelectView() {
+  #buildFilterView() {
     const filterOptions = Object.keys(FilterType).map((key) => [FilterLabel[key], FilterType[key]]);
     const filterKey = FilterPredicate.findKey(this.model.points.getFilter());
 
@@ -31,13 +31,13 @@ export default class FilterSelectPresenter extends Presenter {
       .setValue(FilterType[filterKey]);
   }
 
-  onFilterChange() {
+  #onFilterChange() {
     const filterKey = this.view.getValue().toUpperCase();
 
     this.model.points.setFilter(FilterPredicate[filterKey]);
   }
 
-  onModelMode() {
+  #onModelMode() {
     const flags = Object.values(FilterDisabled);
 
     if (this.model.getMode() !== Mode.VIEW) {

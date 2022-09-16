@@ -6,7 +6,7 @@
 /** @typedef {import('./destination-select-view').DestinationOptionState} DestinationOptionState */
 /** @typedef {import('./offer-select-view').OfferSelectState} OfferSelectState */
 /** @typedef {import('./offer-toggle-view').OfferToggleState} OfferToggleState  */
-/** @typedef {import('./sort-select-view').SortOptionState} SortOptionState */
+/** @typedef {import('./sort-view').SortOptionState} SortOptionState */
 /** @typedef {import('./list-view').default} ListView*/
 /** @typedef {import('./editor-view').default} EditorView */
 

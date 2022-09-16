@@ -9,14 +9,14 @@ import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
 
 import NewPointButtonPresenter from './presenter/new-point-button-presenter';
-import FilterSelectPresenter from './presenter/filter-select-presenter';
-import SortSelectPresenter from './presenter/sort-select-presenter';
-import PlaceholderPresenter from './presenter/filter-placeholder-presentor';
+import FilterPresenter from './presenter/filter-presenter';
+import SortPresenter from './presenter/sort-presenter';
+import PlaceholderPresenter from './presenter/placeholder-presentor';
 import ListPresenter from './presenter/list-presenter';
 import EditorPresenter from './presenter/editor-presenter';
 
-import FilterSelectView from './view/filter-select-view';
-import SortSelectView from './view/sort-select-view';
+import FilterView from './view/filter-view';
+import SortView from './view/sort-view';
 import ListView from './view/list-view';
 import EditorView from './view/editor-view';
 
@@ -24,16 +24,11 @@ import FilterPredicate from './enum/filter-predicate';
 import SortCompare from './enum/sort-compare';
 import Mode from './enum/mode';
 
-//import {getRandomCombination} from './utils';
-
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
 const POINTS_URL = `${BASE_URL}/points`;
 const DESTINATIONS_URL = `${BASE_URL}/destinations`;
 const OFFERS_URL = `${BASE_URL}/offers`;
-//const HEADER_LENGTH = 11;
-//const AUTH = `Basic ${getRandomCombination(HEADER_LENGTH)}`;
 const AUTH = 'Basic 60jd12k5';
-
 
 /** @type {Store<Point>}*/
 const pointStore = new Store(POINTS_URL, AUTH);
@@ -58,11 +53,11 @@ const applicationModel = new ApplicationModel(points, destinations, offerGroups)
 /** @type {ListView} */
 const pointListView = document.querySelector(String(ListView));
 
-/** @type {FilterSelectView} */
-const filterSelectView = document.querySelector(String(FilterSelectView));
+/** @type {FilterView} */
+const filterView = document.querySelector(String(FilterView));
 
-/** @type {SortSelectView} */
-const sortSelectView = document.querySelector(String(SortSelectView));
+/** @type {SortView} */
+const sortView = document.querySelector(String(SortView));
 
 /** @type {PlaceholdersView} */
 const placeholderView = document.querySelector('.trip-events__msg');
@@ -74,8 +69,8 @@ const newPointButtonView = document.querySelector('.trip-main__event-add-btn');
 
 applicationModel.ready().then(() => {
   new NewPointButtonPresenter(applicationModel, newPointButtonView);
-  new FilterSelectPresenter(applicationModel, filterSelectView);
-  new SortSelectPresenter(applicationModel, sortSelectView);
+  new FilterPresenter(applicationModel, filterView);
+  new SortPresenter(applicationModel, sortView);
   new PlaceholderPresenter(applicationModel,placeholderView);
   new ListPresenter(applicationModel, pointListView);
   new EditorPresenter(applicationModel, new EditorView());
