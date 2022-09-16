@@ -47,7 +47,7 @@ export default class ApplicationModel extends Model {
    * @param {number} mode
    * @param {number} editablePointId
    */
-  setMode(mode, editablePointId = null) {
+  setMode(mode = Mode.VIEW, editablePointId = null) {
     switch (mode) {
       case Mode.EDIT:
         this.editablePoint = this.points.findById(editablePointId);
