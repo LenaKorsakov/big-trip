@@ -42,15 +42,15 @@ const destinationStore = new Store(DESTINATIONS_URL, AUTH);
 /** @type {Store<OfferGroup}*/
 const offersStore = new Store(OFFERS_URL, AUTH);
 
-const points = new DataTableModel(pointStore, (point) => new PointAdapter(point))
+const pointsModel = new DataTableModel(pointStore, (point) => new PointAdapter(point))
   .setFilter(FilterPredicate.EVERYTHING)
   .setSort(SortCompare.DAY);
 
-const destinations = new CollectionModel(destinationStore, (destination) => new DestinationAdapter(destination));
+const destinationsModel = new CollectionModel(destinationStore, (destination) => new DestinationAdapter(destination));
 
-const offerGroups = new CollectionModel(offersStore, (offerGroup) => new OfferGroupAdapter(offerGroup));
+const offerGroupsModel = new CollectionModel(offersStore, (offerGroup) => new OfferGroupAdapter(offerGroup));
 
-const applicationModel = new ApplicationModel(points, destinations, offerGroups);
+const applicationModel = new ApplicationModel(pointsModel, destinationsModel, offerGroupsModel);
 
 
 /** @type {ListView} */

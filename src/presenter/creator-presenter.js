@@ -2,7 +2,6 @@ import Presenter from './presenter';
 import PointType from '../enum/point-type';
 import PointLabel from '../enum/point-label';
 import Mode from '../enum/mode';
-import PointAdapter from '../adapter/point-adapter';
 
 /**
  * @template {ApplicationModel} Model
@@ -21,27 +20,13 @@ export default class CreatorPresenter extends Presenter {
     this.view.addEventListener('close', this._onViewClose.bind(this));
     this.view.addEventListener('submit', this._onViewSubmit.bind(this));
 
-    this.view.pointTypeSelectView.addEventListener('change',this.#onPointTypeSelectViewChange.bind(this));
+    this.view.pointTypeSelectView.addEventListener('change', this.#onPointTypeSelectViewChange.bind(this));
     this.view.destinationSelectView.addEventListener('change', this.#onDestinationSelectViewChange.bind(this));
+    this.view.datePickerView.addEventListener('change', this.#onDatePickerViewChange.bind(this));
+    this.view.priceInputView.addEventListener('change', this.#onPriceInputViewChange.bind(this));
+    this.view.offerSelectView.addEventListener('change', this.#onOffersSelectViewChange.bind(this));
 
     this.model.addEventListener('mode',this._onModelMode.bind(this));
-  }
-
-  get currentPoint() {
-    const point = new PointAdapter();
-    const destinationName = this.view.destinationSelectView.getValue();
-    const [startDate, endDate] = this.view.dataPickerView.getDates();
-
-    point.basePrice = Number(this.view.priceInputView.getPrice());
-    point.startDate = startDate;
-    point.endDate = endDate;
-    point.destinationId = this.model.destinations.findBy('name', destinationName)?.id;
-    point.id = this.model.currentPoint.id;
-    point.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
-    point.type = this.view.pointTypeSelectView.getValue();
-    point.isFavorite = false;
-
-    return point;
   }
 
   _buildView() {
@@ -53,7 +38,7 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.pointTypeSelectView.setOptions(pointTypeOptionStates);
     this.view.destinationSelectView.setOptions(destinationSelectOptions);
-    this.view.dataPickerView.configure({dateFormat: 'd/m/y H:m'});
+    this.view.datePickerView.configure({dateFormat: 'd/m/y H:m'});
   }
 
   _updateView() {
@@ -65,7 +50,7 @@ export default class CreatorPresenter extends Presenter {
       .setValue(this.model.destinations.findById(point.destinationId).name)
       .setLabel(PointLabel[PointType.findKey(this.model.currentPoint.type)]);
 
-    this.view.dataPickerView.setDates(point.startDate, point.endDate);
+    this.view.datePickerView.setDates(point.startDate, point.endDate);
 
     this.view.priceInputView.setPrice(point.basePrice);
 
@@ -103,7 +88,8 @@ export default class CreatorPresenter extends Presenter {
   }
 
   _saveCurrentPoint() {
-    return this.model.points.add(this.currentPoint);
+    return this.model.points.add(this.model.currentPoint);
+
   }
 
   async _onViewSubmit() {
@@ -141,11 +127,32 @@ export default class CreatorPresenter extends Presenter {
     const pointType = this.view.pointTypeSelectView.getValue();
     const key = PointType.findKey(pointType);
 
+    this.model.currentPoint.type = pointType;
+
     this.view.destinationSelectView.setLabel(PointLabel[key]);
     this._updateOfferSelectView();
   }
 
   #onDestinationSelectViewChange() {
+    const destinationName = this.view.destinationSelectView.getValue();
+    const destination = this.model.destinations.findBy('name', destinationName);
+
+    this.model.currentPoint.destinationId = destination?.id;
+
     this._updateDestinationView();
+  }
+
+  #onDatePickerViewChange() {
+    const [startDate, endDate] = this.view.datePickerView.getDates();
+
+    Object.assign(this.model.currentPoint.startDate, {startDate, endDate});
+  }
+
+  #onPriceInputViewChange() {
+    this.model.currentPoint.basePrice = Number(this.view.priceInputView.getPrice());
+  }
+
+  #onOffersSelectViewChange() {
+    this.model.currentPoint.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
   }
 }

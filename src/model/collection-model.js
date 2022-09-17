@@ -23,7 +23,7 @@ export default class CollectionModel extends Model {
   }
 
   get blank() {
-    return this.#adapt;
+    return this.#adapt();
   }
 
   /**

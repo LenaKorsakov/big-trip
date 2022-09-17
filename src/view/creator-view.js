@@ -25,7 +25,7 @@ export default class CreatorView extends View {
     this.destinationSelectView = this.querySelector(String(DestinationSelectView));
 
     /** @type {DatePickerView} */
-    this.dataPickerView = this.querySelector(String(DatePickerView));
+    this.datePickerView = this.querySelector(String(DatePickerView));
 
     /** @type {PriceInputView} */
     this.priceInputView = this.querySelector(String(PriceInputView));
