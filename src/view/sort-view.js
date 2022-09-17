@@ -1,6 +1,6 @@
-import RadioGroupView, {html} from './radio-group-view.js';
+import RadioGroupView, {html} from './radio-group-view';
 
-export default class SortSelectView extends RadioGroupView {
+export default class SortView extends RadioGroupView {
   constructor() {
     super(...arguments);
   }
@@ -55,4 +55,4 @@ export default class SortSelectView extends RadioGroupView {
   }
 }
 
-customElements.define(String(SortSelectView), SortSelectView);
+customElements.define(String(SortView), SortView);

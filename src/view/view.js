@@ -1,4 +1,6 @@
-export default class ComponentView extends HTMLElement {
+import './view.css';
+
+export default class View extends HTMLElement {
   constructor() {
     super();
 
@@ -30,6 +32,20 @@ export default class ComponentView extends HTMLElement {
     this[key] = value;
 
     return this;
+  }
+
+  shake() {
+    this.classList.add('shake');
+    this.addEventListener('animationend', this.onAnimationEnd, {once: true});
+  }
+
+  /**
+   * @param {AnimationEvent} event
+   */
+  onAnimationEnd(event) {
+    if (event.animationName === 'shake') {
+      this.classList.remove('shake');
+    }
   }
 
   static get tagNamePrefix() {

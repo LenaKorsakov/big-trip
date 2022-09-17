@@ -1,6 +1,6 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 
-export default class DestinationDetailsView extends ComponentView {
+export default class DestinationView extends View {
   /**
  * @param  {State} state
  */
@@ -26,31 +26,31 @@ export default class DestinationDetailsView extends ComponentView {
     `;
   }
 
-  createPictureHTML(...state) {
-    const [src,alt] = state;
-
-    return html`<img class="event__photo" src=${src} alt=${alt}>`;
-  }
-
   /**
    * @param  {DestinationPictureState[]} states
    */
   setPictures(states) {
     this.querySelector('.event__photos-tape').innerHTML = html`${
-      states.map((state) => this.createPictureHTML(...state))
+      states.map((state) => this.#createPictureHTML(...state))
     }`;
 
     return this;
   }
 
   /**
-   * @param {string} description
+   * @param {string} value
    */
-  setDescription(description) {
-    this.querySelector('.event__destination-description').textContent = description;
+  setDescription(value) {
+    this.querySelector('.event__destination-description').textContent = value;
 
     return this;
   }
+
+  #createPictureHTML(...state) {
+    const [src,alt] = state;
+
+    return html`<img class="event__photo" src=${src} alt=${alt}>`;
+  }
 }
 
-customElements.define(String(DestinationDetailsView), DestinationDetailsView);
+customElements.define(String(DestinationView), DestinationView);

@@ -1,7 +1,7 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 import './offer-select-view.css';
 
-export default class OfferSelectView extends ComponentView {
+export default class OfferSelectView extends View {
   constructor(...state) {
     super(...state);
 

@@ -1,6 +1,6 @@
-import RadioGroupView, {html} from './radio-group-view.js';
+import RadioGroupView, {html} from './radio-group-view';
 
-export default class FilterSelectView extends RadioGroupView {
+export default class FilterView extends RadioGroupView {
   constructor() {
     super(...arguments);
 
@@ -58,4 +58,4 @@ export default class FilterSelectView extends RadioGroupView {
   }
 }
 
-customElements.define(String(FilterSelectView), FilterSelectView);
+customElements.define(String(FilterView), FilterView);

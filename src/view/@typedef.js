@@ -1,21 +1,23 @@
-/** @typedef {import('./destination-details-view').DestinationPictureState} DestinationPictureState */
-/** @typedef {import('./destination-select-view').DestinationOptionState} DestinationOptionState */
-/** @typedef {import('./offer-select-view').OfferSelectState} OfferSelectState */
-/** @typedef {import('./offer-toggle-view').OfferToggleState} OfferToggleState  */
-/** @typedef {import('./sort-select-view').SortOptionState} SortOptionState */
-/** @typedef {import('./point-list-view').default} PointListView */
-/** @typedef {import('./editor-view').default} EditorView */
+/** @typedef {import('flatpickr/dist/types/instance').Instance} Calendar */
+/** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
+/** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
 
-/** @typedef {[label: string, value: PointType]} TypeOptionState  */
+// /** @typedef {import('./destination-view').DestinationPictureState} DestinationPictureState */
+// /** @typedef {import('./destination-select-view').DestinationOptionState} DestinationOptionState */
+// /** @typedef {import('./offer-select-view').OfferSelectState} OfferSelectState */
+// /** @typedef {import('./offer-toggle-view').OfferToggleState} OfferToggleState  */
+// /** @typedef {import('./sort-view').SortOptionState} SortOptionState */
+/** @typedef {import('./list-view').default} ListView*/
+/** @typedef {import('./editor-view').default} CreatorView */
+
+/** @typedef {[label: string, value: PointType]} PointTypeOptionState  */
 /** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
 /** @typedef {[title: string, price: string]} OfferToggleState  */
 /** @typedef {[label: string, value: string]} SortOptionState  */
 /** @typedef {[label: string, value: string]} FilterOptionState  */
-/** @typedef {[string, string][]} DestinationOptionState  */
+/** @typedef {string[]} DestinationOptionState  */
 /** @typedef {[URL, string][]} DestinationPictureState  */
-/** @typedef {import('flatpickr/dist/types/instance').Instance} Calendar */
-/** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
-/** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
+
 /**
  * @typedef PointState
  * @prop {number} id

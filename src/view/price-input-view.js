@@ -1,6 +1,6 @@
-import ComponentView, {html} from './component-view.js';
+import View, {html} from './view.js';
 
-export default class PriceInputView extends ComponentView {
+export default class PriceInputView extends View {
   constructor() {
     super(...arguments);
 
@@ -23,7 +23,8 @@ export default class PriceInputView extends ComponentView {
       id="event-price-1"
       type="text"
       name="event-price"
-      value="${value}">
+      value="${value}"
+      autocomplete="off">
     `;
   }
 

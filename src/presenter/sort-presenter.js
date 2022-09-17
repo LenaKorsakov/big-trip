@@ -1,5 +1,5 @@
 import Presenter from './presenter';
-import Sort from '../enum/sort';
+import SortType from '../enum/sort-type';
 import SortLabel from '../enum/sort-label';
 import SortCompare from '../enum/sort-compare';
 import SortDisabled from '../enum/sort-disabled';
@@ -10,7 +10,7 @@ import Mode from '../enum/mode';
  * @template {SortSelectView} View
  * @extends Presenter<Model,View>
  */
-export default class SortSelectPresenter extends Presenter{
+export default class SortPresenter extends Presenter{
   /**
    * @param {[model: Model, view: View]} init
    */
@@ -19,21 +19,21 @@ export default class SortSelectPresenter extends Presenter{
 
     this.#setVisibility();
 
-    this.model.addEventListener('mode', this.onModelMode.bind(this));
-    this.model.points.addEventListener('filter', this.onModelFilter.bind(this));
-    this.model.points.addEventListener(['add','remove','filter'], this.onModelPointsChange.bind(this));
+    this.model.addEventListener('mode', this.#onModelMode.bind(this));
+    this.model.points.addEventListener('filter', this.#onModelFilter.bind(this));
+    this.model.points.addEventListener(['add','remove','filter'], this.#onModelPointsChange.bind(this));
 
-    this.#buildSortSelectView().addEventListener('change', this.onSortChange.bind(this));
+    this.#buildSortView().addEventListener('change', this.#onSortChange.bind(this));
   }
 
-  #buildSortSelectView() {
+  #buildSortView() {
     const flags = Object.values(SortDisabled);
-    const sortOptions = Object.keys(Sort).map((key) => [SortLabel[key], Sort[key]]);
+    const sortOptions = Object.keys(SortType).map((key) => [SortLabel[key], SortType[key]]);
     const sortKey = SortCompare.findKey(this.model.points.getSort());
 
     return this.view
       .setOptions(sortOptions)
-      .setValue(Sort[sortKey])
+      .setValue(SortType[sortKey])
       .setOptionsDisabled(flags);
   }
 
@@ -43,7 +43,7 @@ export default class SortSelectPresenter extends Presenter{
     this.view.hidden = !isHidden;
   }
 
-  onModelMode() {
+  #onModelMode() {
     const flags = Object.values(SortDisabled);
 
     if (this.model.getMode() !== Mode.VIEW) {
@@ -52,16 +52,16 @@ export default class SortSelectPresenter extends Presenter{
     this.view.setOptionsDisabled(flags);
   }
 
-  onModelFilter() {
-    this.view.setValue(Sort.DAY);
+  #onModelFilter() {
+    this.view.setValue(SortType.DAY);
     this.model.points.setSort(SortCompare.DAY, true);
   }
 
-  onModelPointsChange(){
+  #onModelPointsChange(){
     this.#setVisibility();
   }
 
-  onSortChange() {
+  #onSortChange() {
     const sortKey = this.view.getValue().toUpperCase();
 
     this.model.points.setSort(SortCompare[sortKey]);

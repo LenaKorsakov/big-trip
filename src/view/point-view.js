@@ -1,7 +1,6 @@
-import ListItemView, {html} from './list-item-view.js';
+import View, {html} from './view.js';
 
-
-export default class PointView extends ListItemView {
+export default class PointView extends View {
   #id;
 
   /**
@@ -10,12 +9,13 @@ export default class PointView extends ListItemView {
   constructor(state) {
     super(state);
 
+    this.classList.add('trip-events__item');
+
     this.#id = state.id;
-    this.id = `item-${state.id}`;
+    this.id = `${this.constructor}-${state.id}`;
 
-    this.addEventListener('click', this.#onViewClick);
+    this.addEventListener('click', this.#onClick);
   }
-
 
   /**
    * @type {PointState} state
@@ -24,50 +24,57 @@ export default class PointView extends ListItemView {
   createAdjacentHtml(state) {
 
     return html`
-    <div class ="event">
-    <time class="event__date" datetime="${state.isoStartDate}">${state.startDate}</time>
-    <div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${state.icon}.png" alt="Event type icon">
-    </div>
-    <h3 class="event__title">${state.title}</h3>
+      <div class ="event">
+        <time class="event__date" datetime="${state.isoStartDate}">${state.startDate}</time>
+        <div class="event__type">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${state.icon}.png" alt="Event type icon">
+        </div>
+        <h3 class="event__title">${state.title}</h3>
         <div class="event__schedule">
-        <p class="event__time">
-        <time class="event__start-time" datetime="${state.isoStartDate}">${state.startTime}</time>
-        &mdash;
-        <time class="event__end-time" datetime="${state.isoEndDate}">${state.endTime}</time>
-        </p>
+          <p class="event__time">
+          <time class="event__start-time" datetime="${state.isoStartDate}">${state.startTime}</time>
+          &mdash;
+          <time class="event__end-time" datetime="${state.isoEndDate}">${state.endTime}</time>
+          </p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${state.price}</span>
-          </p>
-          <h4 class="visually-hidden">Offers:</h4>
-          <div class="event__selected-offers">
+        </p>
+        <h4 class="visually-hidden">Offers:</h4>
+        <div class="event__selected-offers">
           ${state.offers.map(([title, price]) => html`
-          <div class = "event__offer">
-          <span class="event__offer-title">${title}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${price}</span>
-          </div>
+            <div class = "event__offer">
+              <span class="event__offer-title">${title}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">${price}</span>
+            </div>
           `)}
-          </div>
-          <button class="event__rollup-btn" type="button">
+        </div>
+        <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
-          </button>
-          </div>
-
+        </button>
+    </div>
   `;
   }
 
-  #onViewClick(event) {
-    if (!event.target.closest('.event__rollup-btn')) {
-      return;
+  getId() {
+    return this.#id;
+  }
+
+  /**
+   * @param {MouseEvent & {target: Element}} event
+   */
+  #onClick(event) {
+    if (event.target.closest('.event__rollup-btn')) {
+      this.dispatchEvent(new CustomEvent('edit', {bubbles: true}));
     }
-    this.dispatchEvent(
-      new CustomEvent('point-edit', {
-        detail: this.#id,
-        bubbles: true
-      })
-    );
+  }
+
+  /**
+   * @param {number} id
+   */
+  static findById(id, rootView = document) {
+    return rootView.querySelector(`#${this}-${id}`);
   }
 }
 
