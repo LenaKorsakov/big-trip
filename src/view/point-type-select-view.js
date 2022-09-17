@@ -5,7 +5,7 @@ export default class PointTypeSelectView extends RadioGroupView {
     super(...arguments);
 
     this.classList.add('event__type-wrapper');
-    this.addEventListener('change', this.onViewChange);
+    this.addEventListener('change', this.#onViewChange);
   }
 
   /**
@@ -28,7 +28,7 @@ export default class PointTypeSelectView extends RadioGroupView {
   }
 
   /**
-   * @param {TypeOptionState} states
+   * @param {PointTypeOptionState} states
    */
   createOptionHtml(...state) {
     const [label, value] = state;
@@ -50,7 +50,7 @@ export default class PointTypeSelectView extends RadioGroupView {
   }
 
   /**
-   * @param {TypeOptionState[]} states
+   * @param {PointTypeOptionState[]} states
    */
   setOptions(states) {
     this.querySelector('legend').insertAdjacentHTML('afterend', html`${
@@ -81,7 +81,7 @@ export default class PointTypeSelectView extends RadioGroupView {
   /**
    * @param {Event & {target: HTMLInputElement}} event
    */
-  onViewChange(event) {
+  #onViewChange(event) {
     const {type, value} = event.target;
 
     if (type === 'checkbox') {

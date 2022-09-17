@@ -69,11 +69,11 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.priceInputView.setPrice(point.basePrice);
 
-    this.#updateDestinationView();
-    this.#updateOfferSelectView();
+    this._updateDestinationView();
+    this._updateOfferSelectView();
   }
 
-  #updateOfferSelectView() {
+  _updateOfferSelectView() {
     const selectedType = this.view.pointTypeSelectView.getValue();
     const availableOffers = this.model.offerGroups.findById(selectedType).items;
 
@@ -84,7 +84,7 @@ export default class CreatorPresenter extends Presenter {
       .setOffers(offers);
   }
 
-  #updateDestinationView() {
+  _updateDestinationView() {
     const destination = this.model.destinations.findBy(
       'name',
       this.view.destinationSelectView.getValue()
@@ -142,10 +142,10 @@ export default class CreatorPresenter extends Presenter {
     const key = PointType.findKey(pointType);
 
     this.view.destinationSelectView.setLabel(PointLabel[key]);
-    this.#updateOfferSelectView();
+    this._updateOfferSelectView();
   }
 
   #onDestinationSelectViewChange() {
-    this.#updateDestinationView();
+    this._updateDestinationView();
   }
 }
