@@ -1,69 +1,18 @@
-import View, {html} from './view';
-import PointTypeSelectView from './point-type-select-view';
-import DestinationSelectView from './destination-select-view';
-import DatePickerView from './date-picker-view';
-import PriceInputView from './price-input-view';
-import OfferSelectView from './offer-select-view';
-import DestinationView from './destination-view';
+import CreatorView from './creator-view';
+import {html} from './view';
 import SaveButtonLabel from '../enum/save-button-label';
 import DeleteButtonLabel from '../enum/delete-button-label';
 
-/**
- * @implements EventListenerObject
- */
-export default class EditorView extends View {
-  #targetView = null;
-
+export default class EditorView extends CreatorView {
   constructor() {
     super();
 
-    this.classList.add('trip-events__item');
-
-    /** @type {PointTypeSelectView} */
-    this.pointTypeSelectView = this.querySelector(String(PointTypeSelectView));
-
-    /** @type {DestinationSelectView} */
-    this.destinationSelectView = this.querySelector(String(DestinationSelectView));
-
-    /** @type {DatePickerView} */
-    this.dataPickerView = this.querySelector(String(DatePickerView));
-
-    /** @type {PriceInputView} */
-    this.priceInputView = this.querySelector(String(PriceInputView));
-
-    /** @type {OfferSelectView} */
-    this.offerSelectView = this.querySelector(String(OfferSelectView));
-
-    /** @type {DestinationView} */
-    this.destinationView = this.querySelector(String(DestinationView));
-
-    this.addEventListener('submit', this.#onSubmit);
-    this.addEventListener('reset', this.#onReset);
-    this.addEventListener('click', this.#onClick);
+    this.addEventListener('click', this._onClick);
   }
 
   /**
    * @override
    */
-  createAdjacentHtml() {
-    return html`
-      <form class="event event--edit" action="#" method="post">
-        <header class="event__header">
-          ${PointTypeSelectView}
-          ${DestinationSelectView}
-          </div>
-          ${DatePickerView}
-          ${PriceInputView}
-          ${this.createButtonsHtml()}
-        </header>
-        <section class="event__details">
-          ${OfferSelectView}
-          ${DestinationView}
-        </section>
-      </form>
-    `;
-  }
-
   createButtonsHtml() {
     return html`
       <button class="event__save-btn  btn  btn--blue" type="submit">
@@ -79,14 +28,17 @@ export default class EditorView extends View {
   }
 
   /**
-   * @param {boolean} flag
+   * @override
    */
-  setSaveButtonPressed(flag) {
-    /** @type {HTMLButtonElement} */
-    const view = this.querySelector('.event__save-btn');
+  connect() {
+    this._targetView.replaceWith(this);
+  }
 
-    view.disabled = flag;
-    view.textContent = flag ? SaveButtonLabel.PRESSED : SaveButtonLabel.DEFAULT;
+  /**
+   * @override
+   */
+  disconnect() {
+    this.replaceWith(this._targetView);
   }
 
   /**
@@ -101,75 +53,13 @@ export default class EditorView extends View {
   }
 
   /**
-   * @param {boolean} flag
+   * @override
    */
-  setFormDisabled(flag) {
-    /** @type {HTMLFormElement[]} */
-    const views = Array.from(...this.children);
-
-    views.forEach((view) => {
-      view.disabled = flag;
-    });
-  }
-
-  /**
-   * @param {HTMLElement} view
-   */
-  target(view) {
-    this.#targetView = view;
-
-    return this;
-  }
-
-  connect() {
-    this.#targetView.replaceWith(this);
-  }
-
-  disconnect() {
-    this.replaceWith(this.#targetView);
-  }
-
-  open() {
-    this.connect();
-
-    document.addEventListener('keydown', this);
-
-    return this;
-  }
-
-  /**
-   * @param {boolean} [silent]
-   */
-  close(silent) {
-    this.disconnect();
-
-    document.removeEventListener('keydown', this);
-
-    if (!silent) {
-      this.dispatchEvent(new CustomEvent('close'));
-    }
-
-    return this;
-  }
-
-  /**
-   * @param {KeyboardEvent} event
-   */
-  handleEvent(event) {
-    if (event.key?.startsWith('Esc')) {
-      this.close();
-    }
-  }
-
-  #onSubmit(event) {
+  _onReset(event) {
     event.preventDefault();
   }
 
-  #onReset(event) {
-    event.preventDefault();
-  }
-
-  #onClick(event) {
+  _onClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }

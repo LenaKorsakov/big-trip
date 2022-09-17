@@ -13,7 +13,7 @@ export default class ApplicationModel extends Model {
     super();
 
     this.points = points;
-    this.editablePoint = null;
+    this.currentPoint = null;
     this.destinations = destinations;
     this.offerGroups = offerGroups;
   }
@@ -21,11 +21,11 @@ export default class ApplicationModel extends Model {
   get defaultPoint() {
     const point = this.points.blank;
 
-    point.type = PointType.BUS;
+    point.type = PointType.TAXI;
     point.destinationId = this.destinations.item(0).id;
     point.startDate = new Date().toJSON();
     point.endDate = point.startDate;
-    point.basePrice = 0;
+    point.basePrice = '1';
     point.offerIds = [];
     point.isFavorite = false;
 
@@ -43,20 +43,20 @@ export default class ApplicationModel extends Model {
   /**
    *
    * @param {number} mode
-   * @param {number} editablePointId
+   * @param {number} currentPointId
    */
-  setMode(mode = this.#mode, editablePointId = null) {
+  setMode(mode = this.#mode, currentPointId = null) {
     switch (mode) {
       case Mode.EDIT:
-        this.editablePoint = this.points.findById(editablePointId);
+        this.currentPoint = this.points.findById(currentPointId);
         break;
 
       case Mode.CREATE:
-        this.editablePoint = this.defaultPoint;
+        this.currentPoint = this.defaultPoint;
         break;
 
       case Mode.VIEW:
-        this.editablePoint = null;
+        this.currentPoint = null;
         break;
 
       default:

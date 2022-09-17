@@ -9,15 +9,18 @@ import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
 
 import NewPointButtonPresenter from './presenter/new-point-button-presenter';
+
 import FilterPresenter from './presenter/filter-presenter';
 import SortPresenter from './presenter/sort-presenter';
 import PlaceholderPresenter from './presenter/placeholder-presentor';
 import ListPresenter from './presenter/list-presenter';
+import CreatorPresenter from './presenter/creator-presenter';
 import EditorPresenter from './presenter/editor-presenter';
 
 import FilterView from './view/filter-view';
 import SortView from './view/sort-view';
 import ListView from './view/list-view';
+import CreatorView from './view/creator-view';
 import EditorView from './view/editor-view';
 
 import FilterPredicate from './enum/filter-predicate';
@@ -65,7 +68,8 @@ const placeholderView = document.querySelector('.trip-events__msg');
 /** @type {HTMLButtonElement} */
 const newPointButtonView = document.querySelector('.trip-main__event-add-btn');
 
-//const creatorView = new CreatorView().target(pointListView);
+/** @type {CreatorView} */
+const creatorView = new CreatorView().target(pointListView);
 
 applicationModel.ready().then(() => {
   new NewPointButtonPresenter(applicationModel, newPointButtonView);
@@ -73,6 +77,7 @@ applicationModel.ready().then(() => {
   new SortPresenter(applicationModel, sortView);
   new PlaceholderPresenter(applicationModel,placeholderView);
   new ListPresenter(applicationModel, pointListView);
+  new CreatorPresenter(applicationModel, creatorView);
   new EditorPresenter(applicationModel, new EditorView());
 });
 

@@ -23,6 +23,6 @@ export default class NewPointButtonPresenter extends Presenter {
   }
 
   onModelMode() {
-    this.view.disabled = (this.model.getMode() === Mode.CREATE);
+    this.view.disabled = (this.model.getMode() !== Mode.VIEW);
   }
 }
