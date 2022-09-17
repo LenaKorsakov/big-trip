@@ -15,6 +15,10 @@ export default class DestinationSelectView extends View {
     this.inputView = this.querySelector('input');
   }
 
+  get allowedKeys() {
+    return ['Tab', 'ArrowUp', 'ArrowDown'];
+  }
+
   /**
    * @override
    */
@@ -28,14 +32,11 @@ export default class DestinationSelectView extends View {
         type="text"
         name="event-destination"
         value=""
-        list="destination-list-1">
+        list="destination-list-1"
+        autocomplete="off">
         <datalist id="destination-list-1">
         </datalist>
     `;
-  }
-
-  createOptionHtml(state) {
-    return new Option(...state);
   }
 
   /**
@@ -43,14 +44,10 @@ export default class DestinationSelectView extends View {
    */
   setOptions(states) {
     this.querySelector('datalist').innerHTML = html`${
-      states.map((state) => this.createOptionHtml(...state))
+      states.map((state) => this.#createOptionHtml(state))
     }`;
 
     return this;
-  }
-
-  get allowedKeys() {
-    return ['Tab', 'ArrowUp', 'ArrowDown'];
   }
 
   setLabel(label) {
@@ -59,16 +56,20 @@ export default class DestinationSelectView extends View {
 
 
   /**
-   * @param {string} destination
+   * @param {string} value
    */
-  setValue(destination) {
-    this.inputView.value = destination;
+  setValue(value) {
+    this.inputView.value = value;
 
     return this;
   }
 
   getValue() {
     return this.inputView.value || this.inputView.placeholder;
+  }
+
+  #createOptionHtml(state) {
+    return html`<option> ${state} </option>`;
   }
 
   #moveValueToPlaceholder() {

@@ -23,7 +23,8 @@ export default class PriceInputView extends View {
       id="event-price-1"
       type="text"
       name="event-price"
-      value="${value}">
+      value="${value}"
+      autocomplete="off">
     `;
   }
 
