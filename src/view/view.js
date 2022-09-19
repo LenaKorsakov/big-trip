@@ -25,11 +25,10 @@ export default class View extends HTMLElement {
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
+   * @param {boolean} flag
    */
-  set(key, value) {
-    this[key] = value;
+  display(flag) {
+    this.hidden = !flag;
 
     return this;
   }

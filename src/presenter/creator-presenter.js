@@ -79,7 +79,7 @@ export default class CreatorPresenter extends Presenter {
     const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.currentPoint.offerIds.includes(offer.id)]);
 
     this.view.offerSelectView
-      .set('hidden', !availableOffers.length)
+      .display(Boolean(availableOffers.length))
       .setOffers(offers);
   }
 
@@ -96,7 +96,6 @@ export default class CreatorPresenter extends Presenter {
 
 
     this.view.destinationView
-      .set('hidden', !destination.pictures.length)
       .setPictures(pictureStates)
       .setDescription(destination.description);
   }

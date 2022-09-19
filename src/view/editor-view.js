@@ -28,17 +28,13 @@ export default class EditorView extends CreatorView {
   }
 
   /**
-   * @override
-   */
-  connect() {
-    this._targetView.replaceWith(this);
-  }
+     * @override
+     * @param {boolean} flag
+     */
+  display(flag) {
+    (flag ? this._targetView : this).replaceWith(flag ? this : this._targetView);
 
-  /**
-   * @override
-   */
-  disconnect() {
-    this.replaceWith(this._targetView);
+    return this;
   }
 
   /**

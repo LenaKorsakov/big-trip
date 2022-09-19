@@ -103,16 +103,22 @@ export default class CreatorView extends View {
     return this;
   }
 
-  connect() {
-    this._targetView.prepend(this);
-  }
+  /**
+   * @override
+   * @param {boolean} flag
+   */
+  display(flag) {
+    if (flag) {
+      this._targetView.prepend(this);
+    } else {
+      this.remove();
+    }
 
-  disconnect() {
-    this.remove();
+    return this;
   }
 
   open() {
-    this.connect();
+    this.display(true);
 
     document.addEventListener('keydown', this);
 
@@ -120,7 +126,7 @@ export default class CreatorView extends View {
   }
 
   close(notify = true) {
-    this.disconnect();
+    this.display(false);
 
     document.removeEventListener('keydown', this);
 
