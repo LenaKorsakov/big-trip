@@ -68,15 +68,20 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.priceInputView.setPrice(point.basePrice);
 
-    this._updateDestinationView();
     this._updateOfferSelectView();
+    this._updateDestinationView();
   }
 
-  _updateOfferSelectView() {
+  _updateOfferSelectView(check = true) {
     const selectedType = this.view.pointTypeSelectView.getValue();
     const availableOffers = this.model.offerGroupsModel.findById(selectedType).items;
 
-    const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.currentPoint.offerIds.includes(offer.id)]);
+    const offers = availableOffers.map((offer) => [
+      offer.title,
+      offer.price,
+      offer.id,
+      check && this.model.currentPoint.offerIds.includes(offer.id)
+    ]);
 
     this.view.offerSelectView
       .display(Boolean(availableOffers.length))
@@ -143,7 +148,7 @@ export default class CreatorPresenter extends Presenter {
     this.model.currentPoint.type = pointType;
 
     this.view.destinationSelectView.setLabel(PointLabel[key]);
-    this._updateOfferSelectView();
+    this._updateOfferSelectView(false);
   }
 
   #onDestinationSelectViewChange() {
