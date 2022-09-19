@@ -34,7 +34,7 @@ export default class CreatorPresenter extends Presenter {
     const pointTypeOptionStates = Object.keys(PointType).map((key) => [PointLabel[key],PointType[key]]);
 
     /** @type {DestinationOptionState} */
-    const destinationSelectOptions = this.model.destinations.listAll().map((destination) => destination.name);
+    const destinationSelectOptions = this.model.destinationsModel.listAll().map((destination) => destination.name);
 
     this.view.pointTypeSelectView.setOptions(pointTypeOptionStates);
     this.view.destinationSelectView.setOptions(destinationSelectOptions);
@@ -47,7 +47,7 @@ export default class CreatorPresenter extends Presenter {
     this.view.pointTypeSelectView.setValue(point.type);
 
     this.view.destinationSelectView
-      .setValue(this.model.destinations.findById(point.destinationId).name)
+      .setValue(this.model.destinationsModel.findById(point.destinationId).name)
       .setLabel(PointLabel[PointType.findKey(this.model.currentPoint.type)]);
 
     this.view.datePickerView.setDates(point.startDate, point.endDate);
@@ -60,7 +60,7 @@ export default class CreatorPresenter extends Presenter {
 
   _updateOfferSelectView() {
     const selectedType = this.view.pointTypeSelectView.getValue();
-    const availableOffers = this.model.offerGroups.findById(selectedType).items;
+    const availableOffers = this.model.offerGroupsModel.findById(selectedType).items;
 
     const offers = availableOffers.map((offer) => [offer.title, offer.price, offer.id, this.model.currentPoint.offerIds.includes(offer.id)]);
 
@@ -70,7 +70,7 @@ export default class CreatorPresenter extends Presenter {
   }
 
   _updateDestinationView() {
-    const destination = this.model.destinations.findBy(
+    const destination = this.model.destinationsModel.findBy(
       'name',
       this.view.destinationSelectView.getValue()
     );
@@ -88,7 +88,7 @@ export default class CreatorPresenter extends Presenter {
   }
 
   _saveCurrentPoint() {
-    return this.model.points.add(this.model.currentPoint);
+    return this.model.pointsModel.add(this.model.currentPoint);
 
   }
 
@@ -135,7 +135,7 @@ export default class CreatorPresenter extends Presenter {
 
   #onDestinationSelectViewChange() {
     const destinationName = this.view.destinationSelectView.getValue();
-    const destination = this.model.destinations.findBy('name', destinationName);
+    const destination = this.model.destinationsModel.findBy('name', destinationName);
 
     this.model.currentPoint.destinationId = destination?.id;
 

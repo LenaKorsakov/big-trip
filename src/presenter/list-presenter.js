@@ -18,7 +18,7 @@ export default class ListPresenter extends Presenter {
 
     this.view.addEventListener('edit', this.onViewEdit.bind(this));
 
-    this.model.points.addEventListener(
+    this.model.pointsModel.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
       this.onModelPointsChange.bind(this)
     );
@@ -26,9 +26,9 @@ export default class ListPresenter extends Presenter {
 
   updateView() {
     /** @type {PointState[]} */
-    const states = this.model.points.list().map((point) => {
-      const destination = this.model.destinations.findById(point.destinationId);
-      const offerGroup = this.model.offerGroups.findById(point.type);
+    const states = this.model.pointsModel.list().map((point) => {
+      const destination = this.model.destinationsModel.findById(point.destinationId);
+      const offerGroup = this.model.offerGroupsModel.findById(point.type);
 
       /** @type {OfferState[]} */
       const offerStates = offerGroup.items.reduce((result, offer) => {

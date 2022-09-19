@@ -16,16 +16,16 @@ export default class PlaceholderPresenter extends Presenter {
 
     this.#updatePlaceholder();
 
-    this.model.points.addEventListener(
+    this.model.pointsModel.addEventListener(
       ['add', 'update', 'remove', 'filter'],
       this.#onModelPointsChange.bind(this)
     );
   }
 
   #updatePlaceholder() {
-    const key = FilterPredicate.findKey(this.model.points.getFilter());
+    const key = FilterPredicate.findKey(this.model.pointsModel.getFilter());
     const message = FilterPlaceholderMessage[key];
-    const isHidden = Boolean(this.model.points.list().length);
+    const isHidden = Boolean(this.model.pointsModel.list().length);
 
     this.view.hidden = isHidden;
     this.view.textContent = isHidden ? '' : message;

@@ -20,8 +20,8 @@ export default class SortPresenter extends Presenter{
     this.#setVisibility();
 
     //this.model.addEventListener('mode', this.#onModelMode.bind(this));
-    this.model.points.addEventListener('filter', this.#onModelFilter.bind(this));
-    this.model.points.addEventListener(['add','remove','filter'], this.#onModelPointsChange.bind(this));
+    this.model.pointsModel.addEventListener('filter', this.#onModelFilter.bind(this));
+    this.model.pointsModel.addEventListener(['add','remove','filter'], this.#onModelPointsChange.bind(this));
 
     this.#buildSortView().addEventListener('change', this.#onSortChange.bind(this));
   }
@@ -29,7 +29,7 @@ export default class SortPresenter extends Presenter{
   #buildSortView() {
     const flags = Object.values(SortDisabled);
     const sortOptions = Object.keys(SortType).map((key) => [SortLabel[key], SortType[key]]);
-    const sortKey = SortCompare.findKey(this.model.points.getSort());
+    const sortKey = SortCompare.findKey(this.model.pointsModel.getSort());
 
     return this.view
       .setOptions(sortOptions)
@@ -38,7 +38,7 @@ export default class SortPresenter extends Presenter{
   }
 
   #setVisibility() {
-    const isHidden = Boolean(this.model.points.list().length);
+    const isHidden = Boolean(this.model.pointsModel.list().length);
 
     this.view.hidden = !isHidden;
   }
@@ -46,8 +46,17 @@ export default class SortPresenter extends Presenter{
   #onSortChange() {
     const sortKey = this.view.getValue().toUpperCase();
 
-    this.model.points.setSort(SortCompare[sortKey]);
+    this.model.pointsModel.setSort(SortCompare[sortKey]);
     this.model.setMode(Mode.VIEW);
+  }
+
+  #onModelFilter() {
+    this.view.setValue(SortType.DAY);
+    this.model.pointsModel.setSort(SortCompare.DAY, true);
+  }
+
+  #onModelPointsChange(){
+    this.#setVisibility();
   }
 
   // #onModelMode() {
@@ -58,13 +67,4 @@ export default class SortPresenter extends Presenter{
   //   }
   //   this.view.setOptionsDisabled(flags);
   // }
-
-  #onModelFilter() {
-    this.view.setValue(SortType.DAY);
-    this.model.points.setSort(SortCompare.DAY, true);
-  }
-
-  #onModelPointsChange(){
-    this.#setVisibility();
-  }
 }

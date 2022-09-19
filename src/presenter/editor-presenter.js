@@ -21,7 +21,7 @@ export default class EditorPresenter extends CreatorPresenter {
    * @override
    */
   _saveCurrentPoint() {
-    return this.model.points.update(this.model.currentPoint.id, this.model.currentPoint);
+    return this.model.pointsModel.update(this.model.currentPoint.id, this.model.currentPoint);
   }
 
   /**
@@ -63,7 +63,7 @@ export default class EditorPresenter extends CreatorPresenter {
   }
 
   _deleteCurrentPoint() {
-    return this.model.points.remove(this.model.currentPoint.id);
+    return this.model.pointsModel.remove(this.model.currentPoint.id);
   }
 
   async _onViewReset() {

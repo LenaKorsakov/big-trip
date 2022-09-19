@@ -88,6 +88,6 @@ applicationModel.addEventListener('mode', () => {
   group(`Mode[${Mode.findKey(applicationModel.getMode())}]`);
 });
 
-applicationModel.points.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
+applicationModel.pointsModel.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
   trace(event.type);
 });

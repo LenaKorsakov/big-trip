@@ -24,7 +24,7 @@ export default class FilterPresenter extends Presenter {
 
   #buildFilterView() {
     const filterOptions = Object.keys(FilterType).map((key) => [FilterLabel[key], FilterType[key]]);
-    const filterKey = FilterPredicate.findKey(this.model.points.getFilter());
+    const filterKey = FilterPredicate.findKey(this.model.pointsModel.getFilter());
 
     return this.view
       .setOptions(filterOptions)
@@ -34,7 +34,7 @@ export default class FilterPresenter extends Presenter {
   #onFilterChange() {
     const filterKey = this.view.getValue().toUpperCase();
 
-    this.model.points.setFilter(FilterPredicate[filterKey]);
+    this.model.pointsModel.setFilter(FilterPredicate[filterKey]);
     this.model.setMode(Mode.VIEW);
   }
 

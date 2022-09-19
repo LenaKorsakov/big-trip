@@ -5,24 +5,24 @@ import Model from './model';
 export default class ApplicationModel extends Model {
   #mode = Mode.VIEW;
   /**
-   * @param {DataTableModel<Point, PointAdapter>} points
-   * @param {CollectionModel<Destination, DestinationAdapter>} destinations
-   * @param {CollectionModel<OfferGroup, OfferGroupAdapter>} offerGroups
+   * @param {DataTableModel<Point, PointAdapter>} pointsModel
+   * @param {CollectionModel<Destination, DestinationAdapter>} destinationsModel
+   * @param {CollectionModel<OfferGroup, OfferGroupAdapter>} offerGroupsModel
    */
-  constructor(points, destinations, offerGroups) {
+  constructor(pointsModel, destinationsModel, offerGroupsModel) {
     super();
 
-    this.points = points;
+    this.pointsModel = pointsModel;
     this.currentPoint = null;
-    this.destinations = destinations;
-    this.offerGroups = offerGroups;
+    this.destinationsModel = destinationsModel;
+    this.offerGroupsModel = offerGroupsModel;
   }
 
   get defaultPoint() {
-    const point = this.points.blank;
+    const point = this.pointsModel.blank;
 
     point.type = PointType.TAXI;
-    point.destinationId = this.destinations.item(0).id;
+    point.destinationId = this.destinationsModel.item(0).id;
     point.startDate = new Date().toJSON();
     point.endDate = point.startDate;
     point.basePrice = '1';
@@ -34,9 +34,9 @@ export default class ApplicationModel extends Model {
 
   async ready() {
     await Promise.all([
-      this.points.ready(),
-      this.destinations.ready(),
-      this.offerGroups.ready()
+      this.pointsModel.ready(),
+      this.destinationsModel.ready(),
+      this.offerGroupsModel.ready()
     ]);
   }
 
@@ -48,7 +48,7 @@ export default class ApplicationModel extends Model {
   setMode(mode = this.#mode, currentPointId = null) {
     switch (mode) {
       case Mode.EDIT:
-        this.currentPoint = this.points.findById(currentPointId);
+        this.currentPoint = this.pointsModel.findById(currentPointId);
         break;
 
       case Mode.CREATE:
