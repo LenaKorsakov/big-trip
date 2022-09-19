@@ -119,15 +119,12 @@ export default class CreatorView extends View {
     return this;
   }
 
-  /**
-   * @param {boolean} [silent]
-   */
-  close(silent) {
+  close(notify = true) {
     this.disconnect();
 
     document.removeEventListener('keydown', this);
 
-    if (!silent) {
+    if (notify) {
       this.dispatchEvent(new CustomEvent('close'));
     }
 

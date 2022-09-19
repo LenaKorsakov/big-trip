@@ -55,7 +55,7 @@ export default class EditorPresenter extends CreatorPresenter {
 
     const pointView = PointView.findById(this.model.currentPoint.id);
 
-    this.view.close(true);
+    this.view.close(false);
 
     this._updateView();
 

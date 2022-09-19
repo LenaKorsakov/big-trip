@@ -38,10 +38,10 @@ export default class DataTableModel extends CollectionModel {
   /**
    * @param {SortCompare} compare
    */
-  setSort(compare, silent = false) {
+  setSort(compare, notify = true) {
     this.#sort = compare;
 
-    if (!silent) {
+    if (notify) {
       this.dispatchEvent(new CustomEvent('sort'));
     }
     return this;
