@@ -9,15 +9,6 @@ import PointView from '../view/point-view';
  */
 export default class EditorPresenter extends CreatorPresenter {
   /**
-   * @param {[model: Model, view: View]} init
-   */
-  constructor(...init) {
-    super(...init);
-
-    this.view.addEventListener('reset', this._onViewReset.bind(this));
-  }
-
-  /**
    * @override
    */
   _saveCurrentPoint() {
@@ -28,8 +19,8 @@ export default class EditorPresenter extends CreatorPresenter {
    * @override
    */
   async _onViewSubmit() {
-    this.view.setSaveButtonPressed(true);
-    this.view.setFormDisabled(true);
+    this.view.setSaving(true);
+    this.view.setDisabled(true);
 
     try {
       await this._saveCurrentPoint();
@@ -41,8 +32,8 @@ export default class EditorPresenter extends CreatorPresenter {
       this.view.shake();
     }
 
-    this.view.setSaveButtonPressed(false);
-    this.view.setFormDisabled(false);
+    this.view.setSaving(false);
+    this.view.setDisabled(false);
   }
 
   /**
@@ -66,9 +57,11 @@ export default class EditorPresenter extends CreatorPresenter {
     return this.model.pointsModel.remove(this.model.currentPoint.id);
   }
 
+  /**
+   * @override
+   */
   async _onViewReset() {
-    this.view.setDeleteButtonPressed(true);
-    this.view.setFormDisabled(true);
+    this.view.setDeleting(true);
 
     try {
       await this._deleteCurrentPoint();
@@ -80,7 +73,6 @@ export default class EditorPresenter extends CreatorPresenter {
       this.view.shake();
     }
 
-    this.view.setDeleteButtonPressed(false);
-    this.view.setFormDisabled(false);
+    this.view.setDeleting(false);
   }
 }

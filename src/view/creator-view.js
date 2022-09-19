@@ -18,6 +18,8 @@ export default class CreatorView extends View {
 
     this.classList.add('trip-events__item');
 
+    this.formView = this.querySelector('form');
+
     /** @type {PointTypeSelectView} */
     this.pointTypeSelectView = this.querySelector(String(PointTypeSelectView));
 
@@ -35,9 +37,6 @@ export default class CreatorView extends View {
 
     /** @type {DestinationView} */
     this.destinationView = this.querySelector(String(DestinationView));
-
-    this.addEventListener('submit', this._onSubmit);
-    this.addEventListener('reset', this._onReset);
   }
 
   /**
@@ -74,22 +73,19 @@ export default class CreatorView extends View {
   /**
    * @param {boolean} flag
    */
-  setSaveButtonPressed(flag) {
-    /** @type {HTMLButtonElement} */
-    const view = this.querySelector('.event__save-btn');
+  setSaving(flag) {
+    this.querySelector('.event__save-btn').textContent = flag ?
+      SaveButtonLabel.PRESSED :
+      SaveButtonLabel.DEFAULT;
 
-    view.disabled = flag;
-    view.textContent = flag ? SaveButtonLabel.PRESSED : SaveButtonLabel.DEFAULT;
+    this.setDisabled(flag);
   }
 
   /**
    * @param {boolean} flag
    */
-  setFormDisabled(flag) {
-    /** @type {HTMLFormElement[]} */
-    const views = Array.from(...this.children);
-
-    views.forEach((view) => {
+  setDisabled(flag) {
+    [...this.formView].forEach((view) => {
       view.disabled = flag;
     });
   }
@@ -144,16 +140,6 @@ export default class CreatorView extends View {
     if (event.key?.startsWith('Esc')) {
       this.close();
     }
-  }
-
-  _onSubmit(event) {
-    event.preventDefault();
-  }
-
-  _onReset(event) {
-    event.preventDefault();
-
-    this.close();
   }
 }
 

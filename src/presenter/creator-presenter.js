@@ -26,6 +26,7 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.addEventListener('close', this._onViewClose.bind(this));
     this.view.addEventListener('submit', this._onViewSubmit.bind(this));
+    this.view.addEventListener('reset', this._onViewReset.bind(this));
 
     this.view.pointTypeSelectView.addEventListener('change', this.#onPointTypeSelectViewChange.bind(this));
     this.view.destinationSelectView.addEventListener('change', this.#onDestinationSelectViewChange.bind(this));
@@ -110,9 +111,10 @@ export default class CreatorPresenter extends Presenter {
 
   }
 
-  async _onViewSubmit() {
-    this.view.setSaveButtonPressed(true);
-    this.view.setFormDisabled(true);
+  async _onViewSubmit(event) {
+    event.preventDefault();
+
+    this.view.setSaving(true);
 
     try {
       await this._saveCurrentPoint();
@@ -123,8 +125,17 @@ export default class CreatorPresenter extends Presenter {
       this.view.shake();
     }
 
-    this.view.setSaveButtonPressed(false);
-    this.view.setFormDisabled(false);
+    this.view.setSaving(false);
+  }
+
+  _onViewReset(event) {
+    event.preventDefault();
+
+    this.view.close();
+  }
+
+  _onViewClose() {
+    this.model.setMode(Mode.VIEW);
   }
 
   _onModelMode() {
@@ -135,10 +146,6 @@ export default class CreatorPresenter extends Presenter {
     this._updateView();
 
     this.view.open();
-  }
-
-  _onViewClose() {
-    this.model.setMode(Mode.VIEW);
   }
 
   #onPointTypeSelectViewChange() {
