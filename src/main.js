@@ -81,13 +81,13 @@ applicationModel.ready().then(() => {
   new EditorPresenter(applicationModel, new EditorView());
 });
 
-const {group, groupEnd, trace} = console;
+const {trace} = console;
 
 applicationModel.addEventListener('mode', () => {
-  groupEnd();
-  group(`Mode[${Mode.findKey(applicationModel.getMode())}]`);
+  trace(`%cMode.${Mode.findKey(applicationModel.getMode())}`, 'background: pink');
 });
 
-applicationModel.pointsModel.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
-  trace(event.type);
+pointsModel.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
+  trace(`%c${event.type}`, 'background: yellow');
 });
+

@@ -12,20 +12,8 @@ export default class DatePickerView extends View {
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
-    const onStartDateChange = ([date]) => {
-      this.#endDateCalendar.set('minDate', date);
-    };
-
-    const calendarDefaults = {
-      'enableTime': true,
-      'time_24hr': true
-    };
-
-    this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'), {
-      ...calendarDefaults,
-      onChange: [onStartDateChange]
-    });
-    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'), calendarDefaults);
+    this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'));
+    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'));
   }
 
   /**
@@ -66,6 +54,13 @@ export default class DatePickerView extends View {
       this.#startDateCalendar.selectedDates[0]?.toJSON(),
       this.#endDateCalendar.selectedDates[0]?.toJSON()
     ];
+  }
+
+  /**
+   * @param {CalendarOptions} options
+   */
+  static setDefaults(options) {
+    initCalendar.setDefaults(options);
   }
 }
 

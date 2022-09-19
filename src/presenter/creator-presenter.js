@@ -2,6 +2,13 @@ import Presenter from './presenter';
 import PointType from '../enum/point-type';
 import PointLabel from '../enum/point-label';
 import Mode from '../enum/mode';
+import DatePickerView from '../view/date-picker-view';
+
+DatePickerView.setDefaults({
+  enableTime: true,
+  dateFormat: 'd/m/y H:i',
+  locale: {firstDayOfWeek: 1, 'time_24hr': true}
+});
 
 /**
  * @template {ApplicationModel} Model
@@ -38,7 +45,14 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.pointTypeSelectView.setOptions(pointTypeOptionStates);
     this.view.destinationSelectView.setOptions(destinationSelectOptions);
-    this.view.datePickerView.configure({dateFormat: 'd/m/y H:m'});
+
+    this.view.datePickerView.configure({
+      onChange: [(dates) => {
+        const [minDate] = dates;
+
+        this.view.datePickerView.configure({}, {minDate: minDate});
+      }]
+    }, {});
   }
 
   _updateView() {
@@ -145,7 +159,7 @@ export default class CreatorPresenter extends Presenter {
   #onDatePickerViewChange() {
     const [startDate, endDate] = this.view.datePickerView.getDates();
 
-    Object.assign(this.model.currentPoint.startDate, {startDate, endDate});
+    Object.assign(this.model.currentPoint, {startDate, endDate});
   }
 
   #onPriceInputViewChange() {
