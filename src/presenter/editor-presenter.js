@@ -18,27 +18,6 @@ export default class EditorPresenter extends CreatorPresenter {
   /**
    * @override
    */
-  async _onViewSubmit() {
-    this.view.setSaving(true);
-    this.view.setDisabled(true);
-
-    try {
-      await this._saveCurrentPoint();
-
-      this.view.close();
-    }
-
-    catch (exception) {
-      this.view.shake();
-    }
-
-    this.view.setSaving(false);
-    this.view.setDisabled(false);
-  }
-
-  /**
-   * @override
-   */
   _onModelMode() {
     if (this.model.getMode() !== Mode.EDIT) {
       return;
@@ -60,7 +39,9 @@ export default class EditorPresenter extends CreatorPresenter {
   /**
    * @override
    */
-  async _onViewReset() {
+  async _onViewReset(event) {
+    event.preventDefault();
+
     this.view.setDeleting(true);
 
     try {

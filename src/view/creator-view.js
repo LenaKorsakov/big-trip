@@ -6,6 +6,7 @@ import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationView from './destination-view';
 import SaveButtonLabel from '../enum/save-button-label';
+import LoaderView from './loader-view';
 
 /**
  * @implements EventListenerObject
@@ -37,6 +38,8 @@ export default class CreatorView extends View {
 
     /** @type {DestinationView} */
     this.destinationView = this.querySelector(String(DestinationView));
+
+    this.loaderView = new LoaderView();
   }
 
   /**
@@ -88,6 +91,8 @@ export default class CreatorView extends View {
     [...this.formView].forEach((view) => {
       view.disabled = flag;
     });
+
+    this.loaderView.display(flag);
   }
 
   /**

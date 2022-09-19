@@ -48,13 +48,6 @@ export default class EditorView extends CreatorView {
     this.setDisabled(flag);
   }
 
-  /**
-   * @override
-   */
-  _onReset(event) {
-    event.preventDefault();
-  }
-
   _onClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
