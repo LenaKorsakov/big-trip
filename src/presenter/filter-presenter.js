@@ -2,7 +2,7 @@ import Presenter from './presenter';
 import FilterType from '../enum/filter-type';
 import FilterLabel from '../enum/filter-label';
 import FilterPredicate from '../enum/filter-predicate';
-import FilterDisabled from '../enum/filter-disabled';
+//import FilterDisabled from '../enum/filter-disabled';
 import Mode from '../enum/mode';
 
 /**
@@ -17,7 +17,7 @@ export default class FilterPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.model.addEventListener('mode', this.#onModelMode.bind(this));
+    //this.model.addEventListener('mode', this.#onModelMode.bind(this));
 
     this.#buildFilterView().addEventListener('change', this.#onFilterChange.bind(this));
   }
@@ -35,14 +35,15 @@ export default class FilterPresenter extends Presenter {
     const filterKey = this.view.getValue().toUpperCase();
 
     this.model.points.setFilter(FilterPredicate[filterKey]);
+    this.model.setMode(Mode.VIEW);
   }
 
-  #onModelMode() {
-    const flags = Object.values(FilterDisabled);
+  // #onModelMode() {
+  //   const flags = Object.values(FilterDisabled);
 
-    if (this.model.getMode() !== Mode.VIEW) {
-      flags.fill(true);
-    }
-    this.view.setOptionsDisabled(flags);
-  }
+  //   if (this.model.getMode() !== Mode.VIEW) {
+  //     flags.fill(true);
+  //   }
+  //   this.view.setOptionsDisabled(flags);
+  // }
 }

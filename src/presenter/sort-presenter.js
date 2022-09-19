@@ -19,7 +19,7 @@ export default class SortPresenter extends Presenter{
 
     this.#setVisibility();
 
-    this.model.addEventListener('mode', this.#onModelMode.bind(this));
+    //this.model.addEventListener('mode', this.#onModelMode.bind(this));
     this.model.points.addEventListener('filter', this.#onModelFilter.bind(this));
     this.model.points.addEventListener(['add','remove','filter'], this.#onModelPointsChange.bind(this));
 
@@ -43,14 +43,21 @@ export default class SortPresenter extends Presenter{
     this.view.hidden = !isHidden;
   }
 
-  #onModelMode() {
-    const flags = Object.values(SortDisabled);
+  #onSortChange() {
+    const sortKey = this.view.getValue().toUpperCase();
 
-    if (this.model.getMode() !== Mode.VIEW) {
-      flags.fill(true);
-    }
-    this.view.setOptionsDisabled(flags);
+    this.model.points.setSort(SortCompare[sortKey]);
+    this.model.setMode(Mode.VIEW);
   }
+
+  // #onModelMode() {
+  //   const flags = Object.values(SortDisabled);
+
+  //   if (this.model.getMode() !== Mode.VIEW) {
+  //     flags.fill(true);
+  //   }
+  //   this.view.setOptionsDisabled(flags);
+  // }
 
   #onModelFilter() {
     this.view.setValue(SortType.DAY);
@@ -59,11 +66,5 @@ export default class SortPresenter extends Presenter{
 
   #onModelPointsChange(){
     this.#setVisibility();
-  }
-
-  #onSortChange() {
-    const sortKey = this.view.getValue().toUpperCase();
-
-    this.model.points.setSort(SortCompare[sortKey]);
   }
 }

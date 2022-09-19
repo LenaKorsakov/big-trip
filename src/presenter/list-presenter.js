@@ -15,7 +15,6 @@ export default class ListPresenter extends Presenter {
     super(...init);
 
     this.updateView();
-    this.model.setMode();
 
     this.view.addEventListener('edit', this.onViewEdit.bind(this));
 
