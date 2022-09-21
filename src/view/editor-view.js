@@ -32,6 +32,7 @@ export default class EditorView extends CreatorView {
      * @param {boolean} flag
      */
   display(flag) {
+    this.id = this._targetView?.id;
     (flag ? this._targetView : this).replaceWith(flag ? this : this._targetView);
 
     return this;
