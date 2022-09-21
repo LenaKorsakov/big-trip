@@ -45,17 +45,18 @@ export default class OfferSelectView extends View {
   }
 
   /**
-     * @param  {OfferToggleState} states
+     * @param  {OfferOptionState[]} states
      */
   setOffers(states) {
-    this.querySelector('.event__available-offers').innerHTML = html`${states.map((
-      [title, price, id, isChecked]) => this.createOptionHtml(title, price, id, isChecked)
-    )}`;
+    this.querySelector('.event__available-offers').innerHTML = html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`;
 
     return this;
   }
 
   getSelectedValues() {
+    /** @type {HTMLInputElement[]} */
     const views = this.querySelectorAll(':checked');
 
     return [...views].map((view) => view.value);

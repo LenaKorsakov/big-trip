@@ -1,5 +1,4 @@
 import Enum from './enum';
-/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
 
 export default class SortCompare extends Enum {
   /**

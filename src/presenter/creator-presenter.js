@@ -41,11 +41,11 @@ export default class CreatorPresenter extends Presenter {
     /** @type {PointTypeOptionState[]} */
     const pointTypeOptionStates = Object.keys(PointType).map((key) => [PointLabel[key],PointType[key]]);
 
-    /** @type {DestinationOptionState} */
-    const destinationSelectOptions = this.model.destinationsModel.listAll().map((destination) => destination.name);
+    /** @type {DestinationOptionState[]} */
+    const destinationOptionStates = this.model.destinationsModel.listAll().map((item) => ['', item.name]);
 
     this.view.pointTypeSelectView.setOptions(pointTypeOptionStates);
-    this.view.destinationSelectView.setOptions(destinationSelectOptions);
+    this.view.destinationSelectView.setOptions(destinationOptionStates);
 
     this.view.datePickerView.configure({
       onChange: [(dates) => {
@@ -94,7 +94,7 @@ export default class CreatorPresenter extends Presenter {
       'name',
       this.view.destinationSelectView.getValue()
     );
-
+    /** @type {DestinationPictureState[]} */
     const pictureStates = destination.pictures.map((picture) => [
       picture.src,
       picture.description,

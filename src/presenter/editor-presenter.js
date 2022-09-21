@@ -4,7 +4,7 @@ import PointView from '../view/point-view';
 
 /**
  * @template {ApplicationModel} Model
- * @template {CreatorView} View
+ * @template {EditorView} View
  * @extends CreatorPresenter<Model,View>
  */
 export default class EditorPresenter extends CreatorPresenter {

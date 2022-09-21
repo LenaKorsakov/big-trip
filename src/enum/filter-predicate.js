@@ -1,6 +1,3 @@
-/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
-/** @typedef {(item: PointAdapter) => boolean} PointPredicate */
-
 import Enum from './enum';
 
 export default class FilterPredicate extends Enum {

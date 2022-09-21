@@ -1,7 +1,4 @@
 import dayjs from 'dayjs';
 
-const DATE_TEMPLATE = 'D MMM';
-const HOUR_TEMPLATE = 'HH:mm';
-
-export const formatStringToDate = (dueDate) => dayjs(dueDate).format(DATE_TEMPLATE);
-export const formatStringToHour = (dueDate) => dayjs(dueDate).format(HOUR_TEMPLATE);
+export const formatDateTime = (dueDate, template) => dayjs(dueDate).format(template);
+export const formatNumber = (value, locale = 'en') => value.toLocaleString(locale);

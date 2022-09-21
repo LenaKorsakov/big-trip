@@ -18,8 +18,8 @@ export default class PointView extends View {
   }
 
   /**
-   * @type {PointState} state
    * @override
+   * @param {PointState} state
    */
   createAdjacentHtml(state) {
 

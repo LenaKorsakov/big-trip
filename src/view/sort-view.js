@@ -18,7 +18,6 @@ export default class SortView extends RadioGroupView {
 
   /**
    *  * @param {OfferState} state
-   *  @override
    */
   createOptionHtml(...state) {
     const [label, value] = state;

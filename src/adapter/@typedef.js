@@ -8,6 +8,7 @@
  * @typedef Point
  * @prop {number} base_price
  * @prop {string} startDate
+ * @prop {string} date_from
  * @prop {string} date_to
  * @prop {number} destination
  * @prop {string} id
@@ -49,7 +50,7 @@
  */
 
 /**
- * @typedef {'taxi' | 'bus' | 'train' | 'ship' | 'drive' | 'flight' | 'check-in' | 'sightseeing' | 'restaurant'} PointType
+ * @typedef {string} PointType
  */
 
 /**

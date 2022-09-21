@@ -24,27 +24,34 @@ export default class DestinationSelectView extends View {
    */
   createAdjacentHtml() {
     return html`
-      <label class="event__label  event__type-output" for="event-destination-1">
-
-      </label>
+      <label class="event__label  event__type-output" for="event-destination-1"></label>
       <input class="event__input  event__input--destination"
         id="event-destination-1"
         type="text"
         name="event-destination"
         value=""
         list="destination-list-1"
-        autocomplete="off">
-        <datalist id="destination-list-1">
-        </datalist>
+        autocomplete="off"
+      >
+      <datalist id="destination-list-1"></datalist>
     `;
   }
 
   /**
-   * @param {DestinationOptionState} states
+   * @param {DestinationOptionState} state
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`<option value="${value}"> ${label} </option>`;
+  }
+
+  /**
+   * @param {DestinationOptionState[]} states
    */
   setOptions(states) {
     this.querySelector('datalist').innerHTML = html`${
-      states.map((state) => this.#createOptionHtml(state))
+      states.map((state) => this.createOptionHtml(...state))
     }`;
 
     return this;
@@ -66,10 +73,6 @@ export default class DestinationSelectView extends View {
 
   getValue() {
     return this.inputView.value || this.inputView.placeholder;
-  }
-
-  #createOptionHtml(state) {
-    return html`<option> ${state} </option>`;
   }
 
   #moveValueToPlaceholder() {

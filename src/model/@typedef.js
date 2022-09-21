@@ -10,3 +10,4 @@
  * @template {Adapter} ItemAdapter
  * @typedef {import('./data-table-model').default<Item, ItemAdapter>} DataTableModel
  */
+

@@ -72,7 +72,6 @@ export default class Store {
 
   /**
    * @param {number} id
-   * @param {Item} item
    * @return {Promise<Item>}
    */
   remove(id) {

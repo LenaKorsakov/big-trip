@@ -1,6 +1,9 @@
-import Presenter from './presenter.js';
-import Mode from '../enum/mode.js';
-import { formatStringToDate,formatStringToHour} from '../format';
+import Presenter from './presenter';
+import Mode from '../enum/mode';
+import {formatNumber, formatDateTime} from '../format';
+
+const DATE_FORMAT = 'D MMM';
+const TIME_FORMAT = 'HH:mm';
 
 /**
  * @template {ApplicationModel} Model
@@ -14,17 +17,17 @@ export default class ListPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.updateView();
+    this.#updateView();
 
-    this.view.addEventListener('edit', this.onViewEdit.bind(this));
+    this.view.addEventListener('edit', this.#onViewEdit.bind(this));
 
     this.model.pointsModel.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
-      this.onModelPointsChange.bind(this)
+      this.#onModelPointsChange.bind(this)
     );
   }
 
-  updateView() {
+  #updateView() {
     /** @type {PointState[]} */
     const states = this.model.pointsModel.list().map((point) => {
       const destination = this.model.destinationsModel.findById(point.destinationId);
@@ -42,11 +45,11 @@ export default class ListPresenter extends Presenter {
         id: point.id,
         isoStartDate: point.startDate,
         isoEndDate: point.endDate,
-        startDate: formatStringToDate(point.startDate),
+        startDate: formatDateTime(point.startDate, DATE_FORMAT),
         icon: point.type,
-        startTime: formatStringToHour(point.startDate),
-        endTime: formatStringToHour(point.endDate),
-        price: point.basePrice,
+        startTime: formatDateTime(point.startDate, TIME_FORMAT),
+        endTime: formatDateTime(point.endDate, TIME_FORMAT),
+        price: formatNumber(point.basePrice),
         offers: offerStates,
         title: destination.name
       };
@@ -58,7 +61,7 @@ export default class ListPresenter extends Presenter {
   /**
    * @param {CustomEvent & {target: PointView}} event
    */
-  onViewEdit(event) {
+  #onViewEdit(event) {
     this.model.setMode(Mode.EDIT, event.target.getId());
   }
 
@@ -66,10 +69,10 @@ export default class ListPresenter extends Presenter {
    *
    * @param {CustomEvent<PointAdapter>} event
    */
-  onModelPointsChange(event) {
+  #onModelPointsChange(event) {
     if (event.type === 'remove') {
       this.view.findById(event.detail.id)?.remove();
     }
-    this.updateView();
+    this.#updateView();
   }
 }

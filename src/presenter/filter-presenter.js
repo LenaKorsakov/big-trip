@@ -6,7 +6,7 @@ import Mode from '../enum/mode';
 
 /**
  * @template {ApplicationModel} Model
- * @template {FilterSelectView} View
+ * @template {FilterView} View
  * @extends Presenter<Model,View>
  */
 export default class FilterPresenter extends Presenter {
@@ -25,9 +25,10 @@ export default class FilterPresenter extends Presenter {
   }
 
   #buildView() {
-    const filterOptions = Object.keys(FilterType).map((key) => [FilterLabel[key], FilterType[key]]);
+    /** @type {FilterOptionState[]} */
+    const filterOptionStates = Object.keys(FilterType).map((key) => [FilterLabel[key], FilterType[key]]);
 
-    this.view.setOptions(filterOptions);
+    this.view.setOptions(filterOptionStates);
 
     this.#updateViewValue();
     this.#updateViewOptionsDisabled();
@@ -47,7 +48,7 @@ export default class FilterPresenter extends Presenter {
   }
 
   #onViewChange() {
-    const filterKey = this.view.getValue().toUpperCase();
+    const filterKey = FilterType.findKey(this.view.getValue());
 
     this.model.setMode(Mode.VIEW);
     this.model.pointsModel.setFilter(FilterPredicate[filterKey]);

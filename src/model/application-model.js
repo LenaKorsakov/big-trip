@@ -12,8 +12,10 @@ export default class ApplicationModel extends Model {
   constructor(pointsModel, destinationsModel, offerGroupsModel) {
     super();
 
-    this.pointsModel = pointsModel;
+    /** @type {PointAdapter} */
     this.currentPoint = null;
+
+    this.pointsModel = pointsModel;
     this.destinationsModel = destinationsModel;
     this.offerGroupsModel = offerGroupsModel;
   }
@@ -25,7 +27,7 @@ export default class ApplicationModel extends Model {
     point.destinationId = this.destinationsModel.item(0).id;
     point.startDate = new Date().toJSON();
     point.endDate = point.startDate;
-    point.basePrice = '1';
+    point.basePrice = 0;
     point.offerIds = [];
     point.isFavorite = false;
 

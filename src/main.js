@@ -62,7 +62,7 @@ const filterView = document.querySelector(String(FilterView));
 /** @type {SortView} */
 const sortView = document.querySelector(String(SortView));
 
-/** @type {PlaceholdersView} */
+/** @type {HTMLParagraphElement} */
 const placeholderView = document.querySelector('.trip-events__msg');
 
 /** @type {HTMLButtonElement} */
@@ -77,8 +77,8 @@ applicationModel.ready().then(() => {
   new SortPresenter(applicationModel, sortView);
   new PlaceholderPresenter(applicationModel,placeholderView);
   new ListPresenter(applicationModel, pointListView);
-  new CreatorPresenter(applicationModel, creatorView);
   new EditorPresenter(applicationModel, new EditorView());
+  new CreatorPresenter(applicationModel, creatorView);
 });
 
 const {trace} = console;

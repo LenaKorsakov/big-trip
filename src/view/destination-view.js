@@ -1,9 +1,6 @@
 import View, {html} from './view.js';
 
 export default class DestinationView extends View {
-  /**
- * @param  {State} state
- */
   constructor(...state) {
     super(...state);
 

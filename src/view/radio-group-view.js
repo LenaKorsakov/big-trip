@@ -8,6 +8,7 @@ export default class RadioGroupView extends View {
   }
 
   getValue() {
+    /** @type {HTMLButtonElement} */
     const view = this.querySelector(`${this.itemSelector}:checked`);
 
     if (view) {
@@ -21,6 +22,7 @@ export default class RadioGroupView extends View {
    * @param {string} value
    */
   setValue(value) {
+    /** @type {HTMLInputElement} */
     const view = this.querySelector(`${this.itemSelector}[value="${value}"]`);
     if (view) {
       view.checked = true;
@@ -33,6 +35,7 @@ export default class RadioGroupView extends View {
    * @param {boolean[]} flags
    */
   setOptionsDisabled(flags) {
+    /** @type {HTMLInputElement[]} */
     const views = this.querySelectorAll(this.itemSelector);
 
     views.forEach((view, index) => {

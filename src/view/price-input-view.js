@@ -4,6 +4,9 @@ export default class PriceInputView extends View {
   constructor() {
     super(...arguments);
 
+    /** @type {HTMLInputElement} */
+    this.inputView = this.querySelector('.event__input--price');
+
     this.classList.add('event__field-group', 'event__field-group--price');
   }
 
@@ -18,27 +21,31 @@ export default class PriceInputView extends View {
         &euro;
       </label>
       <input class="event__input  event__input--price"
-      title="Введите целое положительное число"
-      pattern="^[0-9]+$"
-      id="event-price-1"
-      type="text"
-      name="event-price"
-      value="${value}"
-      autocomplete="off">
+        title="Enter a positive integer"
+        pattern="^[0-9]+$"
+        min="1"
+        max="1000000"
+        id="event-price"
+        type="text"
+        name="event-price"
+        value="${value}"
+        autocomplete="off"
+        required
+      >
     `;
   }
 
   /**
-     * @param {number}
+     * @param {*} price
      */
   setPrice(price) {
-    this.querySelector('.event__input--price').value = price;
+    this.inputView.value = price;
 
     return this;
   }
 
   getPrice() {
-    return this.querySelector('.event__input--price').value;
+    return this.inputView.value;
   }
 }
 

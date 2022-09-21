@@ -48,7 +48,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} value
+   * @param {*} value
    */
   findById(value) {
     return this.findBy('id', value);
@@ -93,10 +93,10 @@ export default class CollectionModel extends Model {
 
   /**
    * @param {number} id
-   * @param {Item} item
+   * @param {ItemAdapter} item
    */
   async update(id, item) {
-    const newItem = await this.#store.update(id, item);
+    const newItem = await this.#store.update(id, item.toJSON());
     const index = this.findIndexById(id);
     const detail = this.#adapt(newItem);
 

@@ -39,6 +39,7 @@ export default class CreatorView extends View {
     /** @type {DestinationView} */
     this.destinationView = this.querySelector(String(DestinationView));
 
+    /** @type {LoaderView} */
     this.loaderView = new LoaderView();
   }
 
@@ -96,7 +97,7 @@ export default class CreatorView extends View {
   }
 
   /**
-   * @param {HTMLElement} view
+   * @param {Element} view
    */
   target(view) {
     this._targetView = view;

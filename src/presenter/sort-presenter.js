@@ -7,7 +7,7 @@ import Mode from '../enum/mode';
 
 /**
  * @template {ApplicationModel} Model
- * @template {SortSelectView} View
+ * @template {SortView} View
  * @extends Presenter<Model,View>
  */
 export default class SortPresenter extends Presenter{
@@ -26,6 +26,7 @@ export default class SortPresenter extends Presenter{
 
   #buildView() {
     const flags = Object.values(SortDisabled);
+    /** @type {SortOptionState[]} */
     const sortOptions = Object.keys(SortType).map((key) => [SortLabel[key], SortType[key]]);
 
     this.view
