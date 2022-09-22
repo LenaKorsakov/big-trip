@@ -51,9 +51,15 @@ export default class CreatorPresenter extends Presenter {
       onChange: [(dates) => {
         const [minDate] = dates;
 
-        this.view.datePickerView.configure({}, {minDate: minDate});
+        this.view.datePickerView.configure({}, {minDate});
       }]
-    }, {});
+    }, {
+      onValueUpdate: [() => {
+        const [startDate, endDate = startDate] = this.view.datePickerView.getDates();
+
+        this.view.datePickerView.setDates(startDate, endDate, false);
+      }]
+    });
   }
 
   _updateView() {
@@ -77,6 +83,7 @@ export default class CreatorPresenter extends Presenter {
     const selectedType = this.view.pointTypeSelectView.getValue();
     const availableOffers = this.model.offerGroupsModel.findById(selectedType).items;
 
+    /** @type {OfferOptionState[]} */
     const offers = availableOffers.map((offer) => [
       offer.title,
       offer.price,
