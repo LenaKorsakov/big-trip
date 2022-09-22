@@ -9,7 +9,7 @@ import SaveButtonLabel from '../enum/save-button-label';
 import LoaderView from './loader-view';
 
 /**
- * @implements EventListenerObject
+ * @implements {EventListenerObject}
  */
 export default class CreatorView extends View {
   _targetView = null;

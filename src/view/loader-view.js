@@ -2,10 +2,14 @@ import './loader-view.css';
 
 import View from './view.js';
 
+/**
+ * @implements {EventListenerObject}
+ */
 export default class LoaderView extends View {
   constructor() {
     super();
 
+    this.rootView = document.body;
     this.classList.add('loader');
   }
 
@@ -13,14 +17,23 @@ export default class LoaderView extends View {
    * @override
    * @param {boolean} flag
    */
-  display(flag, rootView = document.body) {
+  display(flag) {
     if (flag) {
-      rootView.append(this);
+      this.rootView.append(this);
+      this.rootView.addEventListener('keydown', this);
     } else {
       this.remove();
+      this.rootView.removeEventListener('keydown', this);
     }
 
     return this;
+  }
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+  handleEvent(event) {
+    event.preventDefault();
   }
 
 }
