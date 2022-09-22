@@ -80,14 +80,3 @@ applicationModel.ready().then(() => {
   new EditorPresenter(applicationModel, new EditorView());
   new CreatorPresenter(applicationModel, creatorView);
 });
-
-const {trace} = console;
-
-applicationModel.addEventListener('mode', () => {
-  trace(`%cMode.${Mode.findKey(applicationModel.getMode())}`, 'background: pink');
-});
-
-pointsModel.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
-  trace(`%c${event.type}`, 'background: yellow');
-});
-

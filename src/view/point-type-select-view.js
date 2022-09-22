@@ -5,7 +5,14 @@ export default class PointTypeSelectView extends RadioGroupView {
     super();
 
     this.classList.add('event__type-wrapper');
+
+    /** @type {HTMLInputElement} */
+    this.toggleView = this.querySelector('.event__type-toggle');
+
     this.addEventListener('change', this.#onViewChange);
+    this.addEventListener('focus', this.#onFocus, true);
+    this.addEventListener('blur', this.#onBlur, true);
+    this.addEventListener('pointerdown', this.#onPointerDown);
   }
 
   /**
@@ -13,11 +20,11 @@ export default class PointTypeSelectView extends RadioGroupView {
    */
   createAdjacentHtml() {
     return html`
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <label class="event__type  event__type-btn" for="event-type-toggle-1" tabindex="0">
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" tabindex="-1">
 
       <div class="event__type-list">
         <fieldset class="event__type-group">
@@ -73,12 +80,28 @@ export default class PointTypeSelectView extends RadioGroupView {
   }
 
   /**
-   * @param {boolean} flag
+   * @param {FocusEvent} event
    */
-  displayMenu(flag) {
-    this.querySelector('input').checked = flag;
+  #onFocus(event) {
+    if (event.target === this.toggleView.labels[0]) {
+      this.toggleView.checked = true;
+    }
+  }
 
-    return this;
+  /**
+   * @param {FocusEvent & {relatedTarget: Element}} event
+   */
+  #onBlur(event) {
+    if (!this.contains(event.relatedTarget)) {
+      this.toggleView.checked = false;
+    }
+  }
+
+  /**
+   * @param {PointerEvent} event
+   */
+  #onPointerDown(event) {
+    event.preventDefault();
   }
 
   /**
@@ -93,7 +116,7 @@ export default class PointTypeSelectView extends RadioGroupView {
     }
 
     if (type === 'radio') {
-      this.setValue(value).displayMenu(false);
+      this.setValue(value);
     }
   }
 }

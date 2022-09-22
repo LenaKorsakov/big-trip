@@ -131,7 +131,6 @@ export default class CreatorView extends View {
     this.display(false);
 
     this.datePickerView.close();
-    this.pointTypeSelectView.displayMenu(false);
 
     document.removeEventListener('keydown', this);
 
