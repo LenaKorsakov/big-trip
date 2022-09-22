@@ -2,7 +2,7 @@ import RadioGroupView, {html} from './radio-group-view';
 
 export default class FilterView extends RadioGroupView {
   constructor() {
-    super(...arguments);
+    super();
 
     this.classList.add('trip-controls__filters');
   }

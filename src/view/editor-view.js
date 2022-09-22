@@ -7,7 +7,7 @@ export default class EditorView extends CreatorView {
   constructor() {
     super();
 
-    this.addEventListener('click', this._onClick);
+    this.addEventListener('click', this.#onClick);
   }
 
   /**
@@ -49,7 +49,10 @@ export default class EditorView extends CreatorView {
     this.setDisabled(flag);
   }
 
-  _onClick(event) {
+  /**
+   * @param {MouseEvent & {target: Element}} event
+   */
+  #onClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }

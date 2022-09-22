@@ -2,8 +2,8 @@ import View, {html} from './view.js';
 import './destination-select-view.css';
 
 export default class DestinationSelectView extends View {
-  constructor(states) {
-    super(states);
+  constructor() {
+    super();
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
@@ -13,6 +13,8 @@ export default class DestinationSelectView extends View {
     this.addEventListener('blur', this.#onViewBlur, true);
 
     this.inputView = this.querySelector('input');
+    this.labelView = this.querySelector('label');
+    this.optionListView = this.querySelector('datalist');
   }
 
   get allowedKeys() {
@@ -50,17 +52,19 @@ export default class DestinationSelectView extends View {
    * @param {DestinationOptionState[]} states
    */
   setOptions(states) {
-    this.querySelector('datalist').innerHTML = html`${
+    this.optionListView.innerHTML = html`${
       states.map((state) => this.createOptionHtml(...state))
     }`;
 
     return this;
   }
 
+  /**
+   * @param {string} label
+   */
   setLabel(label) {
-    this.querySelector('.event__label').textContent = label;
+    this.labelView.textContent = label;
   }
-
 
   /**
    * @param {string} value

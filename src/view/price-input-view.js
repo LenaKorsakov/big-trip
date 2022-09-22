@@ -2,7 +2,7 @@ import View, {html} from './view.js';
 
 export default class PriceInputView extends View {
   constructor() {
-    super(...arguments);
+    super();
 
     /** @type {HTMLInputElement} */
     this.inputView = this.querySelector('.event__input--price');
@@ -21,12 +21,10 @@ export default class PriceInputView extends View {
         &euro;
       </label>
       <input class="event__input  event__input--price"
-        title="Enter a positive integer"
-        pattern="^[0-9]+$"
+        type="number"
         min="1"
         max="1000000"
         id="event-price"
-        type="text"
         name="event-price"
         value="${value}"
         autocomplete="off"

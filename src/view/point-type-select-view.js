@@ -2,7 +2,7 @@ import RadioGroupView, {html} from './radio-group-view';
 
 export default class PointTypeSelectView extends RadioGroupView {
   constructor() {
-    super(...arguments);
+    super();
 
     this.classList.add('event__type-wrapper');
     this.addEventListener('change', this.#onViewChange);
@@ -28,7 +28,7 @@ export default class PointTypeSelectView extends RadioGroupView {
   }
 
   /**
-   * @param {PointTypeOptionState} states
+   * @param {PointTypeOptionState} state
    */
   createOptionHtml(...state) {
     const [label, value] = state;

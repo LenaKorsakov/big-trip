@@ -2,7 +2,7 @@ import RadioGroupView, {html} from './radio-group-view';
 
 export default class SortView extends RadioGroupView {
   constructor() {
-    super(...arguments);
+    super();
   }
 
   /**

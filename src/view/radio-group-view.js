@@ -35,7 +35,7 @@ export default class RadioGroupView extends View {
    * @param {boolean[]} flags
    */
   setOptionsDisabled(flags) {
-    /** @type {HTMLInputElement[]} */
+    /** @type {NodeListOf<HTMLInputElement>} */
     const views = this.querySelectorAll(this.itemSelector);
 
     views.forEach((view, index) => {

@@ -39,7 +39,7 @@ const pointStore = new Store(POINTS_URL, AUTH);
 /** @type {Store<Destination>}*/
 const destinationStore = new Store(DESTINATIONS_URL, AUTH);
 
-/** @type {Store<OfferGroup}*/
+/** @type {Store<OfferGroup>}*/
 const offersStore = new Store(OFFERS_URL, AUTH);
 
 const pointsModel = new DataTableModel(pointStore, (point) => new PointAdapter(point))

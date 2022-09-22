@@ -3,7 +3,7 @@ import PointView from './point-view';
 
 export default class ListView extends View {
   constructor() {
-    super(...arguments);
+    super();
 
     this.classList.add('trip-events__list');
   }
@@ -19,6 +19,9 @@ export default class ListView extends View {
     return this;
   }
 
+  /**
+   * @param {string} id
+   */
   findById(id) {
     return PointView.findById(id, this);
   }

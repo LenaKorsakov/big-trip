@@ -1,8 +1,8 @@
 import View, {html} from './view.js';
 
 export default class DestinationView extends View {
-  constructor(...state) {
-    super(...state);
+  constructor() {
+    super();
 
     this.classList.add('event__section', 'event__section--destination');
   }
@@ -28,7 +28,7 @@ export default class DestinationView extends View {
    */
   setPictures(states) {
     this.querySelector('.event__photos-tape').innerHTML = html`${
-      states.map((state) => this.#createPictureHTML(...state))
+      states.map((state) => this.#createPictureHtml(...state))
     }`;
 
     return this;
@@ -43,10 +43,15 @@ export default class DestinationView extends View {
     return this;
   }
 
-  #createPictureHTML(...state) {
-    const [src,alt] = state;
+  /**
+   * @param  {DestinationPictureState} state
+   */
+  #createPictureHtml(...state) {
+    const [src, alt] = state;
 
-    return html`<img class="event__photo" src=${src} alt=${alt}>`;
+    return html`
+      <img class="event__photo" src=${src} alt=${alt}>
+    `;
   }
 }
 

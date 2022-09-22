@@ -89,7 +89,7 @@ export default class CreatorView extends View {
    * @param {boolean} flag
    */
   setDisabled(flag) {
-    [...this.formView].forEach((view) => {
+    [...this.formView].forEach((/** @type {HTMLInputElement}*/view) => {
       view.disabled = flag;
     });
 

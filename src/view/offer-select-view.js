@@ -2,8 +2,8 @@ import View, {html} from './view.js';
 import './offer-select-view.css';
 
 export default class OfferSelectView extends View {
-  constructor(...state) {
-    super(...state);
+  constructor() {
+    super();
 
     this.classList.add('event__section', 'event__section--offers');
   }
@@ -56,7 +56,7 @@ export default class OfferSelectView extends View {
   }
 
   getSelectedValues() {
-    /** @type {HTMLInputElement[]} */
+    /** @type {NodeListOf<HTMLInputElement>} */
     const views = this.querySelectorAll(':checked');
 
     return [...views].map((view) => view.value);
