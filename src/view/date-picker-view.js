@@ -62,6 +62,11 @@ export default class DatePickerView extends View {
     ];
   }
 
+  close() {
+    this.#startDateCalendar.close();
+    this.#endDateCalendar.close();
+  }
+
   /**
    * @param {KeyboardEvent} event
    */

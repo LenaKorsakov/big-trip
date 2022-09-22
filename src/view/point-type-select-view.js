@@ -72,7 +72,10 @@ export default class PointTypeSelectView extends RadioGroupView {
     return this;
   }
 
-  expand(flag = true) {
+  /**
+   * @param {boolean} flag
+   */
+  displayMenu(flag) {
     this.querySelector('input').checked = flag;
 
     return this;
@@ -90,7 +93,7 @@ export default class PointTypeSelectView extends RadioGroupView {
     }
 
     if (type === 'radio') {
-      this.setValue(value).expand(false);
+      this.setValue(value).displayMenu(false);
     }
   }
 }
