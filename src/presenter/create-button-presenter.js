@@ -23,6 +23,6 @@ export default class CreateButtonPresenter extends Presenter {
   }
 
   #onModelMode() {
-    this.view.disabled = (this.model.getMode() !== Mode.VIEW);
+    this.view.disabled = (this.model.getMode() === Mode.CREATE);
   }
 }
