@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
+const TersetPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: './src/main.js',
@@ -11,20 +12,28 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: 'public' }],
+      patterns: [{
+        from: 'public'
+      }],
     }),
   ],
   module: {
-    rules: [
-        {
-          test: /\.js$/,
-          exclude: /(node_modules)/,
-          use: ['babel-loader']
-        },
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader']
+    rules: [{
+      test: /\.js$/,
+      exclude: /(node_modules)/,
+      use: ['babel-loader']
+    }, {
+      test: /\.css$/i,
+      use: ['style-loader', 'css-loader']
+    }]
+  },
+  optimization: {
+    minimizer: [
+      new TersetPlugin( {
+        terserOptions: {
+          keep_classnames: /View$/
         }
-    ]
+      })
+    ],
   }
 };

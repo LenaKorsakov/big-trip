@@ -25,7 +25,7 @@ export default class CreatorPresenter extends Presenter {
 
     this._buildView();
 
-    this.view.addEventListener('close', this._onViewClose.bind(this));
+    this.view.addEventListener('close', this.#onViewClose.bind(this));
     this.view.addEventListener('submit', this._onViewSubmit.bind(this));
     this.view.addEventListener('reset', this._onViewReset.bind(this));
 
@@ -145,10 +145,6 @@ export default class CreatorPresenter extends Presenter {
     this.view.close();
   }
 
-  _onViewClose() {
-    this.model.setMode(Mode.VIEW);
-  }
-
   _onModelMode() {
     if (this.model.getMode() !== Mode.CREATE) {
       return;
@@ -157,6 +153,10 @@ export default class CreatorPresenter extends Presenter {
     this._updateView();
 
     this.view.open();
+  }
+
+  #onViewClose() {
+    this.model.setMode(Mode.VIEW);
   }
 
   #onPointTypeSelectViewChange() {
