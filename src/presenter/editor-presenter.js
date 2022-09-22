@@ -19,17 +19,15 @@ export default class EditorPresenter extends CreatorPresenter {
    * @override
    */
   _onModelMode() {
-    if (this.model.getMode() !== Mode.EDIT) {
-      return;
-    }
-
-    const pointView = PointView.findById(this.model.currentPoint.id);
-
     this.view.close(false);
 
-    this._updateView();
+    if (this.model.getMode() === Mode.EDIT) {
+      const pointView = PointView.findById(this.model.currentPoint.id);
 
-    this.view.target(pointView).open();
+      this._updateView();
+
+      this.view.target(pointView).open();
+    }
   }
 
   _deleteCurrentPoint() {

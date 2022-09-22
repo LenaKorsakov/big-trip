@@ -146,13 +146,13 @@ export default class CreatorPresenter extends Presenter {
   }
 
   _onModelMode() {
-    if (this.model.getMode() !== Mode.CREATE) {
-      return;
+    this.view.close(false);
+
+    if (this.model.getMode() === Mode.CREATE) {
+      this._updateView();
+
+      this.view.open();
     }
-
-    this._updateView();
-
-    this.view.open();
   }
 
   #onViewClose() {
