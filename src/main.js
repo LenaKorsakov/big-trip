@@ -8,7 +8,7 @@ import PointAdapter from './adapter/point-adapter';
 import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
 
-import NewPointButtonPresenter from './presenter/new-point-button-presenter';
+import NewPointButtonPresenter from './presenter/create-button-presenter';
 
 import FilterPresenter from './presenter/filter-presenter';
 import SortPresenter from './presenter/sort-presenter';

@@ -10,7 +10,7 @@
 /** @typedef {import('./editor-view').default} EditorView */
 
 /** @typedef {[label: string, value: PointType]} PointTypeOptionState  */
-/** @typedef {[title: string, price: string, id: number, isChecked: boolean]} OfferOptionState  */
+/** @typedef {[title: string, price: string, id: string, isChecked: boolean]} OfferOptionState  */
 /** @typedef {[title: string, price: string]} OfferState  */
 /** @typedef {[label: string, value: string]} SortOptionState  */
 /** @typedef {[label: string, value: string]} FilterOptionState  */

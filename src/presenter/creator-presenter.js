@@ -3,6 +3,7 @@ import PointType from '../enum/point-type';
 import PointLabel from '../enum/point-label';
 import Mode from '../enum/mode';
 import DatePickerView from '../view/date-picker-view';
+import {escape} from 'he';
 
 DatePickerView.setDefaults({
   enableTime: true,
@@ -39,10 +40,13 @@ export default class CreatorPresenter extends Presenter {
 
   _buildView() {
     /** @type {PointTypeOptionState[]} */
-    const pointTypeOptionStates = Object.keys(PointType).map((key) => [PointLabel[key],PointType[key]]);
+    const pointTypeOptionStates = Object.keys(PointType).map((key) => [PointLabel[key], PointType[key]]);
 
     /** @type {DestinationOptionState[]} */
-    const destinationOptionStates = this.model.destinationsModel.listAll().map((item) => ['', item.name]);
+    const destinationOptionStates = this.model.destinationsModel.listAll().map((item) => [
+      '',
+      escape(item.name)
+    ]);
 
     this.view.pointTypeSelectView.setOptions(pointTypeOptionStates);
     this.view.destinationSelectView.setOptions(destinationOptionStates);
@@ -85,9 +89,9 @@ export default class CreatorPresenter extends Presenter {
 
     /** @type {OfferOptionState[]} */
     const offers = availableOffers.map((offer) => [
-      offer.title,
-      offer.price,
-      offer.id,
+      escape(offer.title),
+      escape(String(offer.price)),
+      escape(offer.id),
       check && this.model.currentPoint.offerIds.includes(offer.id)
     ]);
 
@@ -103,8 +107,8 @@ export default class CreatorPresenter extends Presenter {
     );
     /** @type {DestinationPictureState[]} */
     const pictureStates = destination.pictures.map((picture) => [
-      picture.src,
-      picture.description,
+      escape(picture.src),
+      escape(picture.description),
     ]);
 
 
@@ -185,6 +189,6 @@ export default class CreatorPresenter extends Presenter {
   }
 
   #onOffersSelectViewChange() {
-    this.model.currentPoint.offerIds = this.view.offerSelectView.getSelectedValues().map(Number);
+    this.model.currentPoint.offerIds = this.view.offerSelectView.getSelectedValues();
   }
 }
