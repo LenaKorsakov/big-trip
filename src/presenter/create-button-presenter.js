@@ -6,7 +6,7 @@ import Mode from '../enum/mode.js';
  * @template {HTMLButtonElement} View
  * @extends Presenter<Model,View>
  */
-export default class NewPointButtonPresenter extends Presenter {
+export default class CreateButtonPresenter extends Presenter {
   /**
    * @param {[model: Model, view: View]} init
    */

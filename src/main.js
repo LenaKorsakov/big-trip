@@ -8,11 +8,11 @@ import PointAdapter from './adapter/point-adapter';
 import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
 
-import NewPointButtonPresenter from './presenter/create-button-presenter';
+import CreateButtonPresenter from './presenter/create-button-presenter';
 
 import FilterPresenter from './presenter/filter-presenter';
 import SortPresenter from './presenter/sort-presenter';
-import PlaceholderPresenter from './presenter/placeholder-presentor';
+import PlaceholderPresenter from './presenter/placeholder-presenter';
 import ListPresenter from './presenter/list-presenter';
 import CreatorPresenter from './presenter/creator-presenter';
 import EditorPresenter from './presenter/editor-presenter';
@@ -25,7 +25,6 @@ import EditorView from './view/editor-view';
 
 import FilterPredicate from './enum/filter-predicate';
 import SortCompare from './enum/sort-compare';
-import Mode from './enum/mode';
 
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
 const POINTS_URL = `${BASE_URL}/points`;
@@ -66,13 +65,13 @@ const sortView = document.querySelector(String(SortView));
 const placeholderView = document.querySelector('.trip-events__msg');
 
 /** @type {HTMLButtonElement} */
-const newPointButtonView = document.querySelector('.trip-main__event-add-btn');
+const createButtonView = document.querySelector('.trip-main__event-add-btn');
 
 /** @type {CreatorView} */
 const creatorView = new CreatorView().target(pointListView);
 
 applicationModel.ready().then(() => {
-  new NewPointButtonPresenter(applicationModel, newPointButtonView);
+  new CreateButtonPresenter(applicationModel, createButtonView);
   new FilterPresenter(applicationModel, filterView);
   new SortPresenter(applicationModel, sortView);
   new PlaceholderPresenter(applicationModel,placeholderView);

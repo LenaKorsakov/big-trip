@@ -35,7 +35,7 @@ export default class CreatorPresenter extends Presenter {
     this.view.priceInputView.addEventListener('change', this.#onPriceInputViewChange.bind(this));
     this.view.offerSelectView.addEventListener('change', this.#onOffersSelectViewChange.bind(this));
 
-    this.model.addEventListener('mode',this._onModelMode.bind(this));
+    this.model.addEventListener('mode', this._onModelMode.bind(this));
   }
 
   _buildView() {
@@ -73,7 +73,7 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.destinationSelectView
       .setValue(this.model.destinationsModel.findById(point.destinationId).name)
-      .setLabel(PointLabel[PointType.findKey(this.model.currentPoint.type)]);
+      .setLabel(PointLabel[PointType.findKey(point.type)]);
 
     this.view.datePickerView.setDates(point.startDate, point.endDate);
 

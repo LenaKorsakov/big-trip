@@ -82,13 +82,13 @@ export default class CreatorView extends View {
       SaveButtonLabel.PRESSED :
       SaveButtonLabel.DEFAULT;
 
-    this.setDisabled(flag);
+    this.setLoading(flag);
   }
 
   /**
    * @param {boolean} flag
    */
-  setDisabled(flag) {
+  setLoading(flag) {
     [...this.formView].forEach((/** @type {HTMLInputElement}*/view) => {
       view.disabled = flag;
     });

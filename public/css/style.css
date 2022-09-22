@@ -331,7 +331,6 @@ main {
   list-style: none; }
 
 .trip-events__item {
-  display: block;
   margin-bottom: 54px;
   margin-left: auto; }
 
@@ -354,7 +353,8 @@ main {
   cursor: default;
   -webkit-transition: color 0.2s;
   transition: color 0.2s; }
- 
+  .trip-sort__item:last-child {
+    margin-right: 0; }
   .trip-sort__item--day {
     width: 55px;
     text-align: center;
@@ -776,17 +776,13 @@ main {
   text-transform: capitalize; }
 
 .event__offer-selector {
-  margin-bottom: 6px;
-}
-
-.event__offer-selector:not(:last-of-type) {
-  margin-right: 6px;
-}
+  margin-bottom: 6px; }
+  .event__offer-selector:not(:last-of-type) {
+    margin-right: 6px; }
 
 .event__offer-label {
   display: block;
   padding: 22px 30px 21px;
-  margin-right: 6px;
   font-size: 17px;
   line-height: 21px;
   -webkit-user-select: none;
@@ -797,20 +793,14 @@ main {
   border-radius: 32px;
   cursor: pointer;
   -webkit-transition: background-color 0.2s;
-  transition: background-color 0.2s;
-}
-
-.event__offer-label:hover {
-  background-color: rgba(13, 138, 228, 0.6);
-}
-
-.event__offer-label::first-letter {
-  text-transform: capitalize;
-}
+  transition: background-color 0.2s; }
+  .event__offer-label:hover {
+    background-color: rgba(13, 138, 228, 0.6); }
+  .event__offer-label::first-letter {
+    text-transform: capitalize; }
 
 .event__offer-checkbox:checked + .event__offer-label {
-  background-color: #0d8ae4;
-}
+  background-color: #0d8ae4; }
 
 .event__destination-description {
   width: 560px;

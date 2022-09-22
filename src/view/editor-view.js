@@ -46,7 +46,7 @@ export default class EditorView extends CreatorView {
       DeleteButtonLabel.PRESSED :
       DeleteButtonLabel.DEFAULT;
 
-    this.setDisabled(flag);
+    this.setLoading(flag);
   }
 
   /**

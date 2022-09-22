@@ -1,4 +1,5 @@
 import View, {html} from './view.js';
+import './point-view.css';
 
 export default class PointView extends View {
   #id;
