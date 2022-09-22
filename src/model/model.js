@@ -3,11 +3,13 @@ export default class Model extends EventTarget {
 
   /**
    * @param {string} type
-   * @param {[EventListener | EventListenerObject, EventListenerOptions | boolean]} rest
+   * @param {EventListener | EventListenerObject} listener
+   * @param {boolean | EventListenerOptions} options
    */
-  addEventListener(type, ...rest) {
-    [].concat(type).forEach((name) => {
-      super.addEventListener(name, ...rest);
+  addEventListener(type, listener, options = false) {
+    [].concat(type).forEach((name,) => {
+      super.addEventListener(name, listener, options);
     });
   }
 }
+
