@@ -48,7 +48,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {*} value
+   * @param {string} value
    */
   findById(value) {
     return this.findBy('id', value);
@@ -63,7 +63,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} value
+   * @param {string} value
    */
   findIndexById(value) {
     return this.findIndexBy('id', value);
@@ -92,13 +92,13 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} id
+   * @param {string} id
    * @param {ItemAdapter} item
    */
   async update(id, item) {
     const newItem = await this.#store.update(id, item.toJSON());
     const index = this.findIndexById(id);
-    const detail = this.#adapt(newItem);
+    const detail = [this.#adapt(newItem), this.item(index)];
 
     this.#items.splice(index, 1, newItem);
 
@@ -106,7 +106,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} id
+   * @param {string} id
    */
   async remove(id) {
     await this.#store.remove(id);
