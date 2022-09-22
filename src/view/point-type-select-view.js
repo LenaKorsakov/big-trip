@@ -9,10 +9,11 @@ export default class PointTypeSelectView extends RadioGroupView {
     /** @type {HTMLInputElement} */
     this.toggleView = this.querySelector('.event__type-toggle');
 
-    this.addEventListener('change', this.#onViewChange);
     this.addEventListener('focus', this.#onFocus, true);
     this.addEventListener('blur', this.#onBlur, true);
     this.addEventListener('pointerdown', this.#onPointerDown);
+    this.addEventListener('click', this.#onClick);
+    this.addEventListener('change', this.#onViewChange);
   }
 
   /**
@@ -102,6 +103,15 @@ export default class PointTypeSelectView extends RadioGroupView {
    */
   #onPointerDown(event) {
     event.preventDefault();
+  }
+
+  /**
+ * @param {MouseEvent & {target: HTMLInputElement}} event
+ */
+  #onClick(event) {
+    if (event.target.type === 'radio') {
+      this.toggleView.checked = false;
+    }
   }
 
   /**
