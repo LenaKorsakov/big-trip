@@ -18,11 +18,14 @@ export default class OfferSelectView extends View {
       </h3>
 
       <div class="event__available-offers">
-      <!--offerToggleViews-->
+        <!--options-->
       </div>
     `;
   }
 
+  /**
+   * @param  {OfferOptionState} state
+   */
   createOptionHtml(...state) {
     const [title, price, id, isChecked] = state;
 
@@ -45,9 +48,9 @@ export default class OfferSelectView extends View {
   }
 
   /**
-     * @param  {OfferOptionState[]} states
-     */
-  setOffers(states) {
+   * @param  {OfferOptionState[]} states
+   */
+  setOptions(states) {
     this.querySelector('.event__available-offers').innerHTML = html`${
       states.map((state) => this.createOptionHtml(...state))
     }`;

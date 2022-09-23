@@ -77,7 +77,7 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.datePickerView.setDates(point.startDate, point.endDate);
 
-    this.view.priceInputView.setPrice(point.basePrice);
+    this.view.priceInputView.setPrice(String(point.basePrice));
 
     this._updateOfferSelectView();
     this._updateDestinationView();
@@ -97,7 +97,7 @@ export default class CreatorPresenter extends Presenter {
 
     this.view.offerSelectView
       .display(Boolean(availableOffers.length))
-      .setOffers(offers);
+      .setOptions(offers);
   }
 
   _updateDestinationView() {
@@ -139,6 +139,9 @@ export default class CreatorPresenter extends Presenter {
     this.view.setSaving(false);
   }
 
+  /**
+   * @param {Event} event
+   */
   _onViewReset(event) {
     event.preventDefault();
 
@@ -166,7 +169,7 @@ export default class CreatorPresenter extends Presenter {
     this.model.currentPoint.type = pointType;
 
     this.view.destinationSelectView.setLabel(PointLabel[key]);
-    this._updateOfferSelectView(false);
+    this._updateOfferSelectView();
   }
 
   #onDestinationSelectViewChange() {

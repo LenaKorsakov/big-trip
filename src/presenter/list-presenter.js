@@ -1,12 +1,9 @@
 import Presenter from './presenter';
 import Mode from '../enum/mode';
-import {formatNumber, formatDateTime} from '../format';
+import {formatNumber, formatTime, formatDate} from '../format';
 import {escape} from 'he';
 import PointLabel from '../enum/point-label';
 import PointType from '../enum/point-type';
-
-const DATE_FORMAT = 'D MMM';
-const TIME_FORMAT = 'HH:mm';
 
 /**
  * @template {ApplicationModel} Model
@@ -26,7 +23,7 @@ export default class ListPresenter extends Presenter {
 
     this.model.pointsModel.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
-      this.#onModelPointsEvent.bind(this)
+      this.#onModelPointsChange.bind(this)
     );
   }
 
@@ -51,10 +48,10 @@ export default class ListPresenter extends Presenter {
         id: escape(point.id),
         isoStartDate: escape(point.startDate),
         isoEndDate: escape(point.endDate),
-        startDate: formatDateTime(point.startDate, DATE_FORMAT),
+        startDate: formatDate(point.startDate),
         icon: escape(point.type),
-        startTime: formatDateTime(point.startDate, TIME_FORMAT),
-        endTime: formatDateTime(point.endDate, TIME_FORMAT),
+        startTime: formatTime(point.startDate),
+        endTime: formatTime(point.endDate),
         price: escape(formatNumber(point.basePrice)),
         offers: offerStates,
         title: `${PointLabel[PointType.findKey(point.type)]} ${escape(destination.name)}`
@@ -75,7 +72,7 @@ export default class ListPresenter extends Presenter {
    *
    * @param {CustomEvent<PointAdapter>} event
    */
-  #onModelPointsEvent(event) {
+  #onModelPointsChange(event) {
     if (event.type === 'remove') {
       this.view.findById(event.detail.id)?.remove();
 

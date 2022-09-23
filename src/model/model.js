@@ -2,7 +2,7 @@ export default class Model extends EventTarget {
   async ready() {}
 
   /**
-   * @param {string} type
+   * @param {string | string[]} type
    * @param {EventListener | EventListenerObject} listener
    * @param {boolean | EventListenerOptions} options
    */
@@ -12,4 +12,3 @@ export default class Model extends EventTarget {
     });
   }
 }
-

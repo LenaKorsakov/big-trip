@@ -1,23 +1,19 @@
 import RadioGroupView, {html} from './radio-group-view';
 
 export default class SortView extends RadioGroupView {
-  constructor() {
-    super();
-  }
-
   /**
    * @override
    */
   createAdjacentHtml() {
     return html`
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-        <!--sortOptions-->
+        <!--options-->
       </form>
-  `;
+    `;
   }
 
   /**
-   *  * @param {OfferState} state
+   * @param {OfferState} state
    */
   createOptionHtml(...state) {
     const [label, value] = state;

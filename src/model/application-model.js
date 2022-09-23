@@ -4,6 +4,7 @@ import Model from './model';
 
 export default class ApplicationModel extends Model {
   #mode = Mode.VIEW;
+
   /**
    * @param {DataTableModel<Point, PointAdapter>} pointsModel
    * @param {CollectionModel<Destination, DestinationAdapter>} destinationsModel
@@ -45,12 +46,12 @@ export default class ApplicationModel extends Model {
   /**
    *
    * @param {number} mode
-   * @param {string} currentPointId
+   * @param {string} pointId
    */
-  setMode(mode = this.#mode, currentPointId = null) {
+  setMode(mode, pointId = null) {
     switch (mode) {
       case Mode.EDIT:
-        this.currentPoint = this.pointsModel.findById(currentPointId);
+        this.currentPoint = this.pointsModel.findById(pointId);
         break;
 
       case Mode.CREATE:

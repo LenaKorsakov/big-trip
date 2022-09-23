@@ -9,5 +9,5 @@ export default class FilterPredicate extends Enum {
   /**
    * @type {Predicate<PointAdapter>}
    */
-  static FUTURE = (point) => Date.parse(point.endDate) >= Date.now();
+  static FUTURE = (point) => Date.parse(point.startDate) >= Date.now();
 }

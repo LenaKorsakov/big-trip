@@ -1,5 +1,25 @@
 import './view.css';
 
+/**
+ * @param {TemplateStringsArray} strings
+ * @param  {...*} values
+ * @return {string}
+ */
+export const html = (strings, ...values) =>
+  values.reduce((result, value, index) => {
+
+    if (value?.isViewConstructor) {
+      value = `<${value}></${value}>`;
+    }
+
+    if (Array.isArray(value)) {
+      value = value.join('');
+    }
+
+    return result + value + strings[index + 1];
+
+  }, strings[0]);
+
 export default class View extends HTMLElement {
   constructor() {
     super();
@@ -17,11 +37,8 @@ export default class View extends HTMLElement {
     return 'beforeend';
   }
 
-  /**
-   * @param {...*} data
-   */
-  createAdjacentHtml(...data) {
-    return data.join('');
+  createAdjacentHtml() {
+    return html`${[...arguments]}`;
   }
 
   /**
@@ -35,16 +52,16 @@ export default class View extends HTMLElement {
 
   shake() {
     this.classList.add('shake');
-    this.addEventListener('animationend', this.onAnimationEnd, {once: true});
+
+    this.addEventListener('animationend', () => {
+      this.classList.remove('shake');
+    }, {
+      once: true
+    });
   }
 
-  /**
-   * @param {AnimationEvent} event
-   */
-  onAnimationEnd(event) {
-    if (event.animationName === 'shake') {
-      this.classList.remove('shake');
-    }
+  static get isViewConstructor() {
+    return true;
   }
 
   static get tagNamePrefix() {
@@ -60,22 +77,4 @@ export default class View extends HTMLElement {
   static toString() {
     return this.tagName;
   }
-}
-
-/**
- * @param {TemplateStringsArray} strings
- * @param  {...*} values
- * @return {string}
- */
-export function html(strings, ...values) {
-  return values.reduce((result, value, index) => {
-    if (typeof value === 'function') {
-      value = `<${value}></${value}>`;
-    }
-    if (Array.isArray(value)) {
-      value = value.join('');
-    }
-    return result + value + strings[index + 1];
-
-  }, strings[0]);
 }

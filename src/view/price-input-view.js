@@ -12,21 +12,20 @@ export default class PriceInputView extends View {
 
   /**
    * @override
-   * @param {number} value
    */
-  createAdjacentHtml(value) {
+  createAdjacentHtml() {
     return html`
       <label class="event__label" for="event-price-1">
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price"
+      <input
+        class="event__input  event__input--price"
         type="number"
         min="1"
         max="1000000"
         id="event-price"
         name="event-price"
-        value="${value}"
         autocomplete="off"
         required
       >
@@ -34,8 +33,8 @@ export default class PriceInputView extends View {
   }
 
   /**
-     * @param {*} price
-     */
+   * @param {string} price
+   */
   setPrice(price) {
     this.inputView.value = price;
 

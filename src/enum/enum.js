@@ -1,9 +1,4 @@
 export default class Enum {
-
-  static get defaultValue() {
-    return Object.values(this)[0];
-  }
-
   /**
    * @param {*} value
    */

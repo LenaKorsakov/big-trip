@@ -1,6 +1,7 @@
 import Presenter from './presenter';
-import FilterPlaceholderMessage from '../enum/filter-placeholder';
+import FilterPlaceholder from '../enum/filter-placeholder';
 import FilterPredicate from '../enum/filter-predicate';
+import Mode from '../enum/mode';
 
 /**
  * @template {ApplicationModel} Model
@@ -14,24 +15,28 @@ export default class PlaceholderPresenter extends Presenter {
   constructor(...init) {
     super(...init);
 
-    this.#updatePlaceholder();
+    this.#updateView();
 
-    this.model.pointsModel.addEventListener(
-      ['add', 'update', 'remove', 'filter'],
-      this.#onModelPointsChange.bind(this)
-    );
+    this.model.addEventListener('mode', this.#onModelMode.bind(this));
+    this.model.pointsModel.addEventListener(['add', 'remove', 'filter'], this.#onModelPointsChange.bind(this));
   }
 
-  #updatePlaceholder() {
-    const key = FilterPredicate.findKey(this.model.pointsModel.getFilter());
-    const message = FilterPlaceholderMessage[key];
-    const isHidden = Boolean(this.model.pointsModel.list().length);
+  #updateView() {
+    const predicate = this.model.pointsModel.getFilter();
+    const message = FilterPlaceholder[FilterPredicate.findKey(predicate)];
+
+    const {length} = this.model.pointsModel.list();
+    const isHidden = Boolean(length) || (this.model.getMode() === Mode.CREATE);
 
     this.view.hidden = isHidden;
     this.view.textContent = isHidden ? '' : message;
   }
 
+  #onModelMode() {
+    this.#updateView();
+  }
+
   #onModelPointsChange() {
-    this.#updatePlaceholder();
+    this.#updateView();
   }
 }

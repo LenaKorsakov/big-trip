@@ -23,7 +23,6 @@ export default class PointView extends View {
    * @param {PointState} state
    */
   createAdjacentHtml(state) {
-
     return html`
       <div class ="event">
         <time class="event__date" datetime="${state.isoStartDate}">${state.startDate}</time>

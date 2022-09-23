@@ -106,8 +106,8 @@ export default class PointTypeSelectView extends RadioGroupView {
   }
 
   /**
- * @param {MouseEvent & {target: HTMLInputElement}} event
- */
+   * @param {MouseEvent & {target: HTMLInputElement}} event
+   */
   #onClick(event) {
     if (event.target.type === 'radio') {
       this.toggleView.checked = false;

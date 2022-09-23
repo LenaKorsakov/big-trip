@@ -21,7 +21,7 @@ export default class SortPresenter extends Presenter{
 
     this.view.addEventListener('change', this.#onViewChange.bind(this));
 
-    this.model.pointsModel.addEventListener(['add','remove','filter'], this.#onPointsModelChange.bind(this));
+    this.model.pointsModel.addEventListener(['add', 'remove', 'filter'], this.#onPointsModelChange.bind(this));
   }
 
   #buildView() {
@@ -33,17 +33,13 @@ export default class SortPresenter extends Presenter{
       .setOptions(sortOptions)
       .setOptionsDisabled(flags);
 
-    this.#updateViewValue();
-    this.#updateViewDisplay();
+    this.#updateView();
   }
 
-  #updateViewValue() {
+  #updateView() {
     const sortKey = SortCompare.findKey(this.model.pointsModel.getSort());
 
     this.view.setValue(SortType[sortKey]);
-  }
-
-  #updateViewDisplay() {
     this.view.hidden = !this.model.pointsModel.list().length;
   }
 
@@ -54,13 +50,14 @@ export default class SortPresenter extends Presenter{
     this.model.pointsModel.setSort(SortCompare[sortKey]);
   }
 
+  /**
+   * @param {Event} event
+   */
   #onPointsModelChange(event){
     if (event.type === 'filter') {
       this.model.pointsModel.setSort(SortCompare.DAY, false);
-
-      return this.#updateViewValue();
     }
 
-    this.#updateViewDisplay();
+    this.#updateView();
   }
 }

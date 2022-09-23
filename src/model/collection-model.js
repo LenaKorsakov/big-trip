@@ -11,6 +11,9 @@ export default class CollectionModel extends Model {
   /** @type {Item[]} */
   #items;
 
+  /** @type {Promise<void>} */
+  #ready;
+
   /**
    * @param {Store<Item>} store
    * @param {(item?: Item) => ItemAdapter} adapt
@@ -30,9 +33,11 @@ export default class CollectionModel extends Model {
    * @override
    */
   async ready() {
-    if (!this.#items) {
-      this.#items = await this.#store.list();
-    }
+    this.#ready ??= this.#store.list().then((items) => {
+      this.#items = items;
+    });
+
+    return this.#ready;
   }
 
   listAll() {
@@ -102,7 +107,7 @@ export default class CollectionModel extends Model {
 
     this.#items.splice(index, 1, newItem);
 
-    this.dispatchEvent(new CustomEvent('update',{detail}));
+    this.dispatchEvent(new CustomEvent('update', {detail}));
   }
 
   /**
@@ -112,7 +117,9 @@ export default class CollectionModel extends Model {
     await this.#store.remove(id);
 
     const index = this.findIndexById(id);
-    const detail = this.#items.splice(index, 1).map(this.#adapt);
+    const detail = this.item(index);
+
+    this.#items.splice(index, 1);
 
     this.dispatchEvent(new CustomEvent('remove', {detail}));
   }

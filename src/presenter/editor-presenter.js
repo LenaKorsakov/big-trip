@@ -36,6 +36,7 @@ export default class EditorPresenter extends CreatorPresenter {
 
   /**
    * @override
+   * @param {Event} event
    */
   async _onViewReset(event) {
     event.preventDefault();
