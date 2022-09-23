@@ -1,4 +1,5 @@
 import View, {html} from './view.js';
+import './point-view.css';
 
 export default class PointView extends View {
   #id;
@@ -18,11 +19,10 @@ export default class PointView extends View {
   }
 
   /**
-   * @type {PointState} state
    * @override
+   * @param {PointState} state
    */
   createAdjacentHtml(state) {
-
     return html`
       <div class ="event">
         <time class="event__date" datetime="${state.isoStartDate}">${state.startDate}</time>
@@ -71,7 +71,9 @@ export default class PointView extends View {
   }
 
   /**
-   * @param {number} id
+   * @param {string} id
+   * @param {Document | Element} rootView
+   * @return {PointView}
    */
   static findById(id, rootView = document) {
     return rootView.querySelector(`#${this}-${id}`);

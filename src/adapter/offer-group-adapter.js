@@ -1,4 +1,5 @@
 import Adapter from './adapter';
+import OfferAdapter from './offer-adapter';
 
 export default class OfferGroupAdapter extends Adapter {
   /**
@@ -8,7 +9,7 @@ export default class OfferGroupAdapter extends Adapter {
     super();
 
     this.id = offerGroup.type;
-    this.items = offerGroup.offers.map((offer) => ({...offer}));
+    this.items = offerGroup.offers.map((offer) => new OfferAdapter(offer));
   }
 }
 

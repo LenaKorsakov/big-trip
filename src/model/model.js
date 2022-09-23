@@ -1,9 +1,14 @@
 export default class Model extends EventTarget {
   async ready() {}
 
-  addEventListener(type, ...rest) {
-    [].concat(type).forEach((name) => {
-      super.addEventListener(name, ...rest);
+  /**
+   * @param {string | string[]} type
+   * @param {EventListener | EventListenerObject} listener
+   * @param {boolean | EventListenerOptions} options
+   */
+  addEventListener(type, listener, options = false) {
+    [].concat(type).forEach((name,) => {
+      super.addEventListener(name, listener, options);
     });
   }
 }

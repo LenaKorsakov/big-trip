@@ -1,11 +1,28 @@
 import Enum from './enum';
-/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
 
 export default class SortCompare extends Enum {
   /**
-   * @param {PointAdapter} pointA
-   * @param {PointAdapter} pointB
+   * @type {Compare<PointAdapter>}
    */
-  static DAY = (pointA, pointB) => Date.parse(pointA.startDate) - Date.parse(pointB.startDate);
-  static PRICE = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+  static DAY = (item, nextItem) => Date.parse(item.startDate) - Date.parse(nextItem.startDate);
+
+  /**
+   * @type {Compare<PointAdapter>}
+   */
+  static EVENT = () => 0;
+
+  /**
+   * @type {Compare<PointAdapter>}
+   */
+  static TIME = () => 0;
+
+  /**
+   * @type {Compare<PointAdapter>}
+   */
+  static PRICE = (item, nextItem) => nextItem.basePrice - item.basePrice;
+
+  /**
+   * @type {Compare<PointAdapter>}
+   */
+  static OFFERS = () => 0;
 }

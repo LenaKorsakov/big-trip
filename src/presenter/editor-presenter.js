@@ -4,71 +4,44 @@ import PointView from '../view/point-view';
 
 /**
  * @template {ApplicationModel} Model
- * @template {CreatorView} View
+ * @template {EditorView} View
  * @extends CreatorPresenter<Model,View>
  */
 export default class EditorPresenter extends CreatorPresenter {
   /**
-   * @param {[model: Model, view: View]} init
-   */
-  constructor(...init) {
-    super(...init);
-
-    this.view.addEventListener('reset', this._onViewReset.bind(this));
-  }
-
-  /**
    * @override
    */
   _saveCurrentPoint() {
-    return this.model.points.update(this.model.currentPoint.id, this.model.currentPoint);
-  }
-
-  /**
-   * @override
-   */
-  async _onViewSubmit() {
-    this.view.setSaveButtonPressed(true);
-    this.view.setFormDisabled(true);
-
-    try {
-      await this._saveCurrentPoint();
-
-      this.view.close();
-    }
-
-    catch (exception) {
-      this.view.shake();
-    }
-
-    this.view.setSaveButtonPressed(false);
-    this.view.setFormDisabled(false);
+    return this.model.pointsModel.update(this.model.currentPoint.id, this.model.currentPoint);
   }
 
   /**
    * @override
    */
   _onModelMode() {
-    if (this.model.getMode() !== Mode.EDIT) {
-      return;
+    this.view.close(false);
+
+    if (this.model.getMode() === Mode.EDIT) {
+      const pointView = PointView.findById(this.model.currentPoint.id);
+
+      this._updateView();
+
+      this.view.target(pointView).open();
     }
-
-    const pointView = PointView.findById(this.model.currentPoint.id);
-
-    this.view.close(true);
-
-    this._updateView();
-
-    this.view.target(pointView).open();
   }
 
   _deleteCurrentPoint() {
-    return this.model.points.remove(this.model.currentPoint.id);
+    return this.model.pointsModel.remove(this.model.currentPoint.id);
   }
 
-  async _onViewReset() {
-    this.view.setDeleteButtonPressed(true);
-    this.view.setFormDisabled(true);
+  /**
+   * @override
+   * @param {Event} event
+   */
+  async _onViewReset(event) {
+    event.preventDefault();
+
+    this.view.setDeleting(true);
 
     try {
       await this._deleteCurrentPoint();
@@ -80,7 +53,6 @@ export default class EditorPresenter extends CreatorPresenter {
       this.view.shake();
     }
 
-    this.view.setDeleteButtonPressed(false);
-    this.view.setFormDisabled(false);
+    this.view.setDeleting(false);
   }
 }

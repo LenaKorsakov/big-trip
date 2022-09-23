@@ -1,5 +1,3 @@
-import StoreError from './store-error';
-
 /**
  * @template Item
  */
@@ -13,33 +11,7 @@ export default class Store {
   }
 
   /**
-   *
-   * @param {URL} path
-   * @param {RequestInit} options
-   */
-  query(path, options = {}) {
-    const url = this.#baseUrl + path;
-    const headers = {
-      'authorization': this.#auth,
-      'content-type': 'application/json',
-      ...options.headers
-    };
-
-    return fetch(url, {...options, headers}).then((response) => {
-      if (!response.ok) {
-        throw new StoreError(response);
-      }
-
-      if (response.headers.get('content-type').startsWith('application/json')) {
-        return response.json();
-      }
-
-      return response.text();
-    });
-  }
-
-  /**
-   * @return {Promise<Item[]>}
+   *  @return {Promise<Item[]>}
    */
   list() {
     return this.query('/', {
@@ -59,7 +31,7 @@ export default class Store {
   }
 
   /**
-   * @param {number} id
+   * @param {string} id
    * @param {Item} item
    * @return {Promise<Item>}
    */
@@ -71,13 +43,52 @@ export default class Store {
   }
 
   /**
-   * @param {number} id
-   * @param {Item} item
+   * @param {string} id
    * @return {Promise<Item>}
    */
   remove(id) {
     return this.query(`/${id}`, {
       method: 'delete'
     });
+  }
+
+  /**
+   *
+   * @param {string} path
+   * @param {RequestInit} options
+   */
+  async query(path, options = {}) {
+    const url = this.#baseUrl + path;
+    const headers = {
+      'authorization': this.#auth,
+      'content-type': 'application/json',
+      ...options.headers
+    };
+    const response = await fetch(url, {...options, headers});
+    const {assert, parse} = /** @type {typeof Store} */ (this.constructor);
+
+    await assert(response);
+
+    return parse(response);
+  }
+
+  /**
+   * @param {Response} response
+   */
+  static async assert(response) {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+  }
+
+  /**
+   * @param {Response} response
+   */
+  static parse(response) {
+    if (response.headers.get('content-type').startsWith('application/json')) {
+      return response.json();
+    }
+
+    return response.text();
   }
 }

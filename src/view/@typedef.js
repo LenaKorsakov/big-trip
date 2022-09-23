@@ -2,25 +2,24 @@
 /** @typedef {import('flatpickr/dist/types/options').DateOption} CalendarDate */
 /** @typedef {import('flatpickr/dist/types/options').Options} CalendarOptions */
 
-// /** @typedef {import('./destination-view').DestinationPictureState} DestinationPictureState */
-// /** @typedef {import('./destination-select-view').DestinationOptionState} DestinationOptionState */
-// /** @typedef {import('./offer-select-view').OfferSelectState} OfferSelectState */
-// /** @typedef {import('./offer-toggle-view').OfferToggleState} OfferToggleState  */
-// /** @typedef {import('./sort-view').SortOptionState} SortOptionState */
 /** @typedef {import('./list-view').default} ListView*/
-/** @typedef {import('./editor-view').default} CreatorView */
+/** @typedef {import('./point-view').default} PointView */
+/** @typedef {import('./creator-view').default} CreatorView */
+/** @typedef {import('./filter-view').default} FilterView */
+/** @typedef {import('./sort-view').default} SortView */
+/** @typedef {import('./editor-view').default} EditorView */
 
 /** @typedef {[label: string, value: PointType]} PointTypeOptionState  */
-/** @typedef {[title: string, price: string, isChecked: boolean][]} OfferSelectState  */
-/** @typedef {[title: string, price: string]} OfferToggleState  */
+/** @typedef {[title: string, price: string, id: string, isChecked: boolean]} OfferOptionState  */
+/** @typedef {[title: string, price: string]} OfferState  */
 /** @typedef {[label: string, value: string]} SortOptionState  */
 /** @typedef {[label: string, value: string]} FilterOptionState  */
-/** @typedef {string[]} DestinationOptionState  */
-/** @typedef {[URL, string][]} DestinationPictureState  */
+/** @typedef {[label: string, value: string]} DestinationOptionState  */
+/** @typedef {[src: string, alt: string]} DestinationPictureState  */
 
 /**
  * @typedef PointState
- * @prop {number} id
+ * @prop {string} id
  * @prop {string} isoStartDate
  * @prop {string} isoEndDate
  * @prop {string} startDate

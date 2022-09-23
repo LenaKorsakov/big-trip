@@ -8,11 +8,10 @@ import PointAdapter from './adapter/point-adapter';
 import DestinationAdapter from './adapter/destination-adapter';
 import OfferGroupAdapter from './adapter/offer-group-adapter';
 
-import NewPointButtonPresenter from './presenter/new-point-button-presenter';
-
+import CreateButtonPresenter from './presenter/create-button-presenter';
 import FilterPresenter from './presenter/filter-presenter';
 import SortPresenter from './presenter/sort-presenter';
-import PlaceholderPresenter from './presenter/placeholder-presentor';
+import PlaceholderPresenter from './presenter/placeholder-presenter';
 import ListPresenter from './presenter/list-presenter';
 import CreatorPresenter from './presenter/creator-presenter';
 import EditorPresenter from './presenter/editor-presenter';
@@ -25,36 +24,38 @@ import EditorView from './view/editor-view';
 
 import FilterPredicate from './enum/filter-predicate';
 import SortCompare from './enum/sort-compare';
-import Mode from './enum/mode';
+
 
 const BASE_URL = 'https://18.ecmascript.pages.academy/big-trip';
 const POINTS_URL = `${BASE_URL}/points`;
 const DESTINATIONS_URL = `${BASE_URL}/destinations`;
 const OFFERS_URL = `${BASE_URL}/offers`;
-const AUTH = 'Basic 60jd12k5';
+const AUTH = 'Basic 60od12k5';
+
 
 /** @type {Store<Point>}*/
-const pointStore = new Store(POINTS_URL, AUTH);
+const pointsStore = new Store(POINTS_URL, AUTH);
 
 /** @type {Store<Destination>}*/
-const destinationStore = new Store(DESTINATIONS_URL, AUTH);
+const destinationsStore = new Store(DESTINATIONS_URL, AUTH);
 
-/** @type {Store<OfferGroup}*/
-const offersStore = new Store(OFFERS_URL, AUTH);
+/** @type {Store<OfferGroup>}*/
+const offerGroupsStore = new Store(OFFERS_URL, AUTH);
 
-const pointsModel = new DataTableModel(pointStore, (point) => new PointAdapter(point))
+
+const pointsModel = new DataTableModel(pointsStore, (item) => new PointAdapter(item))
   .setFilter(FilterPredicate.EVERYTHING)
   .setSort(SortCompare.DAY);
 
-const destinationsModel = new CollectionModel(destinationStore, (destination) => new DestinationAdapter(destination));
+const destinationsModel = new CollectionModel(destinationsStore, (item) => new DestinationAdapter(item));
 
-const offerGroupsModel = new CollectionModel(offersStore, (offerGroup) => new OfferGroupAdapter(offerGroup));
+const offerGroupsModel = new CollectionModel(offerGroupsStore, (item) => new OfferGroupAdapter(item));
 
 const applicationModel = new ApplicationModel(pointsModel, destinationsModel, offerGroupsModel);
 
 
 /** @type {ListView} */
-const pointListView = document.querySelector(String(ListView));
+const listView = document.querySelector(String(ListView));
 
 /** @type {FilterView} */
 const filterView = document.querySelector(String(FilterView));
@@ -62,32 +63,19 @@ const filterView = document.querySelector(String(FilterView));
 /** @type {SortView} */
 const sortView = document.querySelector(String(SortView));
 
-/** @type {PlaceholdersView} */
+/** @type {HTMLParagraphElement} */
 const placeholderView = document.querySelector('.trip-events__msg');
 
 /** @type {HTMLButtonElement} */
-const newPointButtonView = document.querySelector('.trip-main__event-add-btn');
+const createButtonView = document.querySelector('.trip-main__event-add-btn');
 
-/** @type {CreatorView} */
-const creatorView = new CreatorView().target(pointListView);
 
 applicationModel.ready().then(() => {
-  new NewPointButtonPresenter(applicationModel, newPointButtonView);
+  new CreateButtonPresenter(applicationModel, createButtonView);
   new FilterPresenter(applicationModel, filterView);
   new SortPresenter(applicationModel, sortView);
-  new PlaceholderPresenter(applicationModel,placeholderView);
-  new ListPresenter(applicationModel, pointListView);
-  new CreatorPresenter(applicationModel, creatorView);
+  new CreatorPresenter(applicationModel, new CreatorView().target(listView));
   new EditorPresenter(applicationModel, new EditorView());
-});
-
-const {group, groupEnd, trace} = console;
-
-applicationModel.addEventListener('mode', () => {
-  groupEnd();
-  group(`Mode[${Mode.findKey(applicationModel.getMode())}]`);
-});
-
-applicationModel.points.addEventListener(['add', 'update', 'remove', 'filter', 'sort'], (event) => {
-  trace(event.type);
+  new ListPresenter(applicationModel, listView);
+  new PlaceholderPresenter(applicationModel,placeholderView);
 });

@@ -1,16 +1,13 @@
-/** @typedef {import('../adapter/point-adapter').default} PointAdapter */
-/** @typedef {(item: PointAdapter) => boolean} PointPredicate */
-
 import Enum from './enum';
 
 export default class FilterPredicate extends Enum {
   /**
-   * @type {PointPredicate}
+   * @type {Predicate<PointAdapter>}
    */
   static EVERYTHING = () => true;
 
   /**
-   * @type {PointPredicate}
+   * @type {Predicate<PointAdapter>}
    */
-  static FUTURE = (point) => Date.parse(point.endDate) >= Date.now();
+  static FUTURE = (point) => Date.parse(point.startDate) >= Date.now();
 }

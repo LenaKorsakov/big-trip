@@ -7,7 +7,7 @@ export default class EditorView extends CreatorView {
   constructor() {
     super();
 
-    this.addEventListener('click', this._onClick);
+    this.addEventListener('click', this.#onClick);
   }
 
   /**
@@ -28,38 +28,32 @@ export default class EditorView extends CreatorView {
   }
 
   /**
-   * @override
-   */
-  connect() {
-    this._targetView.replaceWith(this);
-  }
+     * @override
+     * @param {boolean} flag
+     */
+  display(flag) {
+    this.id = this._targetView?.id;
 
-  /**
-   * @override
-   */
-  disconnect() {
-    this.replaceWith(this._targetView);
+    (flag ? this._targetView : this).replaceWith(flag ? this : this._targetView);
+
+    return this;
   }
 
   /**
    * @param {boolean} flag
    */
-  setDeleteButtonPressed(flag) {
-    /** @type {HTMLButtonElement} */
-    const view = this.querySelector('.event__reset-btn');
+  setDeleting(flag) {
+    this.querySelector('.event__reset-btn').textContent = flag ?
+      DeleteButtonLabel.PRESSED :
+      DeleteButtonLabel.DEFAULT;
 
-    view.disabled = flag;
-    view.textContent = flag ? DeleteButtonLabel.PRESSED : DeleteButtonLabel.DEFAULT;
+    this.setLoading(flag);
   }
 
   /**
-   * @override
+   * @param {MouseEvent & {target: Element}} event
    */
-  _onReset(event) {
-    event.preventDefault();
-  }
-
-  _onClick(event) {
+  #onClick(event) {
     if (event.target.closest('.event__rollup-btn')) {
       this.close();
     }

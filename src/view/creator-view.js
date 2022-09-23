@@ -6,9 +6,10 @@ import PriceInputView from './price-input-view';
 import OfferSelectView from './offer-select-view';
 import DestinationView from './destination-view';
 import SaveButtonLabel from '../enum/save-button-label';
+import LoaderView from './loader-view';
 
 /**
- * @implements EventListenerObject
+ * @implements {EventListenerObject}
  */
 export default class CreatorView extends View {
   _targetView = null;
@@ -17,6 +18,8 @@ export default class CreatorView extends View {
     super();
 
     this.classList.add('trip-events__item');
+
+    this.formView = this.querySelector('form');
 
     /** @type {PointTypeSelectView} */
     this.pointTypeSelectView = this.querySelector(String(PointTypeSelectView));
@@ -36,8 +39,8 @@ export default class CreatorView extends View {
     /** @type {DestinationView} */
     this.destinationView = this.querySelector(String(DestinationView));
 
-    this.addEventListener('submit', this._onSubmit);
-    this.addEventListener('reset', this._onReset);
+    /** @type {LoaderView} */
+    this.loaderView = new LoaderView();
   }
 
   /**
@@ -74,28 +77,27 @@ export default class CreatorView extends View {
   /**
    * @param {boolean} flag
    */
-  setSaveButtonPressed(flag) {
-    /** @type {HTMLButtonElement} */
-    const view = this.querySelector('.event__save-btn');
+  setSaving(flag) {
+    this.querySelector('.event__save-btn').textContent = flag ?
+      SaveButtonLabel.PRESSED :
+      SaveButtonLabel.DEFAULT;
 
-    view.disabled = flag;
-    view.textContent = flag ? SaveButtonLabel.PRESSED : SaveButtonLabel.DEFAULT;
+    this.setLoading(flag);
   }
 
   /**
    * @param {boolean} flag
    */
-  setFormDisabled(flag) {
-    /** @type {HTMLFormElement[]} */
-    const views = Array.from(...this.children);
-
-    views.forEach((view) => {
+  setLoading(flag) {
+    [...this.formView].forEach((/** @type {HTMLInputElement}*/view) => {
       view.disabled = flag;
     });
+
+    this.loaderView.display(flag);
   }
 
   /**
-   * @param {HTMLElement} view
+   * @param {Element} view
    */
   target(view) {
     this._targetView = view;
@@ -103,31 +105,36 @@ export default class CreatorView extends View {
     return this;
   }
 
-  connect() {
-    this._targetView.prepend(this);
-  }
+  /**
+   * @override
+   * @param {boolean} flag
+   */
+  display(flag) {
+    if (flag) {
+      this._targetView.prepend(this);
+    } else {
+      this.remove();
+    }
 
-  disconnect() {
-    this.remove();
+    return this;
   }
 
   open() {
-    this.connect();
+    this.display(true);
 
     document.addEventListener('keydown', this);
 
     return this;
   }
 
-  /**
-   * @param {boolean} [silent]
-   */
-  close(silent) {
-    this.disconnect();
+  close(notify = true) {
+    this.display(false);
+
+    this.datePickerView.close();
 
     document.removeEventListener('keydown', this);
 
-    if (!silent) {
+    if (notify) {
       this.dispatchEvent(new CustomEvent('close'));
     }
 
@@ -141,16 +148,6 @@ export default class CreatorView extends View {
     if (event.key?.startsWith('Esc')) {
       this.close();
     }
-  }
-
-  _onSubmit(event) {
-    event.preventDefault();
-  }
-
-  _onReset(event) {
-    event.preventDefault();
-
-    this.close();
   }
 }
 

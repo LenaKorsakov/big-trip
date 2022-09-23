@@ -2,8 +2,8 @@ import View, {html} from './view.js';
 import './offer-select-view.css';
 
 export default class OfferSelectView extends View {
-  constructor(...state) {
-    super(...state);
+  constructor() {
+    super();
 
     this.classList.add('event__section', 'event__section--offers');
   }
@@ -18,11 +18,14 @@ export default class OfferSelectView extends View {
       </h3>
 
       <div class="event__available-offers">
-      <!--offerToggleViews-->
+        <!--options-->
       </div>
     `;
   }
 
+  /**
+   * @param  {OfferOptionState} state
+   */
   createOptionHtml(...state) {
     const [title, price, id, isChecked] = state;
 
@@ -45,17 +48,18 @@ export default class OfferSelectView extends View {
   }
 
   /**
-     * @param  {OfferToggleState} states
-     */
-  setOffers(states) {
-    this.querySelector('.event__available-offers').innerHTML = html`${states.map((
-      [title, price, id, isChecked]) => this.createOptionHtml(title, price, id, isChecked)
-    )}`;
+   * @param  {OfferOptionState[]} states
+   */
+  setOptions(states) {
+    this.querySelector('.event__available-offers').innerHTML = html`${
+      states.map((state) => this.createOptionHtml(...state))
+    }`;
 
     return this;
   }
 
   getSelectedValues() {
+    /** @type {NodeListOf<HTMLInputElement>} */
     const views = this.querySelectorAll(':checked');
 
     return [...views].map((view) => view.value);

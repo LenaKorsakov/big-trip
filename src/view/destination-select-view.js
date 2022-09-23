@@ -2,8 +2,8 @@ import View, {html} from './view.js';
 import './destination-select-view.css';
 
 export default class DestinationSelectView extends View {
-  constructor(states) {
-    super(states);
+  constructor() {
+    super();
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
@@ -13,6 +13,8 @@ export default class DestinationSelectView extends View {
     this.addEventListener('blur', this.#onViewBlur, true);
 
     this.inputView = this.querySelector('input');
+    this.labelView = this.querySelector('label');
+    this.optionListView = this.querySelector('datalist');
   }
 
   get allowedKeys() {
@@ -24,36 +26,45 @@ export default class DestinationSelectView extends View {
    */
   createAdjacentHtml() {
     return html`
-      <label class="event__label  event__type-output" for="event-destination-1">
-
-      </label>
+      <label class="event__label  event__type-output" for="event-destination-1"></label>
       <input class="event__input  event__input--destination"
         id="event-destination-1"
         type="text"
         name="event-destination"
         value=""
         list="destination-list-1"
-        autocomplete="off">
-        <datalist id="destination-list-1">
-        </datalist>
+        autocomplete="off"
+      >
+      <datalist id="destination-list-1"></datalist>
     `;
   }
 
   /**
-   * @param {DestinationOptionState} states
+   * @param {DestinationOptionState} state
+   */
+  createOptionHtml(...state) {
+    const [label, value] = state;
+
+    return html`<option value="${value}"> ${label} </option>`;
+  }
+
+  /**
+   * @param {DestinationOptionState[]} states
    */
   setOptions(states) {
-    this.querySelector('datalist').innerHTML = html`${
-      states.map((state) => this.#createOptionHtml(state))
+    this.optionListView.innerHTML = html`${
+      states.map((state) => this.createOptionHtml(...state))
     }`;
 
     return this;
   }
 
+  /**
+   * @param {string} label
+   */
   setLabel(label) {
-    this.querySelector('.event__label').textContent = label;
+    this.labelView.textContent = label;
   }
-
 
   /**
    * @param {string} value
@@ -66,10 +77,6 @@ export default class DestinationSelectView extends View {
 
   getValue() {
     return this.inputView.value || this.inputView.placeholder;
-  }
-
-  #createOptionHtml(state) {
-    return html`<option> ${state} </option>`;
   }
 
   #moveValueToPlaceholder() {

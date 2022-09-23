@@ -4,28 +4,31 @@ import Model from './model';
 
 export default class ApplicationModel extends Model {
   #mode = Mode.VIEW;
+
   /**
-   * @param {DataTableModel<Point, PointAdapter>} points
-   * @param {CollectionModel<Destination, DestinationAdapter>} destinations
-   * @param {CollectionModel<OfferGroup, OfferGroupAdapter>} offerGroups
+   * @param {DataTableModel<Point, PointAdapter>} pointsModel
+   * @param {CollectionModel<Destination, DestinationAdapter>} destinationsModel
+   * @param {CollectionModel<OfferGroup, OfferGroupAdapter>} offerGroupsModel
    */
-  constructor(points, destinations, offerGroups) {
+  constructor(pointsModel, destinationsModel, offerGroupsModel) {
     super();
 
-    this.points = points;
+    /** @type {PointAdapter} */
     this.currentPoint = null;
-    this.destinations = destinations;
-    this.offerGroups = offerGroups;
+
+    this.pointsModel = pointsModel;
+    this.destinationsModel = destinationsModel;
+    this.offerGroupsModel = offerGroupsModel;
   }
 
   get defaultPoint() {
-    const point = this.points.blank;
+    const point = this.pointsModel.blank;
 
     point.type = PointType.TAXI;
-    point.destinationId = this.destinations.item(0).id;
+    point.destinationId = this.destinationsModel.item(0).id;
     point.startDate = new Date().toJSON();
     point.endDate = point.startDate;
-    point.basePrice = '1';
+    point.basePrice = 0;
     point.offerIds = [];
     point.isFavorite = false;
 
@@ -34,21 +37,21 @@ export default class ApplicationModel extends Model {
 
   async ready() {
     await Promise.all([
-      this.points.ready(),
-      this.destinations.ready(),
-      this.offerGroups.ready()
+      this.pointsModel.ready(),
+      this.destinationsModel.ready(),
+      this.offerGroupsModel.ready()
     ]);
   }
 
   /**
    *
    * @param {number} mode
-   * @param {number} currentPointId
+   * @param {string} pointId
    */
-  setMode(mode = this.#mode, currentPointId = null) {
+  setMode(mode, pointId = null) {
     switch (mode) {
       case Mode.EDIT:
-        this.currentPoint = this.points.findById(currentPointId);
+        this.currentPoint = this.pointsModel.findById(pointId);
         break;
 
       case Mode.CREATE:

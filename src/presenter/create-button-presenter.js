@@ -6,23 +6,23 @@ import Mode from '../enum/mode.js';
  * @template {HTMLButtonElement} View
  * @extends Presenter<Model,View>
  */
-export default class NewPointButtonPresenter extends Presenter {
+export default class CreateButtonPresenter extends Presenter {
   /**
    * @param {[model: Model, view: View]} init
    */
   constructor(...init) {
     super(...init);
 
-    this.view.addEventListener('click', this.onViewClick.bind(this));
+    this.view.addEventListener('click', this.#onViewClick.bind(this));
 
-    this.model.addEventListener('mode', this.onModelMode.bind(this));
+    this.model.addEventListener('mode', this.#onModelMode.bind(this));
   }
 
-  onViewClick() {
+  #onViewClick() {
     this.model.setMode(Mode.CREATE);
   }
 
-  onModelMode() {
-    this.view.disabled = (this.model.getMode() !== Mode.VIEW);
+  #onModelMode() {
+    this.view.disabled = (this.model.getMode() === Mode.CREATE);
   }
 }

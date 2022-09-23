@@ -12,20 +12,14 @@ export default class DatePickerView extends View {
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
-    const onStartDateChange = ([date]) => {
-      this.#endDateCalendar.set('minDate', date);
-    };
+    this.addEventListener('keydown', this.#onKeyDown, true);
 
-    const calendarDefaults = {
-      'enableTime': true,
-      'time_24hr': true
-    };
+    this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'));
+    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'));
+  }
 
-    this.#startDateCalendar = initCalendar(this.querySelector('#event-start-time-1'), {
-      ...calendarDefaults,
-      onChange: [onStartDateChange]
-    });
-    this.#endDateCalendar = initCalendar(this.querySelector('#event-end-time-1'), calendarDefaults);
+  get disallowedKeys() {
+    return ['Backspace', 'Delete'];
   }
 
   /**
@@ -56,9 +50,9 @@ export default class DatePickerView extends View {
    * @param {CalendarDate} startDate
    * @param {CalendarDate} endDate
    */
-  setDates(startDate, endDate = startDate) {
-    this.#startDateCalendar.setDate(startDate, true);
-    this.#endDateCalendar.setDate(endDate, true);
+  setDates(startDate, endDate = startDate, notify = true) {
+    this.#startDateCalendar.setDate(startDate, notify);
+    this.#endDateCalendar.setDate(endDate, notify);
   }
 
   getDates() {
@@ -66,6 +60,27 @@ export default class DatePickerView extends View {
       this.#startDateCalendar.selectedDates[0]?.toJSON(),
       this.#endDateCalendar.selectedDates[0]?.toJSON()
     ];
+  }
+
+  close() {
+    this.#startDateCalendar.close();
+    this.#endDateCalendar.close();
+  }
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+  #onKeyDown(event) {
+    if (this.disallowedKeys.includes(event.key)) {
+      event.stopPropagation();
+    }
+  }
+
+  /**
+   * @param {CalendarOptions} options
+   */
+  static setDefaults(options) {
+    initCalendar.setDefaults(options);
   }
 }
 

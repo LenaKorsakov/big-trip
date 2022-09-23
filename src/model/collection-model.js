@@ -11,6 +11,9 @@ export default class CollectionModel extends Model {
   /** @type {Item[]} */
   #items;
 
+  /** @type {Promise<void>} */
+  #ready;
+
   /**
    * @param {Store<Item>} store
    * @param {(item?: Item) => ItemAdapter} adapt
@@ -30,9 +33,11 @@ export default class CollectionModel extends Model {
    * @override
    */
   async ready() {
-    if (!this.#items) {
-      this.#items = await this.#store.list();
-    }
+    this.#ready ??= this.#store.list().then((items) => {
+      this.#items = items;
+    });
+
+    return this.#ready;
   }
 
   listAll() {
@@ -48,7 +53,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} value
+   * @param {string} value
    */
   findById(value) {
     return this.findBy('id', value);
@@ -63,7 +68,7 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} value
+   * @param {string} value
    */
   findIndexById(value) {
     return this.findIndexBy('id', value);
@@ -92,27 +97,29 @@ export default class CollectionModel extends Model {
   }
 
   /**
-   * @param {number} id
-   * @param {Item} item
+   * @param {string} id
+   * @param {ItemAdapter} item
    */
   async update(id, item) {
-    const newItem = await this.#store.update(id, item);
+    const newItem = await this.#store.update(id, item.toJSON());
     const index = this.findIndexById(id);
-    const detail = this.#adapt(newItem);
+    const detail = [this.#adapt(newItem), this.item(index)];
 
     this.#items.splice(index, 1, newItem);
 
-    this.dispatchEvent(new CustomEvent('update',{detail}));
+    this.dispatchEvent(new CustomEvent('update', {detail}));
   }
 
   /**
-   * @param {number} id
+   * @param {string} id
    */
   async remove(id) {
     await this.#store.remove(id);
 
     const index = this.findIndexById(id);
-    const detail = this.#items.splice(index, 1).map(this.#adapt);
+    const detail = this.item(index);
+
+    this.#items.splice(index, 1);
 
     this.dispatchEvent(new CustomEvent('remove', {detail}));
   }

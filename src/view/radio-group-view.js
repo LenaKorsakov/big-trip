@@ -3,12 +3,13 @@ import View from './view.js';
 export * from './view.js';
 
 export default class RadioGroupView extends View {
-  get itemSelector() {
+  get optionSelector() {
     return '[type=radio]';
   }
 
   getValue() {
-    const view = this.querySelector(`${this.itemSelector}:checked`);
+    /** @type {HTMLInputElement} */
+    const view = this.querySelector(`${this.optionSelector}:checked`);
 
     if (view) {
       return view.value;
@@ -21,7 +22,8 @@ export default class RadioGroupView extends View {
    * @param {string} value
    */
   setValue(value) {
-    const view = this.querySelector(`${this.itemSelector}[value="${value}"]`);
+    /** @type {HTMLInputElement} */
+    const view = this.querySelector(`${this.optionSelector}[value="${value}"]`);
     if (view) {
       view.checked = true;
     }
@@ -33,7 +35,8 @@ export default class RadioGroupView extends View {
    * @param {boolean[]} flags
    */
   setOptionsDisabled(flags) {
-    const views = this.querySelectorAll(this.itemSelector);
+    /** @type {NodeListOf<HTMLInputElement>} */
+    const views = this.querySelectorAll(this.optionSelector);
 
     views.forEach((view, index) => {
       view.disabled = flags[index];
