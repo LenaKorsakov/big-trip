@@ -5,6 +5,10 @@ export default class Store {
   #baseUrl;
   #auth;
 
+  /**
+   * @param {string} baseUrl
+   * @param {string} auth
+   */
   constructor(baseUrl, auth) {
     this.#baseUrl = baseUrl;
     this.#auth = auth;
@@ -53,7 +57,6 @@ export default class Store {
   }
 
   /**
-   *
    * @param {string} path
    * @param {RequestInit} options
    */
@@ -77,7 +80,7 @@ export default class Store {
    */
   static async assert(response) {
     if (!response.ok) {
-      throw new Error(response.statusText);
+      throw new Error(`${response.status}. ${response.statusText}`);
     }
   }
 

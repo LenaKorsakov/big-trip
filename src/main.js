@@ -76,6 +76,8 @@ applicationModel.ready().then(() => {
   new SortPresenter(applicationModel, sortView);
   new CreatorPresenter(applicationModel, new CreatorView().target(listView));
   new EditorPresenter(applicationModel, new EditorView());
-  new PlaceholderPresenter(applicationModel,placeholderView);
+  new PlaceholderPresenter(applicationModel, placeholderView);
   new ListPresenter(applicationModel, listView);
+}).catch((exception) => {
+  placeholderView.textContent = exception;
 });
