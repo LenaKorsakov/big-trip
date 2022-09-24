@@ -23,7 +23,7 @@ export default class ListPresenter extends Presenter {
 
     this.model.pointsModel.addEventListener(
       ['add', 'update', 'remove', 'filter', 'sort'],
-      this.#onModelPointsChange.bind(this)
+      this.#onPointsModelChange.bind(this)
     );
   }
 
@@ -69,10 +69,9 @@ export default class ListPresenter extends Presenter {
   }
 
   /**
-   *
    * @param {CustomEvent<PointAdapter>} event
    */
-  #onModelPointsChange(event) {
+  #onPointsModelChange(event) {
     if (event.type === 'remove') {
       this.view.findById(event.detail.id)?.remove();
 

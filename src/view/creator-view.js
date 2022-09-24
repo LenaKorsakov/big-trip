@@ -52,7 +52,6 @@ export default class CreatorView extends View {
         <header class="event__header">
           ${PointTypeSelectView}
           ${DestinationSelectView}
-          </div>
           ${DatePickerView}
           ${PriceInputView}
           ${this.createButtonsHtml()}
@@ -70,7 +69,9 @@ export default class CreatorView extends View {
       <button class="event__save-btn  btn  btn--blue" type="submit">
         ${SaveButtonLabel.DEFAULT}
       </button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__reset-btn" type="reset">
+        Cancel
+      </button>
     `;
   }
 

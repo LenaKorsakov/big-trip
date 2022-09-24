@@ -17,7 +17,7 @@ export default class DestinationView extends View {
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-          <!---фотографии--->
+            <!---фотографии--->
           </div>
         </div>
     `;

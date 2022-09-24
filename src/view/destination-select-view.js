@@ -7,10 +7,10 @@ export default class DestinationSelectView extends View {
 
     this.classList.add('event__field-group', 'event__field-group--destination');
 
-    this.addEventListener('focus', this.#onViewFocus, true);
-    this.addEventListener('change', this.#onViewChange);
-    this.addEventListener('keydown', this.#onViewKeyDown);
-    this.addEventListener('blur', this.#onViewBlur, true);
+    this.addEventListener('focus', this.#onFocus, true);
+    this.addEventListener('change', this.#onChange);
+    this.addEventListener('keydown', this.#onKeyDown);
+    this.addEventListener('blur', this.#onBlur, true);
 
     this.inputView = this.querySelector('input');
     this.labelView = this.querySelector('label');
@@ -27,11 +27,11 @@ export default class DestinationSelectView extends View {
   createAdjacentHtml() {
     return html`
       <label class="event__label  event__type-output" for="event-destination-1"></label>
-      <input class="event__input  event__input--destination"
+      <input
+        class="event__input  event__input--destination"
         id="event-destination-1"
         type="text"
         name="event-destination"
-        value=""
         list="destination-list-1"
         autocomplete="off"
       >
@@ -93,21 +93,24 @@ export default class DestinationSelectView extends View {
     inputView.placeholder = '';
   }
 
-  #onViewFocus() {
+  #onFocus() {
     this.#moveValueToPlaceholder();
   }
 
-  #onViewChange() {
+  #onChange() {
     this.#moveValueToPlaceholder();
   }
 
-  #onViewKeyDown(event) {
+  /**
+   * @param {KeyboardEvent} event
+   */
+  #onKeyDown(event) {
     if(!this.allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
   }
 
-  #onViewBlur() {
+  #onBlur() {
     this.#movePlaceholderToValue();
   }
 

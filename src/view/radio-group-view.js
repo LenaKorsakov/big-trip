@@ -24,6 +24,7 @@ export default class RadioGroupView extends View {
   setValue(value) {
     /** @type {HTMLInputElement} */
     const view = this.querySelector(`${this.optionSelector}[value="${value}"]`);
+
     if (view) {
       view.checked = true;
     }

@@ -30,21 +30,22 @@ export default class OfferSelectView extends View {
     const [title, price, id, isChecked] = state;
 
     return html`
-    <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden"
-        id="event-offer-comfort-${id}"
-        type="checkbox"
-        name="event-offer-comfort"
-        value="${id}";
-        ${isChecked ? 'checked' : ''}
-      >
-      <label class="event__offer-label" for="event-offer-comfort-${id}">
-        <span class="event__offer-title">${title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
-      </label>
-    </div>
-  `;
+      <div class="event__offer-selector">
+        <input
+          class="event__offer-checkbox  visually-hidden"
+          id="event-offer-comfort-${id}"
+          type="checkbox"
+          name="event-offer-comfort"
+          value="${id}";
+          ${isChecked ? 'checked' : ''}
+        >
+        <label class="event__offer-label" for="event-offer-comfort-${id}">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </label>
+      </div>
+    `;
   }
 
   /**
