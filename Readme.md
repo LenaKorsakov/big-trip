@@ -29,6 +29,7 @@ For each point, it is possible to view details and edit. For the convenience of 
 - MVP,
 - Babel,
 - Webpack,
+- JSDoc,
 - flatpickr,
 - dayjs.
 
