@@ -5,7 +5,7 @@ The app allows the user to easily plan their trip. At each step of the itinerary
 
 ## Description
 ![When the user starts the application, he immediately sees his planned route. He can select the "future" filter, then only future waypoints will be displayed in relation to the current moment.]
-https://github.com/LenaKorsakov/big-trip/raw/master/screenshots/main-screenshot.png
+(https://github.com/LenaKorsakov/big-trip/raw/master/screenshots/main-screenshot.png)
 
 
 ## Stack
